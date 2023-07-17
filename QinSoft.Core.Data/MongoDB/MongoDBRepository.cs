@@ -25,9 +25,9 @@ namespace QinSoft.Core.Data.MongoDB.Core
             {
                 Type type = typeof(T);
                 MongoDBCollectionAttribute attribute = type.GetCustomAttributes(typeof(MongoDBCollectionAttribute), false).FirstOrDefault() as MongoDBCollectionAttribute;
-                if (attribute != null)
+                if (attribute != null && !string.IsNullOrEmpty(attribute.Name))
                 {
-                    return (string.IsNullOrEmpty(attribute.Name) ? MongoDBContext.Instance.Get() : MongoDBContext.Instance.Get(attribute.Name)).GetDatabase();
+                    return MongoDBContext.Instance.Get(attribute.Name).GetDatabase();
                 }
                 return MongoDBContext.Instance.Get().GetDatabase();
             }
@@ -77,7 +77,9 @@ namespace QinSoft.Core.Data.MongoDB.Core
             PropertyInfo[] propertyInfos = typeof(T).GetProperties();
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
-                keyValues.Add(propertyInfo.Name, propertyInfo.GetValue(document));
+                BsonIdAttribute attribute = propertyInfo.GetCustomAttribute(typeof(BsonIdAttribute)) as BsonIdAttribute;
+                if (attribute != null)
+                    keyValues.Add(propertyInfo.Name, propertyInfo.GetValue(document));
             }
             return CreateFilterDefinition(keyValues);
         }
@@ -108,7 +110,6 @@ namespace QinSoft.Core.Data.MongoDB.Core
             PropertyInfo[] propertyInfos = typeof(T).GetProperties();
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
-                BsonIdAttribute attribute = propertyInfo.GetCustomAttribute(typeof(BsonIdAttribute)) as BsonIdAttribute;
                 keyValues.Add(propertyInfo.Name, propertyInfo.GetValue(document));
             }
             return CreateUpdateDefinition(keyValues);

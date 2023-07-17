@@ -16,7 +16,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCachePool(int poolSize, RedisCacheOptions options)
         {
-            ArgumentUtils.CheckNull(options, "options");
+            ObjectUtils.CheckNull(options, "options");
             if (options.ConfigurationOptions != null)
             {
                 ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, options.ConfigurationOptions);

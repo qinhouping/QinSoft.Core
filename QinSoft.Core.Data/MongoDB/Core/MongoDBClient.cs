@@ -26,7 +26,7 @@ namespace QinSoft.Core.Data.MongoDB.Core
 
         public MongoDBClient(MongoClientSettings settings, string defaultDBName) : base(settings)
         {
-            ArgumentUtils.CheckNull(defaultDBName, "defaultDBName");
+            ObjectUtils.CheckNull(defaultDBName, "defaultDBName");
             DefaultDBName = defaultDBName;
         }
 
@@ -42,7 +42,7 @@ namespace QinSoft.Core.Data.MongoDB.Core
 
         public MongoDBClient(string connectionString, string defaultDBName) : base(connectionString)
         {
-            ArgumentUtils.CheckNull(defaultDBName, "defaultDBName");
+            ObjectUtils.CheckNull(defaultDBName, "defaultDBName");
             this.DefaultDBName = defaultDBName;
         }
 
@@ -52,7 +52,7 @@ namespace QinSoft.Core.Data.MongoDB.Core
         /// </summary>
         public virtual IMongoDatabase GetDatabase(MongoDatabaseSettings settings = null)
         {
-            ArgumentUtils.CheckNull(DefaultDBName, () => new MongoDBException("get default mongo database error"));
+            ObjectUtils.CheckNull(DefaultDBName, () => new MongoDBException("get default mongo database error"));
             return this.GetDatabase(DefaultDBName, settings);
         }
 

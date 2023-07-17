@@ -22,7 +22,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddLocalCacheManager(this IServiceCollection services)
         {
-            ArgumentUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, "services");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<ILocalCacheManager, LocalCacheManager>());
             return services;
@@ -33,8 +33,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddLocalCacheManager(this IServiceCollection services, Action<LocalCacheManagerOptions> setupAction)
         {
-            ArgumentUtils.CheckNull(services, "services");
-            ArgumentUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<ILocalCacheManager, LocalCacheManager>());
             services.Configure(setupAction);
@@ -46,7 +46,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddRedisCacheManager(this IServiceCollection services)
         {
-            ArgumentUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, "services");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IRedisCacheManager, RedisCacheManager>());
             return services;
@@ -57,8 +57,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddRedisCacheManager(this IServiceCollection services, Action<RedisCacheManagerOptions> setupAction)
         {
-            ArgumentUtils.CheckNull(services, "services");
-            ArgumentUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IRedisCacheManager, RedisCacheManager>());
             services.Configure(setupAction);

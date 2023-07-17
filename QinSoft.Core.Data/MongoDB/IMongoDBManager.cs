@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace QinSoft.Core.Data.MongoDB
 {
-    public interface IMongoDBManager
+    public interface IMongoDBManager : IDisposable
     {
         /// <summary>
         /// 获取mongodb客户端

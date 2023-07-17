@@ -41,7 +41,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCache(RedisCacheOptions options)
         {
-            ArgumentUtils.CheckNull(options, "options");
+            ObjectUtils.CheckNull(options, "options");
             if (options.ConfigurationOptions != null)
             {
                 this.Connection = ConnectionMultiplexer.Connect(options.ConfigurationOptions);
@@ -57,7 +57,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCache(IConnectionMultiplexer connection, bool isPoolConnection = false)
         {
-            ArgumentUtils.CheckNull(connection, "connection");
+            ObjectUtils.CheckNull(connection, "connection");
             this.Connection = connection;
             this.IsPoolConnection = isPoolConnection;
             this.DB = this.Connection.GetDatabase();
@@ -65,7 +65,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCache(IReconnectableConnectionMultiplexer connection)
         {
-            ArgumentUtils.CheckNull(connection, "connection");
+            ObjectUtils.CheckNull(connection, "connection");
             this.Connection = connection.Connection;
             this.IsPoolConnection = true;
             this.DB = this.Connection.GetDatabase();

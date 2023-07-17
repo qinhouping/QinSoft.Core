@@ -160,7 +160,7 @@ namespace QinSoft.Core.Configure.FileConfiger
             {
                 if (string.IsNullOrEmpty(key))
                 {
-                    throw new ArgumentNullException("key");
+                    key = typeof(T).Name;
                 }
                 T config = GetConfigFromCache(key) as T;
                 if (config == null)

@@ -23,14 +23,14 @@ namespace QinSoft.Core.Data.MongoDB
 
         public MongoDBCollectionAttribute(string collectionName)
         {
-            ArgumentUtils.CheckNull(collectionName, "collectionName");
+            ObjectUtils.CheckNull(collectionName, "collectionName");
             this.CollectionName = collectionName;
         }
 
         public MongoDBCollectionAttribute(string name, string collectionName)
         {
-            ArgumentUtils.CheckNull(name, "name");
-            ArgumentUtils.CheckNull(collectionName, "collectionName");
+            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(collectionName, "collectionName");
             this.Name = name;
             this.CollectionName = collectionName;
         }

@@ -38,8 +38,8 @@ namespace QinSoft.Core.Data.Database
 
         public DatabaseManager(DatabaseManagerConfig config, ILogger logger)
         {
-            ArgumentUtils.CheckNull(config, "config");
-            ArgumentUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(logger, "logger");
             DatabaseManagerConfig = config;
             this.logger = logger;
         }
@@ -50,9 +50,9 @@ namespace QinSoft.Core.Data.Database
 
         public DatabaseManager(DatabaseManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ArgumentUtils.CheckNull(options, "options");
-            ArgumentUtils.CheckNull(configer, "configer");
-            ArgumentUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, "options");
+            ObjectUtils.CheckNull(configer, "configer");
+            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
             DatabaseManagerConfig = configer.Get<DatabaseManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<DatabaseManager>();
         }
@@ -63,9 +63,9 @@ namespace QinSoft.Core.Data.Database
 
         public DatabaseManager(IOptions<DatabaseManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ArgumentUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ArgumentUtils.CheckNull(configer, "configer");
-            ArgumentUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
+            ObjectUtils.CheckNull(configer, "configer");
+            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
             DatabaseManagerConfig = configer.Get<DatabaseManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<DatabaseManager>();
         }
@@ -75,7 +75,7 @@ namespace QinSoft.Core.Data.Database
         /// </summary>
         protected virtual DatabaseItemConfig GetDatabaseItemConfig(string name)
         {
-            ArgumentUtils.CheckNull(name, name);
+            ObjectUtils.CheckNull(name, name);
             return DatabaseManagerConfig.GetByName(name);
         }
 
@@ -171,7 +171,7 @@ namespace QinSoft.Core.Data.Database
         /// </summary>
         public virtual ISqlSugarClient GetDatabase(string name)
         {
-            ArgumentUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, "name");
             DatabaseItemConfig config = GetDatabaseItemConfig(name);
             if (config == null)
             {

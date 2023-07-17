@@ -36,8 +36,8 @@ namespace QinSoft.Core.Data.MongoDB
 
         public MongoDBManager(MongoDBManagerConfig config, ILogger logger)
         {
-            ArgumentUtils.CheckNull(config, "config");
-            ArgumentUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(logger, "logger");
             MongoDBManagerConfig = config;
             this.logger = logger;
         }
@@ -48,9 +48,9 @@ namespace QinSoft.Core.Data.MongoDB
 
         public MongoDBManager(MongoDBManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ArgumentUtils.CheckNull(options, "options");
-            ArgumentUtils.CheckNull(configer, "configer");
-            ArgumentUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, "options");
+            ObjectUtils.CheckNull(configer, "configer");
+            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
             MongoDBManagerConfig = configer.Get<MongoDBManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<MongoDBManager>();
         }
@@ -61,9 +61,9 @@ namespace QinSoft.Core.Data.MongoDB
 
         public MongoDBManager(IOptions<MongoDBManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ArgumentUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ArgumentUtils.CheckNull(configer, "configer");
-            ArgumentUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
+            ObjectUtils.CheckNull(configer, "configer");
+            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
             MongoDBManagerConfig = configer.Get<MongoDBManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<MongoDBManager>();
         }
@@ -73,7 +73,7 @@ namespace QinSoft.Core.Data.MongoDB
         /// </summary>
         protected virtual MongoDBItemConfig GetMongoDBItemConfig(string name)
         {
-            ArgumentUtils.CheckNull(name, name);
+            ObjectUtils.CheckNull(name, name);
             return MongoDBManagerConfig.GetByName(name);
         }
 
@@ -119,7 +119,7 @@ namespace QinSoft.Core.Data.MongoDB
         /// </summary>
         public virtual IMongoDBClient GetMongoDB(string name)
         {
-            ArgumentUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, "name");
             MongoDBItemConfig config = GetMongoDBItemConfig(name);
             if (config == null)
             {
@@ -141,6 +141,14 @@ namespace QinSoft.Core.Data.MongoDB
             {
                 return GetMongoDB(name);
             });
+        }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public virtual void Dispose()
+        {
+            GC.SuppressFinalize(this);
         }
     }
 }

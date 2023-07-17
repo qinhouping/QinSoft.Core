@@ -15,13 +15,15 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Text;
+using NLog.Extensions.Logging;
+using QinSoft.Core.Data.MongoDB;
 
 namespace QinSoft.Core.Test
 {
     [TestClass]
     public class Programe
     {
-        public static IServiceProvider ServiceProvider;
+        public static IServiceProvider ServiceProvider { get; private set; }
 
         [AssemblyInitialize]
         public static void Initialize(TestContext context)
@@ -30,7 +32,9 @@ namespace QinSoft.Core.Test
             IServiceCollection services = new ServiceCollection()
             .AddLogging(builder =>
             {
+                //builder.AddNLog();
                 //builder.AddLog4Net();
+                builder.AddConsole();
             })
             .AddFileConfiger(options =>
             {
@@ -47,9 +51,14 @@ namespace QinSoft.Core.Test
             .AddDatabaseManager(options =>
             {
 
+            })
+            .AddMongoDBManager(options =>
+            {
+
             });
 
-            services.TryProxyAddTransient<ITestTableRepository, TestTableRepository>(typeof(DatabaseContextInterceptor));
+            services.TryProxyAddSingleton<ITestTableRepository, TestTableRepository>(typeof(DatabaseContextInterceptor));
+            services.TryProxyAddSingleton<ITestTableMongoDBRepository, TestTableMongoDBRepository>(typeof(MongoDBContextInterceptor));
             ServiceProvider = services.BuildServiceProvider();
         }
     }

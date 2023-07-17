@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddDatabaseManager(this IServiceCollection services)
         {
-            ArgumentUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, "services");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IDatabaseManager, DatabaseManager>());
             services.TryAdd(ServiceDescriptor.Singleton<IDatabaseContextStack, DatabaseContextStack>());
@@ -31,8 +31,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddDatabaseManager(this IServiceCollection services, Action<DatabaseManagerOptions> setupAction)
         {
-            ArgumentUtils.CheckNull(services, "services");
-            ArgumentUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IDatabaseManager, DatabaseManager>());
             services.TryAdd(ServiceDescriptor.Singleton<IDatabaseContextStack, DatabaseContextStack>());
@@ -46,10 +46,11 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddMongoDBManager(this IServiceCollection services)
         {
-            ArgumentUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, "services");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IMongoDBManager, IMongoDBManager>());
             services.TryAdd(ServiceDescriptor.Singleton<IMongoDBContext, MongoDBContext>());
+            services.TryAddSingleton<MongoDBContextInterceptor>();
             return services;
         }
 
@@ -58,11 +59,12 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddMongoDBManager(this IServiceCollection services, Action<MongoDBManagerOptions> setupAction)
         {
-            ArgumentUtils.CheckNull(services, "services");
-            ArgumentUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
             services.AddOptions();
-            services.TryAdd(ServiceDescriptor.Singleton<IMongoDBManager, IMongoDBManager>());
+            services.TryAdd(ServiceDescriptor.Singleton<IMongoDBManager, MongoDBManager>());
             services.TryAdd(ServiceDescriptor.Singleton<IMongoDBContext, MongoDBContext>());
+            services.TryAddSingleton<MongoDBContextInterceptor>();
             services.Configure(setupAction);
             return services;
         }
