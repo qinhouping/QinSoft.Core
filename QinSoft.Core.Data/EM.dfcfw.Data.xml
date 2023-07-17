@@ -1,0 +1,309 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>QinSoft.Core.Data</name>
+    </assembly>
+    <members>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseContextAttribute.Name">
+            <summary>
+            山下文数据库名称
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseContextAttribute.UseTran">
+            <summary>
+            是否开启事务
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseContextInterceptor.Intercept(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            拦截处理
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseContextInterceptor.GetDatabaseContext(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            获取拦截上下文
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseContextStack.Instance">
+            <summary>
+            单例模式
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseContextStack.ContextStack">
+            <summary>
+            上下文栈
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseContextStack.DefaultContext">
+            <summary>
+            默认上下文
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseContextStack.Push(SqlSugar.ISqlSugarClient)">
+            <summary>
+            入栈
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseContextStack.Pop">
+            <summary>
+            出栈
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseContextStack.Peek">
+            <summary>
+            出栈（不移除）
+            </summary>
+        </member>
+        <member name="T:QinSoft.Core.Data.Database.DatabaseManager">
+            <summary>
+            Database管理器
+            集成缓存配置，支持多数据源
+            </summary>
+        </member>
+        <member name="F:QinSoft.Core.Data.Database.DatabaseManager.logger">
+            <summary>
+            日志
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseManager.DatabaseManagerConfig">
+            <summary>
+            Database配置
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseManager.GetDatabaseItemConfig(System.String)">
+            <summary>
+            获取缓存配置
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseManager.GetDefaultDatabaseItemConfig">
+            <summary>
+            获取默认缓存配置
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseManager.BuildClientFromConfig(QinSoft.Core.Data.Database.DatabaseItemConfig)">
+            <summary>
+            构建Database客户端实例
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseManager.GetDatabase">
+            <summary>
+            获取数据库客户端
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseManager.GetDatabaseAsync">
+            <summary>
+            获取数据库客户端
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseManager.GetDatabase(System.String)">
+            <summary>
+            获取数据库客户端
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseManager.GetDatabaseAsync(System.String)">
+            <summary>
+            获取数据库客户端
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseManager.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseItemConfig.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseItemConfig.Configs">
+            <summary>
+            数据库连接配置
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseConnectionConfig.ConfigId">
+            <summary>
+            配置ID
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseConnectionConfig.DbType">
+            <summary>
+            数据库类型
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseConnectionConfig.ConnectionString">
+            <summary>
+            主库连接字符串
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseConnectionConfig.IsAutoCloseConnection">
+            <summary>
+            自动关闭连接
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseConnectionConfig.IsShardSameThread">
+            <summary>
+            相同线程共享
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseConnectionConfig.Slaves">
+            <summary>
+            从库配置
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseConnectionConfig.MoreSetting">
+            <summary>
+            扩展配置
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseSlaveConnectionConfig.HitRate">
+            <summary>
+            命中率
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseSlaveConnectionConfig.ConnectionString">
+            <summary>
+            从库连接字符串
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseManagerOptions.ConfigName">
+            <summary>
+            配置名称
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseManagerOptions.ConfigFormat">
+            <summary>
+            配置格式
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Data.Database.DatabaseRepository`1.Client">
+            <summary>
+            数据库客户端
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseRepository`1.Insert(`0,System.Action{SqlSugar.IInsertable{`0}})">
+            <summary>
+            插入实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseRepository`1.Insert(System.Collections.Generic.IEnumerable{`0},System.Action{SqlSugar.IInsertable{`0}})">
+            <summary>
+            批量插入实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseRepository`1.Update(`0,System.Action{SqlSugar.IUpdateable{`0}})">
+            <summary>
+            更新实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseRepository`1.Update(System.Collections.Generic.IEnumerable{`0},System.Action{SqlSugar.IUpdateable{`0}})">
+            <summary>
+            批量更新实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseRepository`1.Save(`0,System.Action{SqlSugar.ISaveable{`0}})">
+            <summary>
+            保存实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseRepository`1.Save(System.Collections.Generic.IEnumerable{`0},System.Action{SqlSugar.ISaveable{`0}})">
+            <summary>
+            批量保存实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseRepository`1.Delete(System.Object[])">
+            <summary>
+            移除实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.DatabaseRepository`1.Delete(System.Action{SqlSugar.IDeleteable{`0}})">
+            <summary>
+            移除实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseContextStack.Push(SqlSugar.ISqlSugarClient)">
+            <summary>
+            入栈
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseContextStack.Pop">
+            <summary>
+            出栈
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseContextStack.Peek">
+            <summary>
+            出栈（不移除）
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseManager.GetDatabase">
+            <summary>
+            获取数据库客户端
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseManager.GetDatabaseAsync">
+            <summary>
+            获取数据库客户端
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseManager.GetDatabase(System.String)">
+            <summary>
+            获取数据库客户端
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseManager.GetDatabaseAsync(System.String)">
+            <summary>
+            获取数据库客户端
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseRepository`1.Insert(`0,System.Action{SqlSugar.IInsertable{`0}})">
+            <summary>
+            插入实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseRepository`1.Insert(System.Collections.Generic.IEnumerable{`0},System.Action{SqlSugar.IInsertable{`0}})">
+            <summary>
+            批量插入实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseRepository`1.Update(`0,System.Action{SqlSugar.IUpdateable{`0}})">
+            <summary>
+            更新实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseRepository`1.Update(System.Collections.Generic.IEnumerable{`0},System.Action{SqlSugar.IUpdateable{`0}})">
+            <summary>
+            批量更新实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseRepository`1.Save(`0,System.Action{SqlSugar.ISaveable{`0}})">
+            <summary>
+            保存实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseRepository`1.Save(System.Collections.Generic.IEnumerable{`0},System.Action{SqlSugar.ISaveable{`0}})">
+            <summary>
+            批量保存实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseRepository`1.Delete(System.Object[])">
+            <summary>
+            移除实体
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Data.Database.IDatabaseRepository`1.Delete(System.Action{SqlSugar.IDeleteable{`0}})">
+            <summary>
+            移除实体
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DataServiceCollectionExtensions.AddDatabaseManager(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入Database
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.DataServiceCollectionExtensions.AddDatabaseManager(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{QinSoft.Core.Data.Database.DatabaseManagerOptions})">
+            <summary>
+            注入Database
+            </summary>
+        </member>
+    </members>
+</doc>

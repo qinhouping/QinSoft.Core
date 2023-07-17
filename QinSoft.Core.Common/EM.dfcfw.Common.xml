@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>QinSoft.Core.Common</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.Extensions.DependencyInjection.Extensions.ProxyDependencyInjectionExtensions">
+            <summary>
+            代理依赖注入扩展，
+            支持Castle拦截器
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.Extensions.ProxyDependencyInjectionExtensions.ProxyObjectFactory(System.Type,System.Type,System.Type[])">
+            <summary>
+            Castle代理对象工厂
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Common.Utils.CipherUtils.DefaultLog">
+            <summary>
+            Http默认日志
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.Hash(System.Byte[],System.String)">
+            <summary>
+            HASH
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.Hash(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            HASH
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.MD5(System.String,System.Text.Encoding)">
+            <summary>
+            MD5
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.MD5(System.String)">
+            <summary>
+            MD5
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.SHA1(System.String)">
+            <summary>
+            SHA1
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.DESDecrypt(System.Byte[],System.Byte[],System.Byte[],System.Security.Cryptography.CipherMode,System.Security.Cryptography.PaddingMode)">
+            <summary>
+            DES解密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.DESDecrypt(System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+            DES解密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.DESDecrypt(System.String,System.String,System.String)">
+            <summary>
+            DES解密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.DESEncrypt(System.Byte[],System.Byte[],System.Byte[],System.Security.Cryptography.CipherMode,System.Security.Cryptography.PaddingMode)">
+            <summary>
+            DES加密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.DESEncrypt(System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+            DES加密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.DESEncrypt(System.String,System.String,System.String)">
+            <summary>
+            DES加密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.AESDecrypt(System.Byte[],System.Byte[],System.Byte[],System.Security.Cryptography.CipherMode,System.Security.Cryptography.PaddingMode)">
+            <summary>
+            AES解密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.AESDecrypt(System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+            AES解密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.AESDecrypt(System.String,System.String,System.String)">
+            <summary>
+            AES解密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.AESEncrypt(System.Byte[],System.Byte[],System.Byte[],System.Security.Cryptography.CipherMode,System.Security.Cryptography.PaddingMode)">
+            <summary>
+            AES加密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.AESEncrypt(System.String,System.String,System.String,System.Text.Encoding)">
+            <summary>
+            AES加密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.AESEncrypt(System.String,System.String,System.String)">
+            <summary>
+            AES加密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.RSADecrypt(System.Byte[],System.String)">
+            <summary>
+            RSA解密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.RSADecrypt(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            RSA解密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.RSADecrypt(System.String,System.String)">
+            <summary>
+            RSA解密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.RSAEncrypt(System.Byte[],System.String)">
+            <summary>
+            RSA加密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.RSAEncrypt(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            RSA加密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.CipherUtils.RSAEncrypt(System.String,System.String)">
+            <summary>
+            RSA加密
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.DateTimeUtils.ToTimeStamp(System.DateTime)">
+            <summary>
+            获取时间戳
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.DateTimeUtils.ToDateTime(System.Int64)">
+            <summary>
+            获取时间
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.FileUtils.CreateFileDirectory(System.IO.FileInfo)">
+            <summary>
+            创建文件所在目录
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.FileUtils.GetFiles(System.IO.DirectoryInfo,System.String,System.Boolean)">
+            <summary>
+            获取目录下的文件
+            正则匹配
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Common.Utils.HttpUtils.DefaultLog">
+            <summary>
+            Http默认日志
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.HttpUtils.SendAsync(System.Net.Http.HttpClient,System.Net.Http.HttpRequestMessage)">
+            <summary>
+            发送请求
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.HttpUtils.GetAsync``1(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            GET请求
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.HttpUtils.DeleteAsync``1(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            DELETE请求
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.HttpUtils.PostAsync``2(System.String,``0,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            POST请求
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.HttpUtils.PutAsync``2(System.String,``0,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            PUT请求
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.HttpUtils.UploadAsync``1(System.String,System.IO.Stream,System.String,System.String,System.Collections.Generic.IDictionary{System.String,System.String},System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            文件上传
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.HttpUtils.DownloadAsync(System.String,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            文件下载(GET)
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.HttpUtils.DownloadAsync``1(System.String,``0,System.Collections.Generic.IDictionary{System.String,System.String})">
+            <summary>
+            文件下载(POST)
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Common.Utils.JsonUtils.DefaultDateTimeConvert">
+            <summary>
+            Json默认时间转换器
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Common.Utils.JsonUtils.DefaultLog">
+            <summary>
+            JSON默认日志
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.JsonUtils.ToJson``1(``0)">
+            <summary>
+            JSON序列化
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.JsonUtils.FromJson``1(System.String)">
+            <summary>
+            JSON反序列化
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Common.Utils.RetryUtils.DefaultLog">
+            <summary>
+            重试默认日志
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Common.Utils.XmlUtils.DefaultLog">
+            <summary>
+            XML默认日志
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.XmlUtils.ToXml(System.Object)">
+            <summary>
+            XML序列化
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Common.Utils.XmlUtils.FromXml``1(System.String)">
+            <summary>
+            XML反序列化
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,438 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>QinSoft.Core.Cache</name>
+    </assembly>
+    <members>
+        <member name="M:QinSoft.Core.Cache.CacheManager`1.GetCache">
+            <summary>
+            获取缓存
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.CacheManager`1.GetCacheAsync">
+            <summary>
+            获取缓存
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.CacheManager`1.GetCache(System.String)">
+            <summary>
+            获取缓存
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.CacheManager`1.GetCacheAsync(System.String)">
+            <summary>
+            获取缓存
+            </summary>
+        </member>
+        <member name="F:QinSoft.Core.Cache.Local.LocalCacheManager.CacheDictionary">
+            <summary>
+            缓存字典
+            </summary>
+        </member>
+        <member name="F:QinSoft.Core.Cache.Local.LocalCacheManager.logger">
+            <summary>
+            日志
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Local.LocalCacheManager.LocalCacheManagerConfig">
+            <summary>
+            本地缓存配置
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Local.LocalCacheManager.GetCacheItemConfig(System.String)">
+            <summary>
+            获取缓存配置
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Local.LocalCacheManager.GetDefaultCacheItemConfig">
+            <summary>
+            获取默认缓存配置
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Local.LocalCacheManager.BuildCacheFromConfig(QinSoft.Core.Cache.Local.LocalCacheItemConfig)">
+            <summary>
+            构建缓存实例
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Local.LocalCacheManager.GetCache">
+            <summary>
+            获取缓存
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:QinSoft.Core.Cache.Local.LocalCacheManager.GetCacheAsync" -->
+        <member name="M:QinSoft.Core.Cache.Local.LocalCacheManager.GetCache(System.String)">
+            <summary>
+            获取缓存
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:QinSoft.Core.Cache.Local.LocalCacheManager.GetCacheAsync(System.String)" -->
+        <member name="M:QinSoft.Core.Cache.Local.LocalCacheManager.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Local.LocalCacheItemConfig.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Local.LocalCacheItemConfig.SizeLimie">
+            <summary>
+            数量限制
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Local.LocalCacheItemConfig.CompactionPercentage">
+            <summary>
+            压缩比列
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Local.LocalCacheItemConfig.ExpirationScanFrequency">
+            <summary>
+            移除过期缓存频率
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Local.LocalCacheManagerOptions.ConfigName">
+            <summary>
+            配置名称
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Local.LocalCacheManagerOptions.ConfigFormat">
+            <summary>
+            配置格式
+            </summary>
+        </member>
+        <member name="T:QinSoft.Core.Cache.Redis.Core.BackupableRedisCache">
+            <summary>
+            可备份的Redis缓存，多写
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.BackupableRedisCache.SafeDispose">
+            <summary>
+            释放资源 
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.BackupableRedisCachePool.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.BackupableRedisCachePool.Get">
+            <summary>
+            获取Redis缓存
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.BackupableRedisCachePool.GetAsync">
+            <summary>
+            获取Redis缓存
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.IRedisCachePool.Get">
+            <summary>
+            获取Redis缓存
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.IRedisCachePool.GetAsync">
+            <summary>
+            获取Redis缓存
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCache.Select(System.Int32)">
+            <summary>
+            切换DB
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCache.Dispose">
+            <summary>
+            释放资源 
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCache.SafeDispose">
+            <summary>
+            释放资源 
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.Get``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey)">
+            <summary>
+            获取键值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.Set``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            设置键值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.HashGet``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,StackExchange.Redis.RedisValue)">
+            <summary>
+            获取哈希值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.HashSet``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,StackExchange.Redis.RedisValue,``0)">
+            <summary>
+            设置哈希值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListGet``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,System.Int64)">
+            <summary>
+            获取列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListSet``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,System.Int64,``0)">
+            <summary>
+            设置列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListRemove``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            移除列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListPush``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            入队列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListPop``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey)">
+            <summary>
+            出队列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SetAdd``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            增加集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SetRemove``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            移除集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SetPop``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey)">
+            <summary>
+            出队集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SortedSetAdd``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0,System.Double)">
+            <summary>
+            增加有序集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SortedSetRemove``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            移除有序集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SortedSetPop``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,StackExchange.Redis.Order)">
+            <summary>
+            出队有序集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.GetAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey)">
+            <summary>
+            获取键值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SetAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            设置键值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.HashGetAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,StackExchange.Redis.RedisValue)">
+            <summary>
+            获取哈希值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.HashSetAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,StackExchange.Redis.RedisValue,``0)">
+            <summary>
+            设置哈希值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListGetAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,System.Int64)">
+            <summary>
+            获取列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListSetAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,System.Int64,``0)">
+            <summary>
+            设置列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListRemoveAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            移除列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListPushAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            入队列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.ListPopAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey)">
+            <summary>
+            出队列表值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SetAddAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            增加集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SetRemoveAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            移除集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SetPopAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey)">
+            <summary>
+            出队集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SortedSetAddAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0,System.Double)">
+            <summary>
+            增加有序集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SortedSetRemoveAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey,``0)">
+            <summary>
+            移除有序集合值
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCacheExtensions.SortedSetPopAsync``1(QinSoft.Core.Cache.Redis.Core.IRedisCache,StackExchange.Redis.RedisKey)">
+            <summary>
+            出队有序集合值
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.Core.RedisCacheOptions.Configuration">
+            <summary>
+            连接字符串
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.Core.RedisCacheOptions.ConfigurationOptions">
+            <summary>
+            连接配置选项，优先
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCachePool.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCachePool.Get">
+            <summary>
+            获取Redis缓存
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.Core.RedisCachePool.GetAsync">
+            <summary>
+            获取Redis缓存
+            </summary>
+        </member>
+        <member name="T:QinSoft.Core.Cache.Redis.RedisCacheManager">
+            <summary>
+            Redis缓存管理器
+            集成缓存配置，支持多数据源，支持连接池
+            </summary>
+        </member>
+        <member name="F:QinSoft.Core.Cache.Redis.RedisCacheManager.CacheDictionary">
+            <summary>
+            缓存字典
+            </summary>
+        </member>
+        <member name="F:QinSoft.Core.Cache.Redis.RedisCacheManager.logger">
+            <summary>
+            日志
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.RedisCacheManager.RedisCacheManagerConfig">
+            <summary>
+            Redis缓存配置
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.RedisCacheManager.GetCacheItemConfig(System.String)">
+            <summary>
+            获取缓存配置
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.RedisCacheManager.GetDefaultCacheItemConfig">
+            <summary>
+            获取默认缓存配置
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.RedisCacheManager.BuildCacheFromConfig(QinSoft.Core.Cache.Redis.RedisCacheItemConfig)">
+            <summary>
+            构建缓存实例
+            </summary>
+        </member>
+        <member name="M:QinSoft.Core.Cache.Redis.RedisCacheManager.GetCache">
+            <summary>
+            获取缓存
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:QinSoft.Core.Cache.Redis.RedisCacheManager.GetCacheAsync" -->
+        <member name="M:QinSoft.Core.Cache.Redis.RedisCacheManager.GetCache(System.String)">
+            <summary>
+            获取缓存
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:QinSoft.Core.Cache.Redis.RedisCacheManager.GetCacheAsync(System.String)" -->
+        <member name="M:QinSoft.Core.Cache.Redis.RedisCacheManager.Dispose">
+            <summary>
+            释放资源
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.RedisCacheItemConfig.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.RedisCacheItemConfig.PoolSize">
+            <summary>
+            连接池大小
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.RedisCacheItemConfig.Configuration">
+            <summary>
+            Redis连接配置
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.RedisCacheItemConfig.Backups">
+            <summary>
+            备份缓存配置
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.BackupRedisCacheItemConfig.Configuration">
+            <summary>
+            Redis连接配置，备份配置
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.RedisCacheManagerOptions.ConfigName">
+            <summary>
+            配置名称
+            </summary>
+        </member>
+        <member name="P:QinSoft.Core.Cache.Redis.RedisCacheManagerOptions.ConfigFormat">
+            <summary>
+            配置格式
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.CacheServiceCollectionExtensions.AddLocalCacheManager(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入本地缓存
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.CacheServiceCollectionExtensions.AddLocalCacheManager(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{QinSoft.Core.Cache.Local.LocalCacheManagerOptions})">
+            <summary>
+            注入本地缓存
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.CacheServiceCollectionExtensions.AddRedisCacheManager(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入Redis缓存
+            </summary>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.CacheServiceCollectionExtensions.AddRedisCacheManager(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{QinSoft.Core.Cache.Redis.RedisCacheManagerOptions})">
+            <summary>
+            注入Redis缓存
+            </summary>
+        </member>
+    </members>
+</doc>
