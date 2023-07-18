@@ -55,6 +55,10 @@ namespace QinSoft.Core.Test
             .AddMongoDBManager(options =>
             {
 
+            })
+            .AddKafkaManager(options =>
+            {
+
             });
 
             services.TryProxyAddSingleton<ITestTableRepository, TestTableRepository>(typeof(DatabaseContextInterceptor));

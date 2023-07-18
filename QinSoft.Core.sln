@@ -22,6 +22,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QinSoft.Core.Data", "QinSof
 		{4F560B95-3727-42C8-971E-CC5E1F6DB87F} = {4F560B95-3727-42C8-971E-CC5E1F6DB87F}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QinSoft.Core.MQ", "QinSoft.Core.MQ\QinSoft.Core.MQ.csproj", "{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{70845EDA-F1C5-44ED-8A8D-43D6E3251FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70845EDA-F1C5-44ED-8A8D-43D6E3251FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70845EDA-F1C5-44ED-8A8D-43D6E3251FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

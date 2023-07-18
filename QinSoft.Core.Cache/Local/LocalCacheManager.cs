@@ -183,7 +183,6 @@ namespace QinSoft.Core.Cache.Local
                 }
                 CacheDictionary.Clear();
             }
-            CacheDictionary = null;
         }
     }
 }

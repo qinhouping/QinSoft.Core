@@ -1,18 +1,17 @@
 ﻿using Newtonsoft.Json;
-using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
 
-namespace QinSoft.Core.Data.MongoDB
+namespace QinSoft.Core.MQ.Kafka
 {
     /// <summary>
     /// Mongo管理器配置
     /// </summary>
-    [XmlRoot("mongodbManager", Namespace = "http://www.qinsoft.com")]
-    public class MongoDBManagerConfig
+    [XmlRoot("kafkaManager", Namespace = "http://www.qinsoft.com")]
+    public class KafkaManagerConfig
     {
         /// <summary>
         /// 默认数据库配置
@@ -24,14 +23,14 @@ namespace QinSoft.Core.Data.MongoDB
         /// <summary>
         /// 数据库配置列表
         /// </summary>
-        [XmlElement("mongodb")]
-        [JsonProperty("mongodb")]
-        public MongoDBItemConfig[] Items { get; set; }
+        [XmlElement("kafka")]
+        [JsonProperty("kafka")]
+        public KafkaItemConfig[] Items { get; set; }
 
         /// <summary>
         /// 根据指定名称的本地缓存配置项
         /// </summary>
-        public MongoDBItemConfig GetByName(string name)
+        public KafkaItemConfig GetByName(string name)
         {
             return Items?.FirstOrDefault(u => u.Name != null && u.Name.Equals(name));
         }
@@ -40,7 +39,7 @@ namespace QinSoft.Core.Data.MongoDB
     /// <summary>
     /// 数据库配置项
     /// </summary>
-    public class MongoDBItemConfig
+    public class KafkaItemConfig
     {
         /// <summary>
         /// 名称
@@ -50,18 +49,10 @@ namespace QinSoft.Core.Data.MongoDB
         public string Name { get; set; }
 
         /// <summary>
-        /// mongodb连接配置
+        /// kafka连接配置
         /// </summary>
-        [XmlElement("connectionString")]
-        [JsonProperty("connectionString")]
-        public string ConnectionString { get; set; }
-
-
-        /// <summary>
-        /// mongodb数据库名
-        /// </summary>
-        [XmlElement("database")]
-        [JsonProperty("database")]
-        public string Database { get; set; }
+        [XmlElement("bootstrapServers")]
+        [JsonProperty("bootstrapServers")]
+        public string BootstrapServers { get; set; }
     }
 }

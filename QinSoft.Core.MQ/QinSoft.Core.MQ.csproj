@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Confluent.Kafka" Version="2.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\QinSoft.Core.Common\QinSoft.Core.Common.csproj" />
+    <ProjectReference Include="..\QinSoft.Core.Configure\QinSoft.Core.Configure.csproj" />
+  </ItemGroup>
+
+</Project>

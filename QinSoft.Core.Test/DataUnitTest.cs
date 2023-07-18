@@ -66,6 +66,8 @@ namespace QinSoft.Core.Test
 
             Assert.AreEqual(result.va, model.va);
 
+            Assert.AreNotEqual(repository.Count(), 0);
+
             Assert.AreEqual(repository.Delete((delete) => { delete.Where(t => t.id.Equals("daf7f265-c48b-444c-a4d9-2c584a28ace2")); }), 1);
         }
 

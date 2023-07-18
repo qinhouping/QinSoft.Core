@@ -27,12 +27,12 @@ namespace QinSoft.Core.Data.MongoDB
         /// </summary>
         protected AsyncLocal<IMongoDBClient> DefaultContext { get; set; }
 
-        public MongoDBContext(IMongoDBManager mongoDBManager)
+        public MongoDBContext(IMongoDBManager mongodbManager)
         {
-            ObjectUtils.CheckNull(mongoDBManager, "mongoDBManager");
+            ObjectUtils.CheckNull(mongodbManager, "mongodbManager");
             this.Context = new AsyncLocal<ConcurrentDictionary<string, IMongoDBClient>>();
             this.DefaultContext = new AsyncLocal<IMongoDBClient>();
-            this.mongodbManager = mongoDBManager;
+            this.mongodbManager = mongodbManager;
             Instance = this;
         }
 

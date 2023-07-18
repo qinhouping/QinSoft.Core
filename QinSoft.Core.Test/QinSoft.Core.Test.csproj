@@ -21,10 +21,14 @@
     <ProjectReference Include="..\QinSoft.Core.Configure\QinSoft.Core.Configure.csproj" />
     <ProjectReference Include="..\QinSoft.Core.Data\QinSoft.Core.Data.csproj" />
     <ProjectReference Include="..\QinSoft.Core.Log\QinSoft.Core.Log.csproj" />
+    <ProjectReference Include="..\QinSoft.Core.MQ\QinSoft.Core.MQ.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Configs\ConfigManager.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configs\dev\KafkaManager.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Configs\dev\MongoDBManager.config">
