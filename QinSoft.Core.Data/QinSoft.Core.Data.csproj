@@ -10,10 +10,12 @@
 
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.0.0" />
+    <PackageReference Include="Elasticsearch.Net" Version="7.17.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
+    <PackageReference Include="NEST" Version="7.17.0" />
     <PackageReference Include="SqlSugarCore" Version="5.0.3.4" />
   </ItemGroup>
 
