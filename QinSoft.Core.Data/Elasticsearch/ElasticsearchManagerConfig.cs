@@ -24,8 +24,8 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// <summary>
         /// elasticsearch配置列表
         /// </summary>
-        [XmlElement("mongodb")]
-        [JsonProperty("mongodb")]
+        [XmlElement("elasticsearch")]
+        [JsonProperty("elasticsearch")]
         public ElasticsearchItemConfig[] Items { get; set; }
 
         /// <summary>
@@ -48,6 +48,27 @@ namespace QinSoft.Core.Data.Elasticsearch
         [XmlAttribute("name")]
         [JsonProperty("name")]
         public string Name { get; set; }
+
+        /// <summary>
+        /// 名称
+        /// </summary>
+        [XmlAttribute("username")]
+        [JsonProperty("username")]
+        public string Username { get; set; }
+
+        /// <summary>
+        /// 名称
+        /// </summary>
+        [XmlAttribute("password")]
+        [JsonProperty("password")]
+        public string Password { get; set; }
+
+        /// <summary>
+        /// elasticsearch默认索引
+        /// </summary>
+        [XmlAttribute("indexName")]
+        [JsonProperty("indexName")]
+        public string DefaultIndexName { get; set; }
 
         /// <summary>
         /// elasticsearch地址

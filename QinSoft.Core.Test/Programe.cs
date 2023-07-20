@@ -56,6 +56,10 @@ namespace QinSoft.Core.Test
             {
 
             })
+            .AddElasticsearchManager(options =>
+            {
+
+            })
             .AddKafkaManager(options =>
             {
 

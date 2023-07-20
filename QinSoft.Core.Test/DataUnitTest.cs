@@ -21,6 +21,8 @@ using System.Text.RegularExpressions;
 using QinSoft.Core.Data.MongoDB;
 using QinSoft.Core.Data.MongoDB.Core;
 using MongoDB.Bson.Serialization.Attributes;
+using QinSoft.Core.Data.Elasticsearch;
+using Nest;
 
 namespace QinSoft.Core.Test
 {
@@ -109,6 +111,18 @@ namespace QinSoft.Core.Test
             Assert.AreEqual(result.va, model.va);
 
             Assert.AreEqual(repository.DeleteOne(model), true);
+        }
+
+        [TestMethod]
+        public void TestElasticsearch()
+        {
+            IConfiger configer = new FileConfiger(new FileConfigerOptions());
+            ElasticsearchManagerConfig elasticsearchManagerConfig = configer.Get<ElasticsearchManagerConfig>("ElasticsearchManagerConfig");
+            using (IElasticsearchManager elasticsearchManager = new ElasticsearchManager(elasticsearchManagerConfig))
+            {
+                IElasticClient client = elasticsearchManager.GetElasticsearch();
+                var res = client.Get<TestTable>(new GetRequest<TestTable>("test_table", 1));
+            }
         }
     }
 

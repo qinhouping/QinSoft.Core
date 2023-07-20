@@ -14,8 +14,13 @@ using System.Linq;
 
 namespace QinSoft.Core.Data.Elasticsearch
 {
-    public class ElasticsearchManager
+    public class ElasticsearchManager : IElasticsearchManager
     {
+        /// <summary>
+        /// 缓存字典
+        /// </summary>
+        protected ConcurrentDictionary<string, IElasticClient> CacheDictionary;
+
         /// <summary>
         /// 日志
         /// </summary>
@@ -35,6 +40,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         {
             ObjectUtils.CheckNull(config, "config");
             ObjectUtils.CheckNull(logger, "logger");
+            CacheDictionary = new ConcurrentDictionary<string, IElasticClient>();
             ElasticsearchManagerConfig = config;
             this.logger = logger;
         }
@@ -48,6 +54,7 @@ namespace QinSoft.Core.Data.Elasticsearch
             ObjectUtils.CheckNull(options, "options");
             ObjectUtils.CheckNull(configer, "configer");
             ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            CacheDictionary = new ConcurrentDictionary<string, IElasticClient>();
             ElasticsearchManagerConfig = configer.Get<ElasticsearchManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<ElasticsearchManager>();
         }
@@ -61,6 +68,7 @@ namespace QinSoft.Core.Data.Elasticsearch
             ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
             ObjectUtils.CheckNull(configer, "configer");
             ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            CacheDictionary = new ConcurrentDictionary<string, IElasticClient>();
             ElasticsearchManagerConfig = configer.Get<ElasticsearchManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<ElasticsearchManager>();
         }
@@ -83,6 +91,25 @@ namespace QinSoft.Core.Data.Elasticsearch
         }
 
         /// <summary>
+        /// 构建elasticsearch客户端实例
+        /// </summary>
+        protected virtual IElasticClient BuildClientFromConfig(ElasticsearchItemConfig config)
+        {
+            ObjectUtils.CheckNull(config, "config");
+            SniffingConnectionPool pool = new SniffingConnectionPool(config.Urls.Select(u => new Uri(u)));
+            ConnectionSettings connectionSettings = new ConnectionSettings(pool);
+            if (!string.IsNullOrEmpty(config.Username) && !string.IsNullOrEmpty(config.Password))
+            {
+                connectionSettings.BasicAuthentication(config.Username, config.Password);
+            }
+            if (!string.IsNullOrEmpty(config.DefaultIndexName))
+            {
+                connectionSettings.DefaultIndex(config.DefaultIndexName);
+            }
+            return new ElasticClient(connectionSettings);
+        }
+
+        /// <summary>
         /// 获取elasticsearch客户端
         /// </summary>
         public virtual IElasticClient GetElasticsearch()
@@ -93,9 +120,7 @@ namespace QinSoft.Core.Data.Elasticsearch
                 throw new ElasticsearchException("not found default elasticsearch client config");
             }
 
-            IEnumerable<Uri> uris = config.Urls.Select(u => new Uri(u));
-            ConnectionSettings connectionSettings = new ConnectionSettings(new SniffingConnectionPool(uris));
-            IElasticClient client = new ElasticClient(connectionSettings);
+            IElasticClient client = CacheDictionary.GetOrAdd(config.Name, (key) => BuildClientFromConfig(config));
 
             logger.LogDebug("get default elasticsearch client from config");
 
@@ -126,9 +151,7 @@ namespace QinSoft.Core.Data.Elasticsearch
                 throw new ElasticsearchException(string.Format("not found elasticsearch client config:{0}", name));
             }
 
-            IEnumerable<Uri> uris = config.Urls.Select(u => new Uri(u));
-            ConnectionSettings connectionSettings = new ConnectionSettings(new SniffingConnectionPool(uris));
-            IElasticClient client = new ElasticClient(connectionSettings);
+            IElasticClient client = CacheDictionary.GetOrAdd(config.Name, (key) => BuildClientFromConfig(config));
 
             logger.LogDebug(string.Format("get elasticsearch client from config:{0}", name));
 
@@ -152,6 +175,10 @@ namespace QinSoft.Core.Data.Elasticsearch
         public virtual void Dispose()
         {
             GC.SuppressFinalize(this);
+            if (CacheDictionary != null)
+            {
+                CacheDictionary.Clear();
+            }
         }
     }
 }

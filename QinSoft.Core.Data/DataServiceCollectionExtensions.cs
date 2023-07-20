@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using QinSoft.Core.Data.MongoDB;
+using QinSoft.Core.Data.Elasticsearch;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -65,6 +66,30 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAdd(ServiceDescriptor.Singleton<IMongoDBManager, MongoDBManager>());
             services.TryAdd(ServiceDescriptor.Singleton<IMongoDBContext, MongoDBContext>());
             services.TryAddSingleton<MongoDBContextInterceptor>();
+            services.Configure(setupAction);
+            return services;
+        }
+
+        /// <summary>
+        /// 注入Elasticsearch
+        /// </summary>
+        public static IServiceCollection AddElasticsearchManager(this IServiceCollection services)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchManager, ElasticsearchManager>());
+            return services;
+        }
+
+        /// <summary>
+        /// 注入Elasticsearch
+        /// </summary>
+        public static IServiceCollection AddElasticsearchManager(this IServiceCollection services, Action<MongoDBManagerOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchManager, ElasticsearchManager>());
             services.Configure(setupAction);
             return services;
         }

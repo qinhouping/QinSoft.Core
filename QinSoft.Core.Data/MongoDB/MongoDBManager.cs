@@ -86,6 +86,15 @@ namespace QinSoft.Core.Data.MongoDB
         }
 
         /// <summary>
+        /// 构建mongodb客户端实例
+        /// </summary>
+        protected virtual IMongoDBClient BuildClientFromConfig(MongoDBItemConfig config)
+        {
+            ObjectUtils.CheckNull(config, "config");
+            return string.IsNullOrEmpty(config.Database) ? new MongoDBClient(config.ConnectionString) : new MongoDBClient(config.ConnectionString, config.Database);
+        }
+
+        /// <summary>
         /// 获取mongodb客户端
         /// </summary>
         public virtual IMongoDBClient GetMongoDB()
@@ -96,7 +105,7 @@ namespace QinSoft.Core.Data.MongoDB
                 throw new MongoDBException("not found default mongodb client config");
             }
 
-            IMongoDBClient client = string.IsNullOrEmpty(config.Database) ? new MongoDBClient(config.ConnectionString) : new MongoDBClient(config.ConnectionString, config.Database);
+            IMongoDBClient client = BuildClientFromConfig(config);
 
             logger.LogDebug("get default mongodb client from config");
 
@@ -125,7 +134,8 @@ namespace QinSoft.Core.Data.MongoDB
             {
                 throw new MongoDBException(string.Format("not found mongodb client config:{0}", name));
             }
-            IMongoDBClient client = string.IsNullOrEmpty(config.Database) ? new MongoDBClient(config.ConnectionString) : new MongoDBClient(config.ConnectionString, config.Database);
+
+            IMongoDBClient client = BuildClientFromConfig(config);
 
             logger.LogDebug(string.Format("get mongodb client from config:{0}", name));
 
