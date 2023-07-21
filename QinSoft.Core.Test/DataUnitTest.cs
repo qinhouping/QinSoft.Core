@@ -134,9 +134,9 @@ namespace QinSoft.Core.Test
 
                 DeleteResponse deleteResponse = client.Delete(new DeleteDescriptor<TestTable>(indexName, "2ef6965e3-fb87-4add-9a89-7e5dc30c1961"));
 
-                UpdateResponse<TestTable> updateResponse = client.Update<TestTable>((new DocumentPath<TestTable>("2993a1de-b98a-4aa9-bae1-215aaaf7600d")).Index(indexName), u => u.Doc(new TestTable() { va2 = "update " + DateTime.Now.ToString() }));
-
                 UpdateResponse<TestTable> updateResponse2 = client.Update<TestTable, TestTable>(new UpdateDescriptor<TestTable, TestTable>(indexName, "2993a1de-b98a-4aa9-bae1-215aaaf7600d").Doc(new TestTable() { va2 = "update2 " + DateTime.Now.ToString() }));
+
+                UpdateResponse<TestTable> updateResponse = client.Update<TestTable>((new DocumentPath<TestTable>("2993a1de-b98a-4aa9-bae1-215aaaf7600d")).Index(indexName), u => u.Doc(new TestTable() { va2 = "update " + DateTime.Now.ToString() }));
 
                 GetResponse<TestTable> getResponse = client.Get<TestTable>(new GetDescriptor<TestTable>(indexName, "5cb891a5-2d35-40b3-8be4-bf78eac405bb"));
 
