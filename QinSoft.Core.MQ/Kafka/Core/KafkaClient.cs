@@ -140,13 +140,7 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// </summary>
         protected virtual IConsumer<TKEY, TVALUE> BuildConsumer(string groupId, TopicPartition topicPartition)
         {
-            ConsumerConfig config = new ConsumerConfig()
-            {
-                BootstrapServers = BootstrapServers,
-                GroupId = groupId,
-                AutoOffsetReset = AutoOffsetReset.Earliest
-            };
-            IConsumer<TKEY, TVALUE> consumer = new ConsumerBuilder<TKEY, TVALUE>(config).Build();
+            IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId);
             consumer.Assign(topicPartition);
             return consumer;
         }
@@ -156,13 +150,7 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// </summary>
         protected virtual IConsumer<TKEY, TVALUE> BuildConsumer(string groupId, TopicPartitionOffset topicPartitionOffset)
         {
-            ConsumerConfig config = new ConsumerConfig()
-            {
-                BootstrapServers = BootstrapServers,
-                GroupId = groupId,
-                AutoOffsetReset = AutoOffsetReset.Earliest
-            };
-            IConsumer<TKEY, TVALUE> consumer = new ConsumerBuilder<TKEY, TVALUE>(config).Build();
+            IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId);
             consumer.Assign(topicPartitionOffset);
             return consumer;
         }

@@ -64,6 +64,13 @@ namespace QinSoft.Core.Data.Elasticsearch
         public string Password { get; set; }
 
         /// <summary>
+        /// 认证令牌
+        /// </summary>
+        [XmlAttribute("apiKey")]
+        [JsonProperty("apiKey")]
+        public string ApiKey { get; set; }
+
+        /// <summary>
         /// elasticsearch默认索引
         /// </summary>
         [XmlAttribute("indexName")]

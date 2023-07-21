@@ -98,6 +98,10 @@ namespace QinSoft.Core.Data.Elasticsearch
             ObjectUtils.CheckNull(config, "config");
             SniffingConnectionPool pool = new SniffingConnectionPool(config.Urls.Select(u => new Uri(u)));
             ConnectionSettings connectionSettings = new ConnectionSettings(pool);
+            if (!string.IsNullOrEmpty(config.ApiKey))
+            {
+                connectionSettings.ApiKeyAuthentication(new ApiKeyAuthenticationCredentials(config.ApiKey));
+            }
             if (!string.IsNullOrEmpty(config.Username) && !string.IsNullOrEmpty(config.Password))
             {
                 connectionSettings.BasicAuthentication(config.Username, config.Password);

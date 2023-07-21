@@ -52,7 +52,7 @@ namespace QinSoft.Core.Test
             var model = new TestTable()
             {
                 id = "daf7f265-c48b-444c-a4d9-2c584a28ace2",
-                va = DateTime.Now.ToString()
+                va2 = DateTime.Now.ToString()
             };
 
             if (repository.Count(query => query.Where(t => t.id.Equals("daf7f265-c48b-444c-a4d9-2c584a28ace2"))) == 0)
@@ -66,7 +66,7 @@ namespace QinSoft.Core.Test
 
             TestTable result = repository.SelectOne((query) => { query.Where(t => t.id.Equals("daf7f265-c48b-444c-a4d9-2c584a28ace2")); });
 
-            Assert.AreEqual(result.va, model.va);
+            Assert.AreEqual(result.va2, model.va2);
 
             Assert.AreNotEqual(repository.Count(), 0);
 
@@ -94,7 +94,7 @@ namespace QinSoft.Core.Test
             var model = new TestTable()
             {
                 id = "daf7f265-c48b-444c-a4d9-2c584a28ace2",
-                va = DateTime.Now.ToString()
+                va2 = DateTime.Now.ToString()
             };
 
             if (repository.FindOne(model) == null)
@@ -108,26 +108,57 @@ namespace QinSoft.Core.Test
 
             TestTable result = repository.FindOne(model);
 
-            Assert.AreEqual(result.va, model.va);
+            Assert.AreEqual(result.va2, model.va2);
 
             Assert.AreEqual(repository.DeleteOne(model), true);
         }
 
         [TestMethod]
-        public void TestElasticsearch()
+        public void TestElasticsearchManager()
         {
+            string indexName = "test_table";
             IConfiger configer = new FileConfiger(new FileConfigerOptions());
             ElasticsearchManagerConfig elasticsearchManagerConfig = configer.Get<ElasticsearchManagerConfig>("ElasticsearchManagerConfig");
             using (IElasticsearchManager elasticsearchManager = new ElasticsearchManager(elasticsearchManagerConfig))
             {
                 IElasticClient client = elasticsearchManager.GetElasticsearch();
-                var res = client.Get<TestTable>(new GetRequest<TestTable>("test_table", 1));
+                CreateIndexResponse createIndexResponse = client.Indices.Create(indexName, c => c
+                     .Map<TestTable>(m => m.Properties(p => p
+                         .Keyword(t => t.Name(n => n.id))
+                         .Text(t => t.Name(n => n.va2))
+                         )
+                     )
+                 );
+
+                IndexResponse indexResponse = client.Index<TestTable>(new IndexDescriptor<TestTable>(new TestTable() { id = Guid.NewGuid().ToString(), va2 = "hello world" }, indexName));
+
+                DeleteResponse deleteResponse = client.Delete(new DeleteDescriptor<TestTable>(indexName, "2ef6965e3-fb87-4add-9a89-7e5dc30c1961"));
+
+                UpdateResponse<TestTable> updateResponse = client.Update<TestTable>((new DocumentPath<TestTable>("2993a1de-b98a-4aa9-bae1-215aaaf7600d")).Index(indexName), u => u.Doc(new TestTable() { va2 = "update " + DateTime.Now.ToString() }));
+
+                UpdateResponse<TestTable> updateResponse2 = client.Update<TestTable, TestTable>(new UpdateDescriptor<TestTable, TestTable>(indexName, "2993a1de-b98a-4aa9-bae1-215aaaf7600d").Doc(new TestTable() { va2 = "update2 " + DateTime.Now.ToString() }));
+
+                GetResponse<TestTable> getResponse = client.Get<TestTable>(new GetDescriptor<TestTable>(indexName, "5cb891a5-2d35-40b3-8be4-bf78eac405bb"));
+
+                ISearchResponse<TestTable> searchResponse = client.Search<TestTable>(new SearchDescriptor<TestTable>(indexName).Query(q => q
+                    .Match(m => m
+                        .Field(f => f.va2)
+                        .Query("update")
+                        )
+                    )
+                );
+
+                ISearchResponse<TestTable> searchResponse2 = client.Search<TestTable>(s => s.Index(indexName).Query(q => q
+                     .Match(m => m
+                           .Field(f => f.id)
+                           .Query("bae1")
+                           )
+                    )
+                );
             }
         }
     }
 
-    [MongoDBCollection("t")]
-    [SugarTable("t")]
     public class TestTable
     {
         [BsonId]
@@ -136,7 +167,7 @@ namespace QinSoft.Core.Test
 
         [BsonElement("value")]
         [SugarColumn(ColumnName = "value")]
-        public string va { get; set; }
+        public string va2 { get; set; }
 
         [BsonIgnore]
         [SugarColumn(IsIgnore = true)]
