@@ -313,6 +313,24 @@ namespace QinSoft.Core.Data.MongoDB.Core
             return await find.FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// 计数文档
+        /// </summary>
+        public virtual long Count(FilterDefinition<T> filter)
+        {
+            IFindFluent<T, T> find = Collection.Find(filter);
+            return find.CountDocuments();
+        }
+
+        /// <summary>
+        /// 计数文档
+        /// </summary>
+        public virtual async Task<long> CountAsync(FilterDefinition<T> filter)
+        {
+            IFindFluent<T, T> find = Collection.Find(filter);
+            return await find.CountDocumentsAsync();
+        }
+
 
         /// <summary>
         /// 批量操作文档

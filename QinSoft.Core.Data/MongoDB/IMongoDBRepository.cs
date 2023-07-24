@@ -146,6 +146,15 @@ namespace QinSoft.Core.Data.MongoDB.Core
         /// </summary>
         Task<T> FindOneAsync(T docuemnt);
 
+        /// <summary>
+        /// 计数文档
+        /// </summary>
+        long Count(FilterDefinition<T> filter);
+
+        /// <summary>
+        /// 计数文档
+        /// </summary>
+        Task<long> CountAsync(FilterDefinition<T> filter);
 
         /// <summary>
         /// 批量操作文档

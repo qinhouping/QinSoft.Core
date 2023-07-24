@@ -136,22 +136,20 @@ namespace QinSoft.Core.Test
 
                 UpdateResponse<TestTable> updateResponse2 = client.Update<TestTable, TestTable>(new UpdateDescriptor<TestTable, TestTable>(indexName, "2993a1de-b98a-4aa9-bae1-215aaaf7600d").Doc(new TestTable() { va2 = "update2 " + DateTime.Now.ToString() }));
 
-                UpdateResponse<TestTable> updateResponse = client.Update<TestTable>((new DocumentPath<TestTable>("2993a1de-b98a-4aa9-bae1-215aaaf7600d")).Index(indexName), u => u.Doc(new TestTable() { va2 = "update " + DateTime.Now.ToString() }));
+                UpdateResponse<TestTable> updateResponse = client.Update<TestTable, TestTable>((new DocumentPath<TestTable>("2993a1de-b98a-4aa9-bae1-215aaaf7600d")).Index(indexName), u => u.Doc(new TestTable() { va2 = "update " + DateTime.Now.ToString() }));
 
                 GetResponse<TestTable> getResponse = client.Get<TestTable>(new GetDescriptor<TestTable>(indexName, "5cb891a5-2d35-40b3-8be4-bf78eac405bb"));
 
                 ISearchResponse<TestTable> searchResponse = client.Search<TestTable>(new SearchDescriptor<TestTable>(indexName).Query(q => q
-                    .Match(m => m
-                        .Field(f => f.va2)
-                        .Query("update")
+                    .Fuzzy(m => m
+                        .Field(f => f.va2).Value("update").Fuzziness(Fuzziness.EditDistance(2))
                         )
                     )
-                );
+                ); ;
 
                 ISearchResponse<TestTable> searchResponse2 = client.Search<TestTable>(s => s.Index(indexName).Query(q => q
-                     .Match(m => m
-                           .Field(f => f.id)
-                           .Query("bae1")
+                     .Term(t => t
+                           .Field(f => f.id).Value("2993a1de-b98a-4aa9-bae1-215aaaf7600d")
                            )
                     )
                 );

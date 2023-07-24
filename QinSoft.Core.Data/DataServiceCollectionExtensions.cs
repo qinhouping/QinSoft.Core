@@ -78,6 +78,8 @@ namespace Microsoft.Extensions.DependencyInjection
             ObjectUtils.CheckNull(services, "services");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchManager, ElasticsearchManager>());
+            services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchContext, ElasticsearchContext>());
+            services.TryAddSingleton<ElasticsearchContextInterceptor>();
             return services;
         }
 
@@ -90,6 +92,8 @@ namespace Microsoft.Extensions.DependencyInjection
             ObjectUtils.CheckNull(setupAction, "setupAction");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchManager, ElasticsearchManager>());
+            services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchContext, ElasticsearchContext>());
+            services.TryAddSingleton<ElasticsearchContextInterceptor>();
             services.Configure(setupAction);
             return services;
         }
