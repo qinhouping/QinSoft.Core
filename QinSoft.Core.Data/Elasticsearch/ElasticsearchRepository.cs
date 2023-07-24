@@ -22,7 +22,7 @@ namespace QinSoft.Core.Data.Elasticsearch
             get
             {
                 Type type = typeof(T);
-                ElasticsearchContextAttribute attribute = type.GetCustomAttributes(typeof(ElasticsearchContextAttribute), false).FirstOrDefault() as ElasticsearchContextAttribute;
+                ElasticsearchIndexAttribute attribute = type.GetCustomAttributes(typeof(ElasticsearchIndexAttribute), false).FirstOrDefault() as ElasticsearchIndexAttribute;
                 if (attribute != null && !string.IsNullOrEmpty(attribute.Name))
                 {
                     return ElasticsearchContext.Instance.Get(attribute.Name);
@@ -39,12 +39,12 @@ namespace QinSoft.Core.Data.Elasticsearch
             get
             {
                 Type type = typeof(T);
-                ElasticsearchContextAttribute attribute = type.GetCustomAttributes(typeof(ElasticsearchContextAttribute), false).FirstOrDefault() as ElasticsearchContextAttribute;
+                ElasticsearchIndexAttribute attribute = type.GetCustomAttributes(typeof(ElasticsearchIndexAttribute), false).FirstOrDefault() as ElasticsearchIndexAttribute;
                 if (attribute != null)
                 {
                     return attribute.IndexName;
                 }
-                return null;
+                return type.Name;
             }
         }
 

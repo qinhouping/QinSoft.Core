@@ -17,6 +17,7 @@ using System.IO;
 using System.Text;
 using NLog.Extensions.Logging;
 using QinSoft.Core.Data.MongoDB;
+using QinSoft.Core.Data.Elasticsearch;
 
 namespace QinSoft.Core.Test
 {
@@ -67,6 +68,7 @@ namespace QinSoft.Core.Test
 
             services.TryProxyAddSingleton<ITestTableRepository, TestTableRepository>(typeof(DatabaseContextInterceptor));
             services.TryProxyAddSingleton<ITestTableMongoDBRepository, TestTableMongoDBRepository>(typeof(MongoDBContextInterceptor));
+            services.TryProxyAddSingleton<ITestTableElasticsearchRepository, TestTableElasticsearchRepository>(typeof(ElasticsearchContextInterceptor));
             ServiceProvider = services.BuildServiceProvider();
         }
     }

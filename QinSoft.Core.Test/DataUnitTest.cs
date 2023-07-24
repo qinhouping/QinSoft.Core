@@ -145,7 +145,7 @@ namespace QinSoft.Core.Test
                         .Field(f => f.va2).Value("update").Fuzziness(Fuzziness.EditDistance(2))
                         )
                     )
-                ); ;
+                );
 
                 ISearchResponse<TestTable> searchResponse2 = client.Search<TestTable>(s => s.Index(indexName).Query(q => q
                      .Term(t => t
@@ -155,8 +155,18 @@ namespace QinSoft.Core.Test
                 );
             }
         }
+
+        [TestMethod]
+        public void TestElasticsearchRespository()
+        {
+            ITestTableElasticsearchRepository repository = Programe.ServiceProvider.GetService<ITestTableElasticsearchRepository>();
+            var res = repository.Search(q => q.Match(m => m
+                .Field(f => f.id).Query("5cb891a5"))
+             );
+        }
     }
 
+    [ElasticsearchIndex("test_table")]
     public class TestTable
     {
         [BsonId]
@@ -189,6 +199,16 @@ namespace QinSoft.Core.Test
     }
 
     public class TestTableMongoDBRepository : MongoDBRepository<TestTable>, ITestTableMongoDBRepository
+    {
+
+    }
+
+    public interface ITestTableElasticsearchRepository : IElasticsearchRepository<TestTable>
+    {
+
+    }
+
+    public class TestTableElasticsearchRepository : ElasticsearchRepository<TestTable>, ITestTableElasticsearchRepository
     {
 
     }

@@ -86,7 +86,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 注入Elasticsearch
         /// </summary>
-        public static IServiceCollection AddElasticsearchManager(this IServiceCollection services, Action<MongoDBManagerOptions> setupAction)
+        public static IServiceCollection AddElasticsearchManager(this IServiceCollection services, Action<ElasticsearchManagerOptions> setupAction)
         {
             ObjectUtils.CheckNull(services, "services");
             ObjectUtils.CheckNull(setupAction, "setupAction");

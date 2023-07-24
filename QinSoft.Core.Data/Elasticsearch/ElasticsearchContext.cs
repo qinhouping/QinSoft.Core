@@ -29,7 +29,7 @@ namespace QinSoft.Core.Data.Elasticsearch
 
         public ElasticsearchContext(IElasticsearchManager elasticsearchManager)
         {
-            ObjectUtils.CheckNull(elasticsearchManager, "mongodbManager");
+            ObjectUtils.CheckNull(elasticsearchManager, "elasticsearchManager");
             this.Context = new AsyncLocal<ConcurrentDictionary<string, IElasticClient>>();
             this.DefaultContext = new AsyncLocal<IElasticClient>();
             this.ElasticsearchManager = elasticsearchManager;
