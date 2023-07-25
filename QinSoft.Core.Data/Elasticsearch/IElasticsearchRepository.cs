@@ -10,7 +10,7 @@ using Nest;
 namespace QinSoft.Core.Data.Elasticsearch
 {
     /// <summary>
-    /// 数据库仓库接口
+    /// elasticsearch仓库接口
     /// </summary>
     public interface IElasticsearchRepository<T> where T : class, new()
     {
