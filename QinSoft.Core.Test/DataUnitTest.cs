@@ -166,6 +166,8 @@ namespace QinSoft.Core.Test
         }
     }
 
+    [SugarTable("test_table")]
+    [MongoDBCollection("test_table")]
     [ElasticsearchIndex("test_table")]
     public class TestTable
     {
