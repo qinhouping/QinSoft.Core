@@ -23,6 +23,7 @@ using QinSoft.Core.Data.MongoDB.Core;
 using MongoDB.Bson.Serialization.Attributes;
 using QinSoft.Core.Data.Elasticsearch;
 using Nest;
+using MongoDB.Bson;
 
 namespace QinSoft.Core.Test
 {

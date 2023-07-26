@@ -267,13 +267,7 @@ namespace QinSoft.Core.Data.MongoDB.Core
         /// </summary>
         public virtual async Task<IEnumerable<T>> FindAsync(FilterDefinition<T> filter, SortDefinition<T> sort = null, int? skip = null, int? limit = 0)
         {
-            IFindFluent<T, T> find = Collection.Find(filter);
-            if (sort != null)
-                find = find.Sort(sort);
-            if (skip != null)
-                find = find.Skip(skip);
-            if (limit != null)
-                find = find.Limit(limit);
+            IFindFluent<T, T> find = Collection.Find(filter).Sort(sort).Skip(skip).Limit(limit);
             return await find.ToListAsync();
         }
 

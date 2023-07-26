@@ -25,6 +25,16 @@ namespace QinSoft.Core.Data.Elasticsearch
         Task<(bool, string)> IndexAsync(T document);
 
         /// <summary>
+        /// 批量索引文档
+        /// </summary>
+        int BulkIndex(params T[] documents);
+
+        /// <summary>
+        /// 批量索引文档
+        /// </summary>
+        Task<int> BulkIndexAsync(params T[] documents);
+
+        /// <summary>
         /// 移除文档
         /// </summary>
         bool Delete(string id);
@@ -33,6 +43,16 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// 移除文档
         /// </summary>
         Task<bool> DeleteAsync(string id);
+
+        /// <summary>
+        /// 移除文档
+        /// </summary>
+        int BulkDelete(params string[] ids);
+
+        /// <summary>
+        /// 移除文档
+        /// </summary>
+        Task<int> BulkDeleteAsync(params string[] ids);
 
         /// <summary>
         /// 更新文档
@@ -47,12 +67,53 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// <summary>
         /// 更新文档
         /// </summary>
+        int BulkUpdate(Func<T, string> idAction, params T[] documents);
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        Task<int> BulkUpdateAsync(Func<T, string> idAction, params T[] documents);
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        bool Upsert(string id, T docuemnt);
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        Task<bool> UpsertAsync(string id, T docuemnt);
+
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        int BulkUpsert(Func<T, string> idAction, params T[] documents);
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        Task<int> BulkUpsertAsync(Func<T, string> idAction, params T[] documents);
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
         bool Update<TPartial>(string id, TPartial docuemnt) where TPartial : class, new();
 
         /// <summary>
         /// 更新文档
         /// </summary>
         Task<bool> UpdateAsync<TPartial>(string id, TPartial docuemnt) where TPartial : class, new();
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        int BulkUpdate<TPartial>(Func<TPartial, string> idAction, params TPartial[] documents) where TPartial : class, new();
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        Task<int> BulkUpdateAsync<TPartial>(Func<TPartial, string> idAction, params TPartial[] documents) where TPartial : class, new();
 
         /// <summary>
         /// 获取文档

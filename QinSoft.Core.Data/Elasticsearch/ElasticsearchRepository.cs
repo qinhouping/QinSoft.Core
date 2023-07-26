@@ -53,7 +53,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual (bool, string) Index(T document)
         {
-            IndexResponse response = Client.Index(document, i => i.Index(IndexName));
+            IndexResponse response = Client.Index<T>(document, i => i.Index(IndexName));
             if (response.IsValid)
             {
                 return (Result.Created.Equals(response.Result), response.Id);
@@ -69,7 +69,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual async Task<(bool, string)> IndexAsync(T document)
         {
-            IndexResponse response = await Client.IndexAsync(document, (i) => i.Index(IndexName));
+            IndexResponse response = await Client.IndexAsync<T>(document, (i) => i.Index(IndexName));
             if (response.IsValid)
             {
                 return (Result.Created.Equals(response.Result), response.Id);
@@ -81,11 +81,43 @@ namespace QinSoft.Core.Data.Elasticsearch
         }
 
         /// <summary>
+        /// 批量索引文档
+        /// </summary>
+        public virtual int BulkIndex(params T[] documents)
+        {
+            BulkResponse response = Client.Bulk(s => s.IndexMany<T>(documents, (i, t) => i.Index(IndexName)));
+            if (response.IsValid)
+            {
+                return response.Items.Count();
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 批量索引文档
+        /// </summary>
+        public virtual async Task<int> BulkIndexAsync(params T[] documents)
+        {
+            BulkResponse response = await Client.BulkAsync(s => s.IndexMany<T>(documents, (i, t) => i.Index(IndexName)));
+            if (response.IsValid)
+            {
+                return response.Items.Count();
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
         /// 移除文档
         /// </summary>
         public virtual bool Delete(string id)
         {
-            DeleteResponse response = Client.Delete(new DocumentPath<T>(id), s => s.Index(IndexName));
+            DeleteResponse response = Client.Delete<T>(id, s => s.Index(IndexName));
             if (response.IsValid)
             {
                 return Result.Deleted.Equals(response.Result);
@@ -101,7 +133,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual async Task<bool> DeleteAsync(string id)
         {
-            DeleteResponse response = await Client.DeleteAsync(new DocumentPath<T>(new Id(id)), s => s.Index(IndexName));
+            DeleteResponse response = await Client.DeleteAsync<T>(id, s => s.Index(IndexName));
             if (response.IsValid)
             {
                 return Result.Deleted.Equals(response.Result);
@@ -113,11 +145,43 @@ namespace QinSoft.Core.Data.Elasticsearch
         }
 
         /// <summary>
+        /// 移除文档
+        /// </summary>
+        public virtual int BulkDelete(params string[] ids)
+        {
+            BulkResponse response = Client.Bulk(s => s.DeleteMany(ids, (d, t) => d.Index(IndexName)));
+            if (response.IsValid)
+            {
+                return response.Items.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 移除文档
+        /// </summary>
+        public virtual async Task<int> BulkDeleteAsync(params string[] ids)
+        {
+            BulkResponse response = await Client.BulkAsync(s => s.DeleteMany(ids, (d, t) => d.Index(IndexName)));
+            if (response.IsValid)
+            {
+                return response.Items.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
         /// 更新文档
         /// </summary>
         public virtual bool Update(string id, T docuemnt)
         {
-            UpdateResponse<T> response = Client.Update(new DocumentPath<T>(id), s => s.Index(IndexName).Doc(docuemnt));
+            UpdateResponse<T> response = Client.Update<T>(id, s => s.Index(IndexName).Doc(docuemnt));
             if (response.IsValid)
             {
                 return Result.Updated.Equals(response.Result);
@@ -133,7 +197,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual async Task<bool> UpdateAsync(string id, T docuemnt)
         {
-            UpdateResponse<T> response = await Client.UpdateAsync(new DocumentPath<T>(id), s => s.Index(IndexName).Doc(docuemnt));
+            UpdateResponse<T> response = await Client.UpdateAsync<T>(id, s => s.Index(IndexName).Doc(docuemnt));
             if (response.IsValid)
             {
                 return Result.Updated.Equals(response.Result);
@@ -147,9 +211,105 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// <summary>
         /// 更新文档
         /// </summary>
+        public virtual int BulkUpdate(Func<T, string> idAction, params T[] documents)
+        {
+            BulkResponse response = Client.Bulk(s => s.UpdateMany<T>(documents, (u, t) => u.Index(IndexName).Id(idAction(t)).Doc(t)));
+            if (response.IsValid)
+            {
+                return response.Items.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        public virtual async Task<int> BulkUpdateAsync(Func<T, string> idAction, params T[] documents)
+        {
+            BulkResponse response = await Client.BulkAsync(s => s.UpdateMany<T>(documents, (u, t) => u.Index(IndexName).Id(idAction(t)).Doc(t)));
+            if (response.IsValid)
+            {
+                return response.Items.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        public virtual bool Upsert(string id, T docuemnt)
+        {
+            UpdateResponse<T> response = Client.Update<T>(id, s => s.Index(IndexName).Upsert(docuemnt));
+            if (response.IsValid)
+            {
+                return Result.Updated.Equals(response.Result);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        public virtual async Task<bool> UpsertAsync(string id, T docuemnt)
+        {
+            UpdateResponse<T> response = await Client.UpdateAsync<T>(id, s => s.Index(IndexName).Upsert(docuemnt));
+            if (response.IsValid)
+            {
+                return Result.Updated.Equals(response.Result);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        public virtual int BulkUpsert(Func<T, string> idAction, params T[] documents)
+        {
+            BulkResponse response = Client.Bulk(s => s.UpdateMany<T>(documents, (u, t) => u.Index(IndexName).Id(idAction(t)).Upsert(t)));
+            if (response.IsValid)
+            {
+                return response.Items.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        public virtual async Task<int> BulkUpsertAsync(Func<T, string> idAction, params T[] documents)
+        {
+            BulkResponse response = await Client.BulkAsync(s => s.UpdateMany<T>(documents, (u, t) => u.Index(IndexName).Id(idAction(t)).Upsert(t)));
+            if (response.IsValid)
+            {
+                return response.Items.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
         public virtual bool Update<TPartial>(string id, TPartial docuemnt) where TPartial : class, new()
         {
-            UpdateResponse<T> response = Client.Update<T, TPartial>(new DocumentPath<T>(id), s => s.Index(IndexName).Doc(docuemnt));
+            UpdateResponse<T> response = Client.Update<T, TPartial>(id, s => s.Index(IndexName).Doc(docuemnt));
             if (response.IsValid)
             {
                 return Result.Updated.Equals(response.Result);
@@ -165,7 +325,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual async Task<bool> UpdateAsync<TPartial>(string id, TPartial document) where TPartial : class, new()
         {
-            UpdateResponse<T> response = await Client.UpdateAsync<T, TPartial>(new DocumentPath<T>(id), s => s.Index(IndexName).Doc(document));
+            UpdateResponse<T> response = await Client.UpdateAsync<T, TPartial>(id, s => s.Index(IndexName).Doc(document));
             if (response.IsValid)
             {
                 return Result.Updated.Equals(response.Result);
@@ -177,11 +337,57 @@ namespace QinSoft.Core.Data.Elasticsearch
         }
 
         /// <summary>
+        /// 更新文档
+        /// </summary>
+        public virtual int BulkUpdate<TPartial>(Func<TPartial, string> idAction, params TPartial[] documents) where TPartial : class, new()
+        {
+            BulkResponse response = Client.Bulk(s =>
+            {
+                foreach (TPartial document in documents)
+                {
+                    s = s.Update<T, TPartial>(u => u.Index(IndexName).Id(idAction(document)).Doc(document));
+                }
+                return s;
+            });
+            if (response.IsValid)
+            {
+                return response.Items.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 更新文档
+        /// </summary>
+        public virtual async Task<int> BulkUpdateAsync<TPartial>(Func<TPartial, string> idAction, params TPartial[] documents) where TPartial : class, new()
+        {
+            BulkResponse response = await Client.BulkAsync(s =>
+            {
+                foreach (TPartial document in documents)
+                {
+                    s = s.Update<T, TPartial>(u => u.Index(IndexName).Id(idAction(document)).Doc(document));
+                }
+                return s;
+            });
+            if (response.IsValid)
+            {
+                return response.Items.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
         /// 获取文档
         /// </summary>
         public virtual T Get(string id)
         {
-            GetResponse<T> response = Client.Get(new DocumentPath<T>(id), s => s.Index(IndexName));
+            GetResponse<T> response = Client.Get<T>(id, s => s.Index(IndexName));
             if (response.IsValid)
             {
                 return response.Source;
@@ -192,12 +398,13 @@ namespace QinSoft.Core.Data.Elasticsearch
             }
         }
 
+
         /// <summary>
         /// 获取文档
         /// </summary>
         public virtual async Task<T> GetAsync(string id)
         {
-            GetResponse<T> response = await Client.GetAsync(new DocumentPath<T>(id), s => s.Index(IndexName));
+            GetResponse<T> response = await Client.GetAsync<T>(id, s => s.Index(IndexName));
             if (response.IsValid)
             {
                 return response.Source;
