@@ -18,5 +18,17 @@ namespace QinSoft.Core.Common.Utils
         {
             return list == null || !list.Any();
         }
+
+        /// <summary>
+        /// 解析枚举
+        /// </summary>
+        public static Nullable<TEnum> ParseEnum<TEnum>(this string name) where TEnum : struct
+        {
+            if (Enum.TryParse<TEnum>(name, out TEnum res))
+            {
+                return res;
+            }
+            return null;
+        }
     }
 }

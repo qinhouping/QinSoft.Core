@@ -10,9 +10,34 @@ namespace QinSoft.Core.MQ.Kafka.Core
     public class KafkaClient<TKEY, TVALUE> : IKafkaClient<TKEY, TVALUE>
     {
         /// <summary>
-        /// Kakfa地址
+        /// 生产者配置信息
         /// </summary>
-        public string BootstrapServers { get; protected set; }
+        protected ProducerConfig ProducerConfig { get; set; }
+
+        /// <summary>
+        /// 消费者配置信息
+        /// </summary>
+        protected ConsumerConfig ConsumerConfig { get; set; }
+
+        /// <summary>
+        /// 键序列化
+        /// </summary>
+        protected ISerializer<TKEY> KeySerializer { get; set; }
+
+        /// <summary>
+        /// 值序列化
+        /// </summary>
+        protected ISerializer<TVALUE> ValueSerializer { get; set; }
+
+        /// <summary>
+        /// 键反序列化
+        /// </summary>
+        protected IDeserializer<TKEY> KeyDeserializer { get; set; }
+
+        /// <summary>
+        /// 值反序列化
+        /// </summary>
+        protected IDeserializer<TVALUE> ValueDeserializer { get; set; }
 
         /// <summary>
         /// 生产者
@@ -21,9 +46,42 @@ namespace QinSoft.Core.MQ.Kafka.Core
 
         private object lockObj = new object();
 
-        public KafkaClient(string bootstrapServers)
+        public KafkaClient(ProducerConfig producerConfig) : this(producerConfig, null, null)
         {
-            this.BootstrapServers = bootstrapServers;
+
+        }
+
+        public KafkaClient(ProducerConfig producerConfig, ISerializer<TKEY> keySerializer, ISerializer<TVALUE> valueSerializer)
+        {
+            this.ProducerConfig = producerConfig;
+            this.KeySerializer = keySerializer;
+            this.ValueSerializer = valueSerializer;
+        }
+
+        public KafkaClient(ConsumerConfig consumerConfig) : this(consumerConfig, null, null)
+        {
+
+        }
+
+        public KafkaClient(ConsumerConfig consumerConfig, IDeserializer<TKEY> keyDeserializer, IDeserializer<TVALUE> valueDeserializer)
+        {
+            this.ConsumerConfig = consumerConfig;
+            this.KeyDeserializer = KeyDeserializer;
+            this.ValueDeserializer = valueDeserializer;
+        }
+
+        public KafkaClient(ProducerConfig producerConfig, ConsumerConfig consumerConfig) : this(producerConfig, null, null, consumerConfig, null, null)
+        {
+        }
+
+        public KafkaClient(ProducerConfig producerConfig, ISerializer<TKEY> keySerializer, ISerializer<TVALUE> valueSerializer, ConsumerConfig consumerConfig, IDeserializer<TKEY> keyDeserializer, IDeserializer<TVALUE> valueDeserializer)
+        {
+            this.ProducerConfig = producerConfig;
+            this.KeySerializer = keySerializer;
+            this.ValueSerializer = valueSerializer;
+            this.ConsumerConfig = consumerConfig;
+            this.KeyDeserializer = KeyDeserializer;
+            this.ValueDeserializer = ValueDeserializer;
         }
 
         /// <summary>
@@ -33,13 +91,18 @@ namespace QinSoft.Core.MQ.Kafka.Core
         {
             lock (lockObj)
             {
-                ProducerConfig config = new ProducerConfig
-                {
-                    BootstrapServers = BootstrapServers
-                };
                 if (Producer == null)
                 {
-                    Producer = new ProducerBuilder<TKEY, TVALUE>(config).Build();
+                    ProducerBuilder<TKEY, TVALUE> builder = new ProducerBuilder<TKEY, TVALUE>(this.ProducerConfig);
+                    if (KeySerializer != null)
+                    {
+                        builder.SetKeySerializer(KeySerializer);
+                    }
+                    if (ValueSerializer != null)
+                    {
+                        builder.SetValueSerializer(ValueSerializer);
+                    }
+                    Producer = builder.Build();
                 }
             }
         }
@@ -124,23 +187,26 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// <summary>
         /// 创建消费者
         /// </summary>
-        protected virtual IConsumer<TKEY, TVALUE> BuildConsumer(string groupId)
+        protected virtual IConsumer<TKEY, TVALUE> BuildConsumer()
         {
-            ConsumerConfig config = new ConsumerConfig()
+            ConsumerBuilder<TKEY, TVALUE> builder = new ConsumerBuilder<TKEY, TVALUE>(ConsumerConfig);
+            if (KeySerializer != null)
             {
-                BootstrapServers = BootstrapServers,
-                GroupId = groupId,
-                AutoOffsetReset = AutoOffsetReset.Earliest
-            };
-            return new ConsumerBuilder<TKEY, TVALUE>(config).Build();
+                builder.SetKeyDeserializer(KeyDeserializer);
+            }
+            if (ValueSerializer != null)
+            {
+                builder.SetValueDeserializer(ValueDeserializer);
+            }
+            return builder.Build();
         }
 
         /// <summary>
         /// 创建消费者
         /// </summary>
-        protected virtual IConsumer<TKEY, TVALUE> BuildConsumer(string groupId, TopicPartition topicPartition)
+        protected virtual IConsumer<TKEY, TVALUE> BuildConsumer(TopicPartition topicPartition)
         {
-            IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId);
+            IConsumer<TKEY, TVALUE> consumer = BuildConsumer();
             consumer.Assign(topicPartition);
             return consumer;
         }
@@ -148,9 +214,9 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// <summary>
         /// 创建消费者
         /// </summary>
-        protected virtual IConsumer<TKEY, TVALUE> BuildConsumer(string groupId, TopicPartitionOffset topicPartitionOffset)
+        protected virtual IConsumer<TKEY, TVALUE> BuildConsumer(TopicPartitionOffset topicPartitionOffset)
         {
-            IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId);
+            IConsumer<TKEY, TVALUE> consumer = BuildConsumer();
             consumer.Assign(topicPartitionOffset);
             return consumer;
         }
@@ -158,9 +224,9 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        public virtual void Consume(string groupId, string topic, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
+        public virtual void Consume(string topic, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId))
+            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer())
             {
                 consumer.Subscribe(topic);
                 try
@@ -168,16 +234,12 @@ namespace QinSoft.Core.MQ.Kafka.Core
                     while (true)
                     {
                         ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
-                        resultHandler(result);
+                        resultHandler(consumer, result);
                     }
                 }
                 catch (OperationCanceledException)
                 {
                     //取消消费
-                }
-                finally
-                {
-                    consumer.Dispose();
                 }
             }
         }
@@ -185,9 +247,9 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        public virtual void Consume(string groupId, TopicPartition topicPartition, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
+        public virtual void Consume(TopicPartition topicPartition, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId, topicPartition))
+            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartition))
             {
                 consumer.Subscribe(topicPartition.Topic);
                 try
@@ -195,16 +257,12 @@ namespace QinSoft.Core.MQ.Kafka.Core
                     while (true)
                     {
                         ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
-                        resultHandler(result);
+                        resultHandler(consumer, result);
                     }
                 }
                 catch (OperationCanceledException)
                 {
                     //取消消费
-                }
-                finally
-                {
-                    consumer.Dispose();
                 }
             }
         }
@@ -212,9 +270,9 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        public virtual void Consume(string groupId, TopicPartitionOffset topicPartitionOffset, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
+        public virtual void Consume(TopicPartitionOffset topicPartitionOffset, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId, topicPartitionOffset))
+            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartitionOffset))
             {
                 consumer.Subscribe(topicPartitionOffset.Topic);
                 try
@@ -222,16 +280,12 @@ namespace QinSoft.Core.MQ.Kafka.Core
                     while (true)
                     {
                         ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
-                        resultHandler(result);
+                        resultHandler(consumer, result);
                     }
                 }
                 catch (OperationCanceledException)
                 {
                     //取消消费
-                }
-                finally
-                {
-                    consumer.Dispose();
                 }
             }
         }
@@ -239,9 +293,9 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        public virtual async Task ConsumeAsync(string groupId, string topic, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
+        public virtual async Task ConsumeAsync(string topic, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId))
+            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer())
             {
                 consumer.Subscribe(topic);
                 try
@@ -249,16 +303,12 @@ namespace QinSoft.Core.MQ.Kafka.Core
                     while (true)
                     {
                         ConsumeResult<TKEY, TVALUE> result = await Task.FromResult(consumer.Consume(cancellationToken));
-                        resultHandler(result);
+                        resultHandler(consumer, result);
                     }
                 }
                 catch (OperationCanceledException)
                 {
                     //取消消费
-                }
-                finally
-                {
-                    consumer.Dispose();
                 }
             }
         }
@@ -266,9 +316,9 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        public virtual async Task ConsumeAsync(string groupId, TopicPartition topicPartition, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
+        public virtual async Task ConsumeAsync(TopicPartition topicPartition, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId, topicPartition))
+            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartition))
             {
                 consumer.Subscribe(topicPartition.Topic);
                 try
@@ -276,16 +326,12 @@ namespace QinSoft.Core.MQ.Kafka.Core
                     while (true)
                     {
                         ConsumeResult<TKEY, TVALUE> result = await Task.FromResult(consumer.Consume(cancellationToken));
-                        resultHandler(result);
+                        resultHandler(consumer, result);
                     }
                 }
                 catch (OperationCanceledException)
                 {
                     //取消消费
-                }
-                finally
-                {
-                    consumer.Dispose();
                 }
             }
         }
@@ -293,9 +339,9 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        public virtual async Task ConsumeAsync(string groupId, TopicPartitionOffset topicPartitionOffset, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
+        public virtual async Task ConsumeAsync(TopicPartitionOffset topicPartitionOffset, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(groupId, topicPartitionOffset))
+            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartitionOffset))
             {
                 consumer.Subscribe(topicPartitionOffset.Topic);
                 try
@@ -303,16 +349,12 @@ namespace QinSoft.Core.MQ.Kafka.Core
                     while (true)
                     {
                         ConsumeResult<TKEY, TVALUE> result = await Task.FromResult(consumer.Consume(cancellationToken));
-                        resultHandler(result);
+                        resultHandler(consumer, result);
                     }
                 }
                 catch (OperationCanceledException)
                 {
                     //取消消费
-                }
-                finally
-                {
-                    consumer.Dispose();
                 }
             }
         }

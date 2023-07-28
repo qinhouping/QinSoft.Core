@@ -28,13 +28,12 @@ namespace QinSoft.Core.Test
             KafkaManagerConfig KafkaManagerConfig = configer.Get<KafkaManagerConfig>("KafkaManagerConfig");
 
             string topic = "test2";
-            string groupId = "test2_group";
 
             using (IKafkaManager kafkaManager = new KafkaManager(KafkaManagerConfig))
             {
                 Task.Factory.StartNew(() =>
                 {
-                    using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka())
+                    using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
                     {
                         while (true)
                         {
@@ -45,19 +44,19 @@ namespace QinSoft.Core.Test
                 });
                 Task.Factory.StartNew(() =>
                 {
-                    using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka())
+                    using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
                     {
-                        kafka.Consume(groupId, topic, (result) =>
-                         {
-                             Console.WriteLine(result.Message.Key + ":" + result.Message.Value);
-                         });
+                        kafka.Consume(topic, (consumer, result) =>
+                        {
+                            Console.WriteLine(result.Message.Key + ":" + result.Message.Value);
+                        });
                     }
                 });
                 Task.Factory.StartNew(() =>
                 {
-                    using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka())
+                    using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
                     {
-                        kafka.Consume(groupId, topic, (result2) =>
+                        kafka.Consume(topic, (consumer2, result2) =>
                         {
                             Console.WriteLine(result2.Message.Key + ":" + result2.Message.Value);
                         });

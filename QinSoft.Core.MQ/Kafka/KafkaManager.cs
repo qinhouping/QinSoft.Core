@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Confluent.Kafka;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using QinSoft.Core.Common.Utils;
@@ -17,7 +18,7 @@ namespace QinSoft.Core.MQ.Kafka
         /// <summary>
         /// 缓存字典
         /// </summary>
-        protected ConcurrentDictionary<string, IKafkaClient<string,string>> CacheDictionary;
+        protected ConcurrentDictionary<string, IKafkaClient> CacheDictionary;
 
         /// <summary>
         /// 日志
@@ -38,7 +39,7 @@ namespace QinSoft.Core.MQ.Kafka
         {
             ObjectUtils.CheckNull(config, "config");
             ObjectUtils.CheckNull(logger, "logger");
-            CacheDictionary = new ConcurrentDictionary<string, IKafkaClient<string,string>>();
+            CacheDictionary = new ConcurrentDictionary<string, IKafkaClient>();
             KafkaManagerConfig = config;
             this.logger = logger;
         }
@@ -52,7 +53,7 @@ namespace QinSoft.Core.MQ.Kafka
             ObjectUtils.CheckNull(options, "options");
             ObjectUtils.CheckNull(configer, "configer");
             ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
-            CacheDictionary = new ConcurrentDictionary<string, IKafkaClient<string,string>>();
+            CacheDictionary = new ConcurrentDictionary<string, IKafkaClient>();
             KafkaManagerConfig = configer.Get<KafkaManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<KafkaManager>();
         }
@@ -66,7 +67,7 @@ namespace QinSoft.Core.MQ.Kafka
             ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
             ObjectUtils.CheckNull(configer, "configer");
             ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
-            CacheDictionary = new ConcurrentDictionary<string, IKafkaClient<string,string>>();
+            CacheDictionary = new ConcurrentDictionary<string, IKafkaClient>();
             KafkaManagerConfig = configer.Get<KafkaManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<KafkaManager>();
         }
@@ -89,17 +90,53 @@ namespace QinSoft.Core.MQ.Kafka
         }
 
         /// <summary>
-        /// 获取mongodb客户端
+        /// 构建mongodb客户端实例
         /// </summary>
-        public virtual IKafkaClient<string,string> GetKafka()
+        protected virtual IKafkaClient<TKEY, TVALUE> BuildClientFromConfig<TKEY, TVALUE>(KafkaItemConfig config)
+        {
+            ObjectUtils.CheckNull(config, "config");
+            ProducerConfig producerConfig = new ProducerConfig()
+            {
+                BootstrapServers = config.BootstrapServers,
+                RequestTimeoutMs = config.Producer?.RequestTimeoutMs,
+                LingerMs = config.Producer?.LingerMs,
+                CompressionType = config.Producer?.CompressionType.ParseEnum<CompressionType>(),
+                CompressionLevel = config.Producer?.CompressionLevel,
+                Acks = config.Producer?.Acks.ParseEnum<Acks>(),
+                EnableIdempotence = config.Producer?.EnableIdempotence,
+                BatchSize = config.Producer?.BatchSize
+            };
+            ISerializer<TKEY> keySerializer = string.IsNullOrEmpty(config.Producer?.KeySerializer) ? null : (ISerializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Producer?.KeySerializer));
+            ISerializer<TVALUE> valueSerializer = string.IsNullOrEmpty(config.Producer?.ValueSerializer) ? null : (ISerializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Producer?.ValueSerializer));
+
+            ConsumerConfig consumerConfig = new ConsumerConfig()
+            {
+                BootstrapServers = config.BootstrapServers,
+                GroupId = config.Consumer?.GroupId,
+                AutoOffsetReset = config.Consumer?.AutoOffsetReset.ParseEnum<AutoOffsetReset>(),
+                EnableAutoCommit = config.Consumer?.EnableAutoCommit,
+                AutoCommitIntervalMs = config.Consumer?.AutoCommitIntervalMs,
+                MaxPollIntervalMs = config.Consumer?.MaxPollIntervalMs,
+                PartitionAssignmentStrategy = config.Consumer?.PartitionAssignmentStrategy.ParseEnum<PartitionAssignmentStrategy>()
+            };
+            IDeserializer<TKEY> keyDeserializer = string.IsNullOrEmpty(config.Consumer?.KeyDeserializer) ? null : (IDeserializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Consumer?.KeyDeserializer));
+            IDeserializer<TVALUE> valueDeserializer = string.IsNullOrEmpty(config.Consumer?.ValueDeserializer) ? null : (IDeserializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Consumer?.ValueDeserializer));
+
+            return new KafkaClient<TKEY, TVALUE>(producerConfig, keySerializer, valueSerializer, consumerConfig, keyDeserializer, valueDeserializer);
+        }
+
+        /// <summary>
+        /// 获取kafka客户端
+        /// </summary>
+        public virtual IKafkaClient<TKEY, TVALUE> GetKafka<TKEY, TVALUE>()
         {
             KafkaItemConfig config = GetDefaultKafkaItemConfig();
             if (config == null)
             {
-                throw new KafkaException("not found default kafka client config");
+                throw new Core.KafkaException("not found default kafka client config");
             }
 
-            IKafkaClient<string,string> client = CacheDictionary.GetOrAdd(config.Name, (key) => new KafkaClient<string,string>(config.BootstrapServers));
+            IKafkaClient<TKEY, TVALUE> client = (IKafkaClient<TKEY, TVALUE>)CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig<TKEY, TVALUE>(config));
 
             logger.LogDebug("get default kafka client from config");
 
@@ -107,29 +144,29 @@ namespace QinSoft.Core.MQ.Kafka
         }
 
         /// <summary>
-        /// 获取mongodb客户端
+        /// 获取kafka客户端
         /// </summary>
-        public virtual async Task<IKafkaClient<string,string>> GetKafkaAsync()
+        public virtual async Task<IKafkaClient<TKEY, TVALUE>> GetKafkaAsync<TKEY, TVALUE>()
         {
             return await Task.Factory.StartNew(() =>
             {
-                return GetKafka();
+                return GetKafka<TKEY, TVALUE>();
             });
         }
 
         /// <summary>
-        /// 获取mongodb客户端
+        /// 获取kafka客户端
         /// </summary>
-        public virtual IKafkaClient<string,string> GetKafka(string name)
+        public virtual IKafkaClient<TKEY, TVALUE> GetKafka<TKEY, TVALUE>(string name)
         {
             ObjectUtils.CheckNull(name, "name");
             KafkaItemConfig config = GetKafkaItemConfig(name);
             if (config == null)
             {
-                throw new KafkaException(string.Format("not found kafka client config:{0}", name));
+                throw new Core.KafkaException(string.Format("not found kafka client config:{0}", name));
             }
 
-            IKafkaClient<string,string> client = CacheDictionary.GetOrAdd(config.Name, (key) => new KafkaClient<string,string>(config.BootstrapServers));
+            IKafkaClient<TKEY, TVALUE> client = (IKafkaClient<TKEY, TVALUE>)CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig<TKEY, TVALUE>(config));
 
             logger.LogDebug(string.Format("get kafka client from config:{0}", name));
 
@@ -137,13 +174,13 @@ namespace QinSoft.Core.MQ.Kafka
         }
 
         /// <summary>
-        /// 获取mongodb客户端
+        /// 获取kafka客户端
         /// </summary>
-        public virtual async Task<IKafkaClient<string,string>> GetKafkaAsync(string name)
+        public virtual async Task<IKafkaClient<TKEY, TVALUE>> GetKafkaAsync<TKEY, TVALUE>(string name)
         {
             return await Task.Factory.StartNew(() =>
             {
-                return GetKafka(name);
+                return GetKafka<TKEY, TVALUE>(name);
             });
         }
 
@@ -155,7 +192,7 @@ namespace QinSoft.Core.MQ.Kafka
             GC.SuppressFinalize(this);
             if (CacheDictionary != null)
             {
-                foreach (KeyValuePair<string, IKafkaClient<string,string>> pair in CacheDictionary)
+                foreach (KeyValuePair<string, IKafkaClient> pair in CacheDictionary)
                 {
                     pair.Value.SafeDispose();
                 }

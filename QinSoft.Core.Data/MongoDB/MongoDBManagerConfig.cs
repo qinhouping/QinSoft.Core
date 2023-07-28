@@ -25,7 +25,7 @@ namespace QinSoft.Core.Data.MongoDB
         /// 数据库配置列表
         /// </summary>
         [XmlElement("mongodb")]
-        [JsonProperty("mongodb")]
+        [JsonProperty("mongodbs")]
         public MongoDBItemConfig[] Items { get; set; }
 
         /// <summary>

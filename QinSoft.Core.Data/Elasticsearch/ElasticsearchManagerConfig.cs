@@ -25,7 +25,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// elasticsearch配置列表
         /// </summary>
         [XmlElement("elasticsearch")]
-        [JsonProperty("elasticsearch")]
+        [JsonProperty("elasticsearches")]
         public ElasticsearchItemConfig[] Items { get; set; }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// elasticsearch地址
         /// </summary>
         [XmlElement("url")]
-        [JsonProperty("url")]
+        [JsonProperty("urls")]
         public string[] Urls { get; set; }
     }
 }

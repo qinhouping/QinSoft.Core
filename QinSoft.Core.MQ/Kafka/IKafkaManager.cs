@@ -9,23 +9,23 @@ namespace QinSoft.Core.MQ.Kafka
     public interface IKafkaManager : IDisposable
     {
         /// <summary>
-        /// 获取mongodb客户端
+        /// 获取kafka客户端
         /// </summary>
-        IKafkaClient<string, string> GetKafka();
+        IKafkaClient<TKEY, TVALUE> GetKafka<TKEY, TVALUE>();
 
         /// <summary>
-        /// 获取mongodb客户端
+        /// 获取kafka客户端
         /// </summary>
-        Task<IKafkaClient<string, string>> GetKafkaAsync();
+        Task<IKafkaClient<TKEY, TVALUE>> GetKafkaAsync<TKEY, TVALUE>();
 
         /// <summary>
-        /// 获取mongodb客户端
+        /// 获取kafka客户端
         /// </summary>
-        IKafkaClient<string, string> GetKafka(string name);
+        IKafkaClient<TKEY, TVALUE> GetKafka<TKEY, TVALUE>(string name);
 
         /// <summary>
-        /// 获取mongodb客户端
+        /// 获取kafka客户端
         /// </summary>
-        Task<IKafkaClient<string, string>> GetKafkaAsync(string name);
+        Task<IKafkaClient<TKEY, TVALUE>> GetKafkaAsync<TKEY, TVALUE>(string name);
     }
 }

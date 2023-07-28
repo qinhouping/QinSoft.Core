@@ -7,10 +7,17 @@ using System.Threading.Tasks;
 
 namespace QinSoft.Core.MQ.Kafka.Core
 {
+    public interface IKafkaClient : IDisposable
+    {
+        /// <summary>
+        /// 安全资源释放
+        /// </summary>
+        void SafeDispose();
+    }
     /// <summary>
     /// kafka客户端
     /// </summary>
-    public interface IKafkaClient<TKEY, TVALUE> : IDisposable
+    public interface IKafkaClient<TKEY, TVALUE> : IKafkaClient
     {
         /// <summary>
         /// 生产者推送队列
@@ -55,37 +62,31 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        void Consume(string groupId, string topic, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
+        void Consume(string topic, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        void Consume(string groupId, TopicPartition topicPartition, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
-
-
-        /// <summary>
-        /// 消费者消费队列
-        /// </summary>
-        void Consume(string groupId, TopicPartitionOffset topicPartitionOffset, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
+        void Consume(TopicPartition topicPartition, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        Task ConsumeAsync(string groupId, string topic, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
+        void Consume(TopicPartitionOffset topicPartitionOffset, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        Task ConsumeAsync(string groupId, TopicPartition topicPartition, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
+        Task ConsumeAsync(string topic, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 消费者消费队列
         /// </summary>
-        Task ConsumeAsync(string groupId, TopicPartitionOffset topicPartitionOffset, Action<ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
+        Task ConsumeAsync(TopicPartition topicPartition, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 安全资源释放
+        /// 消费者消费队列
         /// </summary>
-        void SafeDispose();
+        Task ConsumeAsync(TopicPartitionOffset topicPartitionOffset, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default);
     }
 }
