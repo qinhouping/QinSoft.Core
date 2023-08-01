@@ -117,10 +117,7 @@ namespace QinSoft.Core.Data.MongoDB
         /// </summary>
         public virtual async Task<IMongoDBClient> GetMongoDBAsync()
         {
-            return await Task.Factory.StartNew(() =>
-            {
-                return GetMongoDB();
-            });
+            return await ExecuteUtils.ExecuteInTask(GetMongoDB);
         }
 
         /// <summary>
@@ -147,10 +144,7 @@ namespace QinSoft.Core.Data.MongoDB
         /// </summary>
         public virtual async Task<IMongoDBClient> GetMongoDBAsync(string name)
         {
-            return await Task.Factory.StartNew(() =>
-            {
-                return GetMongoDB(name);
-            });
+            return await ExecuteUtils.ExecuteInTask(GetMongoDB, name);
         }
 
         /// <summary>

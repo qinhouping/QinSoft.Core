@@ -83,7 +83,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long HashDecrement(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -95,7 +95,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool HashDelete(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -107,7 +107,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long HashDelete(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -119,7 +119,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long HashIncrement(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -131,7 +131,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool KeyDelete(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -142,7 +142,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         }
         public override long KeyDelete(RedisKey[] keys, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -154,7 +154,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool KeyExpire(RedisKey key, TimeSpan? expiry, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -165,7 +165,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         }
         public override bool KeyMove(RedisKey key, int database, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -177,7 +177,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool KeyPersist(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -189,7 +189,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool KeyRename(RedisKey key, RedisKey newKey, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -201,7 +201,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override void KeyRestore(RedisKey key, byte[] value, TimeSpan? expiry = null, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -213,7 +213,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long ListInsertAfter(RedisKey key, RedisValue pivot, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -224,7 +224,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         }
         public override long ListInsertBefore(RedisKey key, RedisValue pivot, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -236,7 +236,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisValue ListLeftPop(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -248,7 +248,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long ListLeftPush(RedisKey key, RedisValue value, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -260,7 +260,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long ListLeftPush(RedisKey key, RedisValue[] values, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -272,7 +272,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long ListLeftPush(RedisKey key, RedisValue[] values, CommandFlags flags)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -284,7 +284,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long ListRemove(RedisKey key, RedisValue value, long count = 0, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -296,7 +296,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisValue ListRightPop(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -307,7 +307,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         }
         public override RedisValue ListRightPopLeftPush(RedisKey source, RedisKey destination, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -319,7 +319,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long ListRightPush(RedisKey key, RedisValue value, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -331,7 +331,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long ListRightPush(RedisKey key, RedisValue[] values, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -343,7 +343,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override void ListSetByIndex(RedisKey key, long index, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -355,7 +355,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override void ListTrim(RedisKey key, long start, long stop, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -367,7 +367,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisResult Execute(string command, params object[] args)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -379,7 +379,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisResult Execute(string command, ICollection<object> args, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -391,7 +391,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisResult ScriptEvaluate(string script, RedisKey[] keys = null, RedisValue[] values = null, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -403,7 +403,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisResult ScriptEvaluate(byte[] hash, RedisKey[] keys = null, RedisValue[] values = null, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -415,7 +415,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisResult ScriptEvaluate(LuaScript script, object parameters = null, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -427,7 +427,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisResult ScriptEvaluate(LoadedLuaScript script, object parameters = null, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -439,7 +439,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool SetAdd(RedisKey key, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -451,7 +451,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SetAdd(RedisKey key, RedisValue[] values, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -463,7 +463,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SetCombineAndStore(SetOperation operation, RedisKey destination, RedisKey first, RedisKey second, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -475,7 +475,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SetCombineAndStore(SetOperation operation, RedisKey destination, RedisKey[] keys, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -487,7 +487,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool SetMove(RedisKey source, RedisKey destination, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -499,7 +499,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisValue SetPop(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -511,7 +511,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisValue[] SetPop(RedisKey key, long count, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -523,7 +523,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool SetRemove(RedisKey key, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -535,7 +535,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SetRemove(RedisKey key, RedisValue[] values, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -547,7 +547,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SortAndStore(RedisKey destination, RedisKey key, long skip = 0, long take = -1, Order order = Order.Ascending, SortType sortType = SortType.Numeric, RedisValue by = default, RedisValue[] get = null, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -559,7 +559,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool SortedSetAdd(RedisKey key, RedisValue member, double score, CommandFlags flags)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -571,7 +571,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool SortedSetAdd(RedisKey key, RedisValue member, double score, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -583,7 +583,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SortedSetAdd(RedisKey key, SortedSetEntry[] values, CommandFlags flags)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -595,7 +595,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SortedSetAdd(RedisKey key, SortedSetEntry[] values, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -607,7 +607,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SortedSetCombineAndStore(SetOperation operation, RedisKey destination, RedisKey first, RedisKey second, Aggregate aggregate = Aggregate.Sum, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -619,7 +619,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SortedSetCombineAndStore(SetOperation operation, RedisKey destination, RedisKey[] keys, double[] weights = null, Aggregate aggregate = Aggregate.Sum, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -631,7 +631,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override double SortedSetDecrement(RedisKey key, RedisValue member, double value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -643,7 +643,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override double SortedSetIncrement(RedisKey key, RedisValue member, double value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -655,7 +655,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool SortedSetRemove(RedisKey key, RedisValue member, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -667,7 +667,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SortedSetRemove(RedisKey key, RedisValue[] members, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -679,7 +679,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SortedSetRemoveRangeByRank(RedisKey key, long start, long stop, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -691,7 +691,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SortedSetRemoveRangeByScore(RedisKey key, double start, double stop, Exclude exclude = Exclude.None, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -703,7 +703,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long SortedSetRemoveRangeByValue(RedisKey key, RedisValue min, RedisValue max, Exclude exclude = Exclude.None, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -715,7 +715,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override SortedSetEntry? SortedSetPop(RedisKey key, Order order = Order.Ascending, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -727,7 +727,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override SortedSetEntry[] SortedSetPop(RedisKey key, long count, Order order = Order.Ascending, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -739,7 +739,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long StringAppend(RedisKey key, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -751,7 +751,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long StringBitOperation(Bitwise operation, RedisKey destination, RedisKey first, RedisKey second = default, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -763,7 +763,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long StringDecrement(RedisKey key, long value = 1, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -775,7 +775,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override double StringDecrement(RedisKey key, double value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -787,7 +787,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long StringIncrement(RedisKey key, long value = 1, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -799,7 +799,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override double StringIncrement(RedisKey key, double value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -811,7 +811,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool StringSet(RedisKey key, RedisValue value, TimeSpan? expiry = null, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -823,7 +823,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool StringSet(KeyValuePair<RedisKey, RedisValue>[] values, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -835,7 +835,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool StringSetBit(RedisKey key, long offset, bool bit, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -847,7 +847,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisValue StringSetRange(RedisKey key, long offset, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -859,7 +859,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override bool KeyTouch(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -871,7 +871,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override long KeyTouch(RedisKey[] keys, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -883,7 +883,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> HashDecrementAsync(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -895,7 +895,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> HashDeleteAsync(RedisKey key, RedisValue hashField, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -907,7 +907,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> HashDeleteAsync(RedisKey key, RedisValue[] hashFields, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -919,7 +919,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> HashIncrementAsync(RedisKey key, RedisValue hashField, long value = 1, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -931,7 +931,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> KeyDeleteAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -942,7 +942,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         }
         public override async Task<long> KeyDeleteAsync(RedisKey[] keys, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -954,7 +954,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> KeyExpireAsync(RedisKey key, TimeSpan? expiry, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -965,7 +965,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         }
         public override async Task<bool> KeyMoveAsync(RedisKey key, int database, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -977,7 +977,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> KeyPersistAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -989,7 +989,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> KeyRenameAsync(RedisKey key, RedisKey newKey, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1001,7 +1001,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task KeyRestoreAsync(RedisKey key, byte[] value, TimeSpan? expiry = null, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1013,7 +1013,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> ListInsertAfterAsync(RedisKey key, RedisValue pivot, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1024,7 +1024,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         }
         public override async Task<long> ListInsertBeforeAsync(RedisKey key, RedisValue pivot, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1036,7 +1036,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisValue> ListLeftPopAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1048,7 +1048,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> ListLeftPushAsync(RedisKey key, RedisValue value, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1060,7 +1060,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> ListLeftPushAsync(RedisKey key, RedisValue[] values, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1072,7 +1072,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> ListLeftPushAsync(RedisKey key, RedisValue[] values, CommandFlags flags)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1084,7 +1084,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> ListRemoveAsync(RedisKey key, RedisValue value, long count = 0, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1096,7 +1096,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisValue> ListRightPopAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1107,7 +1107,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         }
         public override async Task<RedisValue> ListRightPopLeftPushAsync(RedisKey source, RedisKey destination, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1119,7 +1119,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> ListRightPushAsync(RedisKey key, RedisValue value, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1131,7 +1131,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> ListRightPushAsync(RedisKey key, RedisValue[] values, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1143,7 +1143,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task ListSetByIndexAsync(RedisKey key, long index, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1155,7 +1155,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task ListTrimAsync(RedisKey key, long start, long stop, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1167,7 +1167,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisResult> ExecuteAsync(string command, params object[] args)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1179,7 +1179,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisResult> ExecuteAsync(string command, ICollection<object> args, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1191,7 +1191,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisResult> ScriptEvaluateAsync(string script, RedisKey[] keys = null, RedisValue[] values = null, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1203,7 +1203,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisResult> ScriptEvaluateAsync(byte[] hash, RedisKey[] keys = null, RedisValue[] values = null, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1215,7 +1215,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisResult> ScriptEvaluateAsync(LuaScript script, object parameters = null, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1227,7 +1227,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisResult> ScriptEvaluateAsync(LoadedLuaScript script, object parameters = null, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1239,7 +1239,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> SetAddAsync(RedisKey key, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1251,7 +1251,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SetAddAsync(RedisKey key, RedisValue[] values, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1263,7 +1263,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SetCombineAndStoreAsync(SetOperation operation, RedisKey destination, RedisKey first, RedisKey second, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1275,7 +1275,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SetCombineAndStoreAsync(SetOperation operation, RedisKey destination, RedisKey[] keys, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1287,7 +1287,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> SetMoveAsync(RedisKey source, RedisKey destination, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1299,7 +1299,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisValue> SetPopAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1311,7 +1311,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisValue[]> SetPopAsync(RedisKey key, long count, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1323,7 +1323,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> SetRemoveAsync(RedisKey key, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1335,7 +1335,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SetRemoveAsync(RedisKey key, RedisValue[] values, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1347,7 +1347,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SortAndStoreAsync(RedisKey destination, RedisKey key, long skip = 0, long take = -1, Order order = Order.Ascending, SortType sortType = SortType.Numeric, RedisValue by = default, RedisValue[] get = null, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1359,7 +1359,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> SortedSetAddAsync(RedisKey key, RedisValue member, double score, CommandFlags flags)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1371,7 +1371,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> SortedSetAddAsync(RedisKey key, RedisValue member, double score, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1383,7 +1383,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SortedSetAddAsync(RedisKey key, SortedSetEntry[] values, CommandFlags flags)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1395,7 +1395,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SortedSetAddAsync(RedisKey key, SortedSetEntry[] values, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1407,7 +1407,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SortedSetCombineAndStoreAsync(SetOperation operation, RedisKey destination, RedisKey first, RedisKey second, Aggregate aggregate = Aggregate.Sum, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1419,7 +1419,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SortedSetCombineAndStoreAsync(SetOperation operation, RedisKey destination, RedisKey[] keys, double[] weights = null, Aggregate aggregate = Aggregate.Sum, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1431,7 +1431,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<double> SortedSetDecrementAsync(RedisKey key, RedisValue member, double value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1443,7 +1443,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<double> SortedSetIncrementAsync(RedisKey key, RedisValue member, double value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1455,7 +1455,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> SortedSetRemoveAsync(RedisKey key, RedisValue member, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1467,7 +1467,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SortedSetRemoveAsync(RedisKey key, RedisValue[] members, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1479,7 +1479,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SortedSetRemoveRangeByRankAsync(RedisKey key, long start, long stop, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1491,7 +1491,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SortedSetRemoveRangeByScoreAsync(RedisKey key, double start, double stop, Exclude exclude = Exclude.None, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1503,7 +1503,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> SortedSetRemoveRangeByValueAsync(RedisKey key, RedisValue min, RedisValue max, Exclude exclude = Exclude.None, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1515,7 +1515,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<SortedSetEntry?> SortedSetPopAsync(RedisKey key, Order order = Order.Ascending, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1527,7 +1527,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<SortedSetEntry[]> SortedSetPopAsync(RedisKey key, long count, Order order = Order.Ascending, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1539,7 +1539,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> StringAppendAsync(RedisKey key, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1551,7 +1551,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> StringBitOperationAsync(Bitwise operation, RedisKey destination, RedisKey first, RedisKey second = default, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1563,7 +1563,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> StringDecrementAsync(RedisKey key, long value = 1, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1575,7 +1575,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<double> StringDecrementAsync(RedisKey key, double value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1587,7 +1587,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> StringIncrementAsync(RedisKey key, long value = 1, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1599,7 +1599,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<double> StringIncrementAsync(RedisKey key, double value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1611,7 +1611,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> StringSetAsync(RedisKey key, RedisValue value, TimeSpan? expiry = null, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1623,7 +1623,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> StringSetAsync(KeyValuePair<RedisKey, RedisValue>[] values, When when = When.Always, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1635,7 +1635,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> StringSetBitAsync(RedisKey key, long offset, bool bit, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1647,7 +1647,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisValue> StringSetRangeAsync(RedisKey key, long offset, RedisValue value, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1659,7 +1659,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<bool> KeyTouchAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1671,7 +1671,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<long> KeyTouchAsync(RedisKey[] keys, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1683,7 +1683,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisValue[] ListLeftPop(RedisKey key, long count, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1695,7 +1695,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisValue[] ListRightPop(RedisKey key, long count, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1707,7 +1707,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override RedisValue StringGetDelete(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            Task.Factory.StartNew(() =>
+            ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1719,7 +1719,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisValue[]> ListLeftPopAsync(RedisKey key, long count, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1731,7 +1731,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisValue[]> ListRightPopAsync(RedisKey key, long count, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {
@@ -1743,7 +1743,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public override async Task<RedisValue> StringGetDeleteAsync(RedisKey key, CommandFlags flags = CommandFlags.None)
         {
-            await Task.Factory.StartNew(() =>
+            await ExecuteUtils.ExecuteInTask(() =>
             {
                 foreach (IDatabase backupDB in BackupDBs)
                 {

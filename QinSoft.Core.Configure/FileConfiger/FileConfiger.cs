@@ -186,9 +186,9 @@ namespace QinSoft.Core.Configure.FileConfiger
         /// <summary>
         /// 获取配置
         /// </summary>
-        public override Task<T> GetAsync<T>(string key, ConfigFormat format = ConfigFormat.XML)
+        public override async Task<T> GetAsync<T>(string key, ConfigFormat format = ConfigFormat.XML)
         {
-            return Task.Factory.StartNew(() => Get<T>(key, format));
+            return await ExecuteUtils.ExecuteInTask(() => Get<T>(key, format));
         }
     }
 }

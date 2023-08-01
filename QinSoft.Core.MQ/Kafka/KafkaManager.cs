@@ -148,10 +148,7 @@ namespace QinSoft.Core.MQ.Kafka
         /// </summary>
         public virtual async Task<IKafkaClient<TKEY, TVALUE>> GetKafkaAsync<TKEY, TVALUE>()
         {
-            return await Task.Factory.StartNew(() =>
-            {
-                return GetKafka<TKEY, TVALUE>();
-            });
+            return await ExecuteUtils.ExecuteInTask(GetKafka<TKEY, TVALUE>);
         }
 
         /// <summary>
@@ -178,10 +175,7 @@ namespace QinSoft.Core.MQ.Kafka
         /// </summary>
         public virtual async Task<IKafkaClient<TKEY, TVALUE>> GetKafkaAsync<TKEY, TVALUE>(string name)
         {
-            return await Task.Factory.StartNew(() =>
-            {
-                return GetKafka<TKEY, TVALUE>(name);
-            });
+            return await ExecuteUtils.ExecuteInTask(GetKafka<TKEY, TVALUE>, name);
         }
 
         /// <summary>

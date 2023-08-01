@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace QinSoft.Core.Common.Utils
@@ -51,6 +52,14 @@ namespace QinSoft.Core.Common.Utils
         }
 
         /// <summary>
+        /// XML序列化
+        /// </summary>
+        public static async Task<string> ToXmlAsync(this object obj)
+        {
+            return await ExecuteUtils.ExecuteInTask(ToXml, obj);
+        }
+
+        /// <summary>
         /// XML反序列化
         /// </summary>
         public static T FromXml<T>(this string value)
@@ -78,6 +87,14 @@ namespace QinSoft.Core.Common.Utils
                 }
             }
 
+        }
+
+        /// <summary>
+        /// XML反序列化
+        /// </summary>
+        public static async Task<T> FromXmlAsync<T>(this string value)
+        {
+            return await ExecuteUtils.ExecuteInTask(FromXml<T>, value);
         }
     }
 }

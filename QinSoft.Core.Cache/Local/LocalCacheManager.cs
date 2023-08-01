@@ -128,12 +128,9 @@ namespace QinSoft.Core.Cache.Local
         /// <summary>
         /// 获取缓存
         /// </summary>
-        public virtual Task<ILocalCache> GetCacheAsync()
+        public virtual async Task<ILocalCache> GetCacheAsync()
         {
-            return Task.Factory.StartNew(() =>
-            {
-                return GetCache();
-            });
+            return await ExecuteUtils.ExecuteInTask(GetCache);
         }
 
         /// <summary>
@@ -161,12 +158,9 @@ namespace QinSoft.Core.Cache.Local
         /// <summary>
         /// 获取缓存
         /// </summary>
-        public virtual Task<ILocalCache> GetCacheAsync(string name)
+        public virtual async Task<ILocalCache> GetCacheAsync(string name)
         {
-            return Task.Factory.StartNew(() =>
-            {
-                return GetCache(name);
-            });
+            return await ExecuteUtils.ExecuteInTask(GetCache, name);
         }
 
         /// <summary>

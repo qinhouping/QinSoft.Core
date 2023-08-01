@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -47,6 +48,14 @@ namespace QinSoft.Core.Common.Utils
         }
 
         /// <summary>
+        /// JSON序列化
+        /// </summary>
+        public static async Task<string> ToJsonAsync<T>(this T obj)
+        {
+            return await ExecuteUtils.ExecuteInTask(ToJson, obj);
+        }
+
+        /// <summary>
         /// JSON反序列化
         /// </summary>
         public static T FromJson<T>(this string value)
@@ -69,6 +78,14 @@ namespace QinSoft.Core.Common.Utils
                     throw e;
                 }
             }
+        }
+
+        /// <summary>
+        /// JSON反序列化
+        /// </summary>
+        public static async Task<T> FromJsonAsync<T>(this string value)
+        {
+            return await ExecuteUtils.ExecuteInTask(FromJson<T>, value);
         }
     }
 }

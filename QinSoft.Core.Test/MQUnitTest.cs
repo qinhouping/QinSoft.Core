@@ -15,6 +15,7 @@ using QinSoft.Core.MQ.Kafka.Core;
 using System.Threading.Tasks;
 using System.Threading;
 using Confluent.Kafka;
+using QinSoft.Core.Common.Utils;
 
 namespace QinSoft.Core.Test
 {
@@ -31,7 +32,7 @@ namespace QinSoft.Core.Test
 
             using (IKafkaManager kafkaManager = new KafkaManager(KafkaManagerConfig))
             {
-                Task.Factory.StartNew(() =>
+                ExecuteUtils.ExecuteInTask(() =>
                 {
                     using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
                     {
@@ -42,7 +43,7 @@ namespace QinSoft.Core.Test
                         }
                     }
                 });
-                Task.Factory.StartNew(() =>
+                ExecuteUtils.ExecuteInTask(() =>
                 {
                     using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
                     {
@@ -52,7 +53,7 @@ namespace QinSoft.Core.Test
                         });
                     }
                 });
-                Task.Factory.StartNew(() =>
+                ExecuteUtils.ExecuteInTask(() =>
                 {
                     using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
                     {

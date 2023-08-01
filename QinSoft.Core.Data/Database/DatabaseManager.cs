@@ -160,10 +160,7 @@ namespace QinSoft.Core.Data.Database
         /// </summary>
         public virtual async Task<ISqlSugarClient> GetDatabaseAsync()
         {
-            return await Task.Factory.StartNew(() =>
-            {
-                return GetDatabase();
-            });
+            return await ExecuteUtils.ExecuteInTask(GetDatabase);
         }
 
         /// <summary>
@@ -191,10 +188,7 @@ namespace QinSoft.Core.Data.Database
         /// </summary>
         public virtual async Task<ISqlSugarClient> GetDatabaseAsync(string name)
         {
-            return await Task.Factory.StartNew(() =>
-            {
-                return GetDatabase(name);
-            });
+            return await ExecuteUtils.ExecuteInTask(GetDatabase, name);
         }
 
         /// <summary>

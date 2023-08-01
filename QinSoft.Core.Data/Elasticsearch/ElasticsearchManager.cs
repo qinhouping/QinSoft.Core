@@ -137,10 +137,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual async Task<IElasticClient> GetElasticsearchAsync()
         {
-            return await Task.Factory.StartNew(() =>
-            {
-                return GetElasticsearch();
-            });
+            return await ExecuteUtils.ExecuteInTask(GetElasticsearch);
         }
 
         /// <summary>
@@ -167,10 +164,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual async Task<IElasticClient> GetElasticsearchAsync(string name)
         {
-            return await Task.Factory.StartNew(() =>
-            {
-                return GetElasticsearch(name);
-            });
+            return await ExecuteUtils.ExecuteInTask(GetElasticsearch, name);
         }
 
         /// <summary>
