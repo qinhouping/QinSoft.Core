@@ -14,16 +14,16 @@ namespace QinSoft.Core.Cache.Redis.Core
     {
         protected IConnectionMultiplexerPool ConnectionMultiplexerPool { get; set; }
 
-        public RedisCachePool(int poolSize, RedisCacheOptions options)
+        public RedisCachePool(int poolSize, RedisCacheOptions options, ConnectionSelectionStrategy pooStrategy = ConnectionSelectionStrategy.RoundRobin)
         {
             ObjectUtils.CheckNull(options, "options");
-            if (options.ConfigurationOptions != null)
+            if (string.IsNullOrEmpty(options.Configuration))
             {
-                ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, options.ConfigurationOptions);
+                ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, options.ConfigurationOptions, null, pooStrategy);
             }
             else
             {
-                ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, options.Configuration);
+                ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, options.Configuration, null, pooStrategy);
             }
         }
 

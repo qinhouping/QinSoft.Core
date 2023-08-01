@@ -18,20 +18,20 @@ namespace QinSoft.Core.Cache.Redis.Core
         /// </summary>
         protected IList<IConnectionMultiplexerPool> BackupConnectionMultiplexerPools { get; set; }
 
-        public BackupableRedisCachePool(int poolSize, RedisCacheOptions options, RedisCacheOptions[] backupOptions) : base(poolSize, options)
+        public BackupableRedisCachePool(int poolSize, RedisCacheOptions options, RedisCacheOptions[] backupOptions, ConnectionSelectionStrategy pooStrategy = ConnectionSelectionStrategy.RoundRobin) : base(poolSize, options, pooStrategy)
         {
             BackupConnectionMultiplexerPools = new List<IConnectionMultiplexerPool>();
             backupOptions = backupOptions ?? new RedisCacheOptions[0];
             foreach (RedisCacheOptions backupOpt in backupOptions)
             {
                 IConnectionMultiplexerPool backupConnectionMultiplexerPool = null;
-                if (backupOpt.ConfigurationOptions != null)
+                if (string.IsNullOrEmpty(backupOpt.Configuration))
                 {
-                    backupConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, backupOpt.ConfigurationOptions);
+                    backupConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, backupOpt.ConfigurationOptions, null, pooStrategy);
                 }
                 else
                 {
-                    backupConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, backupOpt.Configuration);
+                    backupConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, backupOpt.Configuration, null, pooStrategy);
                 }
                 BackupConnectionMultiplexerPools.Add(backupConnectionMultiplexerPool);
             }

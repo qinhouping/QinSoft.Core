@@ -26,12 +26,12 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         [XmlElement("cache")]
         [JsonProperty("caches")]
-        public RedisCacheItemConfig[] Items { get; set; }
+        public RedisCachePoolItemConfig[] Items { get; set; }
 
         /// <summary>
         /// 根据指定名称的本地缓存配置项
         /// </summary>
-        public RedisCacheItemConfig GetByName(string name)
+        public RedisCachePoolItemConfig GetByName(string name)
         {
             return Items?.FirstOrDefault(u => u.Name != null && u.Name.Equals(name));
         }
@@ -40,7 +40,7 @@ namespace QinSoft.Core.Cache.Redis
     /// <summary>
     /// Redis缓存配置项
     /// </summary>
-    public class RedisCacheItemConfig
+    public class RedisCachePoolItemConfig
     {
         /// <summary>
         /// 名称
@@ -57,11 +57,18 @@ namespace QinSoft.Core.Cache.Redis
         public int PoolSize { get; set; } = 20;
 
         /// <summary>
+        /// 连接池策略
+        /// </summary>
+        [XmlAttribute("poolStrategy")]
+        [JsonProperty("poolStrategy")]
+        public string PoolStrategy { get; set; } = "RoundRobin";
+
+        /// <summary>
         /// Redis连接配置
         /// </summary>
-        [XmlElement("configuration")]
-        [JsonProperty("configuration")]
-        public string Configuration { get; set; }
+        [XmlElement("main")]
+        [JsonProperty("main")]
+        public RedisCacheItemConfig Main { get; set; }
 
         /// <summary>
         /// 备份缓存配置
@@ -69,19 +76,63 @@ namespace QinSoft.Core.Cache.Redis
         [XmlArray("backups")]
         [XmlArrayItem("backup")]
         [JsonProperty("backups")]
-        public BackupRedisCacheItemConfig[] Backups { get; set; }
+        public RedisCacheItemConfig[] Backups { get; set; }
     }
 
     /// <summary>
-    /// 备份Redis缓存配置项
+    /// Redis缓存配置项
     /// </summary>
-    public class BackupRedisCacheItemConfig
+    public class RedisCacheItemConfig
     {
         /// <summary>
-        /// Redis连接配置，备份配置
+        /// Redis连接配置字符串
         /// </summary>
-        [XmlElement("configuration")]
-        [JsonProperty("configuration")]
-        public string Configuration { get; set; }
+        [XmlElement("configurationString")]
+        [JsonProperty("configurationString")]
+        public string ConfigurationString { get; set; }
+
+        /// <summary>
+        /// 模式
+        /// </summary>
+        [XmlElement("commandMap")]
+        [JsonProperty("commandMap")]
+        public string CommandMap { get; set; } = "Default";
+
+        /// <summary>
+        /// 终结点地址和端口
+        /// </summary>
+        [XmlArray("endPoints")]
+        [XmlArrayItem("endPoint")]
+        [JsonProperty("endPoints")]
+        public string[] EndPoints { get; set; }
+
+        /// <summary>
+        /// 主节点的名称
+        /// </summary>
+        [XmlElement("serviceName")]
+        [JsonProperty("serviceName")]
+        public string ServiceName { get; set; }
+
+        /// <summary>
+        /// 密码
+        /// </summary>
+        [XmlElement("password")]
+        [JsonProperty("password")]
+        public string Passowrd { get; set; }
+
+        /// <summary>
+        /// 默认数据库
+        /// </summary>
+        [XmlElement("defaultDatabase")]
+        [JsonProperty("defaultDatabase")]
+        public int? DefaultDatabase { get; set; }
+
+
+        /// <summary>
+        /// 连接超时，单位ms
+        /// </summary>
+        [XmlElement("connectTimeout")]
+        [JsonProperty("connectTimeout")]
+        public int ConnectTimeout { get; set; } = 5000;
     }
 }

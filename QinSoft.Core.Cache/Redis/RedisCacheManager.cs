@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using StackExchange.Redis;
+using System.Net;
 
 namespace QinSoft.Core.Cache.Redis
 {
@@ -80,7 +82,7 @@ namespace QinSoft.Core.Cache.Redis
         /// <summary>
         /// 获取缓存配置
         /// </summary>
-        protected virtual RedisCacheItemConfig GetCacheItemConfig(string name)
+        protected virtual RedisCachePoolItemConfig GetCacheItemConfig(string name)
         {
             ObjectUtils.CheckNull(name, name);
             return RedisCacheManagerConfig.GetByName(name);
@@ -89,23 +91,49 @@ namespace QinSoft.Core.Cache.Redis
         /// <summary>
         /// 获取默认缓存配置
         /// </summary>
-        protected virtual RedisCacheItemConfig GetDefaultCacheItemConfig()
+        protected virtual RedisCachePoolItemConfig GetDefaultCacheItemConfig()
         {
             return GetCacheItemConfig(this.RedisCacheManagerConfig.Primary);
+        }
+
+        protected CommandMap GetCommandMap(string name)
+        {
+            switch (name)
+            {
+                case "Default": return CommandMap.Default;
+                case "Twemproxy": return CommandMap.Twemproxy;
+                case "SSDB": return CommandMap.SSDB;
+                case "Sentinel": return CommandMap.Sentinel;
+                default: return CommandMap.Default;
+            }
+        }
+
+        /// <summary>
+        /// 获取redis配置
+        /// </summary>
+        protected virtual RedisCacheOptions GetRedisCacheOptions(RedisCacheItemConfig config)
+        {
+            RedisCacheOptions options = new RedisCacheOptions();
+            options.Configuration = config.ConfigurationString;
+            options.ConfigurationOptions = new ConfigurationOptions();
+            options.ConfigurationOptions.CommandMap = GetCommandMap(config.CommandMap);
+            config.EndPoints?.ToList().ForEach(u =>
+            {
+                options.ConfigurationOptions.EndPoints.Add(u);
+            });
+            options.ConfigurationOptions.ServiceName = config.ServiceName;
+            options.ConfigurationOptions.Password = config.Passowrd;
+            options.ConfigurationOptions.DefaultDatabase = config.DefaultDatabase;
+            options.ConfigurationOptions.ConnectTimeout = config.ConnectTimeout;
+            return options;
         }
 
         /// <summary>
         /// 构建缓存实例
         /// </summary>
-        protected IRedisCachePool BuildCacheFromConfig(RedisCacheItemConfig config)
+        protected virtual IRedisCachePool BuildCacheFromConfig(RedisCachePoolItemConfig config)
         {
-            return new BackupableRedisCachePool(config.PoolSize, new RedisCacheOptions()
-            {
-                Configuration = config.Configuration
-            }, config.Backups?.Select(u => new RedisCacheOptions()
-            {
-                Configuration = u.Configuration
-            }).ToArray());
+            return new BackupableRedisCachePool(config.PoolSize, GetRedisCacheOptions(config.Main), config.Backups?.Select(u => GetRedisCacheOptions(u)).ToArray());
         }
 
         /// <summary>
@@ -113,7 +141,7 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         public virtual IRedisCache GetCache()
         {
-            RedisCacheItemConfig config = GetDefaultCacheItemConfig();
+            RedisCachePoolItemConfig config = GetDefaultCacheItemConfig();
             if (config == null)
             {
                 throw new CacheExecption("not found default cache config");
@@ -134,7 +162,7 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         public virtual async Task<IRedisCache> GetCacheAsync()
         {
-            RedisCacheItemConfig config = GetDefaultCacheItemConfig();
+            RedisCachePoolItemConfig config = GetDefaultCacheItemConfig();
             if (config == null)
             {
                 throw new CacheExecption("not found default cache config");
@@ -156,7 +184,7 @@ namespace QinSoft.Core.Cache.Redis
         public virtual IRedisCache GetCache(string name)
         {
             ObjectUtils.CheckNull(name, "name");
-            RedisCacheItemConfig config = GetCacheItemConfig(name);
+            RedisCachePoolItemConfig config = GetCacheItemConfig(name);
             if (config == null)
             {
                 throw new CacheExecption(string.Format("not found cache config:{0}", name));
@@ -178,7 +206,7 @@ namespace QinSoft.Core.Cache.Redis
         public virtual async Task<IRedisCache> GetCacheAsync(string name)
         {
             ObjectUtils.CheckNull(name, "name");
-            RedisCacheItemConfig config = GetCacheItemConfig(name);
+            RedisCachePoolItemConfig config = GetCacheItemConfig(name);
             if (config == null)
             {
                 throw new CacheExecption(string.Format("not found cache config:{0}", name));
