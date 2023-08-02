@@ -40,7 +40,7 @@ namespace QinSoft.Core.Data.Database
             DatabaseContextAttribute databaseContext = GetDatabaseContext(invocation);
             if (databaseContext != null)
             {
-                using (ISqlSugarClient client = string.IsNullOrEmpty(databaseContext.Name) ? this.DatabaseManager.GetDatabase() : this.DatabaseManager.GetDatabase(databaseContext.Name))
+                using (ISqlSugarClient client = databaseContext.Name.IsEmpty() ? this.DatabaseManager.GetDatabase() : this.DatabaseManager.GetDatabase(databaseContext.Name))
                 {
                     DatabaseContextStack.Push(client);
                     try

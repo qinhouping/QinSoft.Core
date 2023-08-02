@@ -52,7 +52,7 @@ namespace QinSoft.Core.Data.MongoDB.Core
         /// </summary>
         public virtual IMongoDatabase GetDatabase(MongoDatabaseSettings settings = null)
         {
-            ObjectUtils.CheckNull(DefaultDBName, () => new MongoDBException("get default mongo database error"));
+            ObjectUtils.CheckNull(DefaultDBName, "DefaultDBName");
             return this.GetDatabase(DefaultDBName, settings);
         }
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using System.Reflection;
 using MongoDB.Bson.Serialization.Attributes;
+using QinSoft.Core.Common.Utils;
 
 namespace QinSoft.Core.Data.MongoDB.Core
 {
@@ -25,7 +26,7 @@ namespace QinSoft.Core.Data.MongoDB.Core
             {
                 Type type = typeof(T);
                 MongoDBCollectionAttribute attribute = type.GetCustomAttributes(typeof(MongoDBCollectionAttribute), false).FirstOrDefault() as MongoDBCollectionAttribute;
-                if (attribute != null && !string.IsNullOrEmpty(attribute.Name))
+                if (attribute != null && !attribute.Name.IsEmpty())
                 {
                     return MongoDBContext.Instance.Get(attribute.Name).GetDatabase();
                 }

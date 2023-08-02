@@ -23,7 +23,7 @@ namespace QinSoft.Core.Data.Elasticsearch
             {
                 Type type = typeof(T);
                 ElasticsearchIndexAttribute attribute = type.GetCustomAttributes(typeof(ElasticsearchIndexAttribute), false).FirstOrDefault() as ElasticsearchIndexAttribute;
-                if (attribute != null && !string.IsNullOrEmpty(attribute.Name))
+                if (attribute != null && !attribute.Name.IsEmpty())
                 {
                     return ElasticsearchContext.Instance.Get(attribute.Name);
                 }

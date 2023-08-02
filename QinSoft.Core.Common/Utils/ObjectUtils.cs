@@ -12,12 +12,24 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 判断参数是否是NULL
         /// </summary>
-        public static void CheckNull<T>(T argument, string paramName) where T : class
+        public static void CheckNull<T>(T argument, string paramName)
         {
             if (argument == null)
             {
-                throw new ArgumentNullException(paramName);
+                throw new ArgumentException(paramName);
             }
+        }
+
+        /// <summary>
+        /// 判断参数是否是NULL
+        /// </summary>
+        public static T CheckNull<T>(T argument, Func<T> action)
+        {
+            if (argument == null)
+            {
+                return action();
+            }
+            return argument;
         }
 
         /// <summary>
@@ -27,52 +39,51 @@ namespace QinSoft.Core.Common.Utils
         {
             if (argument.CompareTo(begin) < 0 || argument.CompareTo(end) >= 0)
             {
-                throw new ArgumentNullException(paramName);
+                throw new ArgumentException(paramName);
             }
         }
 
         /// <summary>
         /// 判断参数是否超过范围
         /// </summary>
-        public static void CheckRange<T>(T argument, T end, string paramName) where T : IComparable
+        public static T CheckRange<T>(T argument, T begin, T end, Func<T> action) where T : IComparable
         {
-            if (argument.CompareTo(0) < 0 || argument.CompareTo(end) >= 0)
+            if (argument.CompareTo(begin) < 0 || argument.CompareTo(end) >= 0)
             {
-                throw new ArgumentNullException(paramName);
+                return action();
             }
+            return argument;
         }
 
         /// <summary>
-        /// 判断参数是否是NULL
+        /// 判断列表是否是空
         /// </summary>
-        public static void CheckNull<T>(T argument, Func<Exception> action) where T : class
+        public static void CheckEmpty<T>(IEnumerable<T> argument, string paramName)
         {
-            if (argument == null)
+            if (argument.IsEmpty())
             {
-                throw action();
+                throw new ArgumentException(paramName);
             }
         }
 
         /// <summary>
         /// 判断列表是否是空
         /// </summary>
-        public static void CheckEmpty<T>(IEnumerable<T> argument, string paramName) where T : class
+        public static T CheckEmpty<T, I>(T argument, Func<T> action) where T : IEnumerable<I>
         {
             if (argument.IsEmpty())
             {
-                throw new ArgumentNullException(paramName);
+                return action();
             }
+            return argument;
         }
 
         /// <summary>
-        /// 判断列表是否是空
+        /// 通用检测
         /// </summary>
-        public static void CheckEmpty<T>(IEnumerable<T> argument, Func<Exception> action) where T : class
+        public static T Check<T>(T arguemnt, Func<T, T> checkAction)
         {
-            if (argument.IsEmpty())
-            {
-                throw action();
-            }
+            return checkAction(arguemnt);
         }
     }
 }

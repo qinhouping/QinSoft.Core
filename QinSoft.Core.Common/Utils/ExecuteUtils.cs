@@ -17,7 +17,7 @@ namespace QinSoft.Core.Common.Utils
         public static Thread ExecuteInThread(this Action action, string name = null, bool isBackground = true, ThreadPriority priority = ThreadPriority.Normal)
         {
             Thread thread = new Thread(new ThreadStart(action));
-            if (!string.IsNullOrEmpty(name))
+            if (!name.IsEmpty())
             {
                 thread.Name = name;
             }
@@ -33,7 +33,7 @@ namespace QinSoft.Core.Common.Utils
         public static Thread ExecuteInThread(this Action<object> action, object param, string name = null, bool isBackground = true, ThreadPriority priority = ThreadPriority.Normal)
         {
             Thread thread = new Thread(new ParameterizedThreadStart(action));
-            if (!string.IsNullOrEmpty(name))
+            if (!name.IsEmpty())
             {
                 thread.Name = name;
             }

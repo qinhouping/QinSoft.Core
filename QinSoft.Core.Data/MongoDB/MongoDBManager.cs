@@ -91,7 +91,7 @@ namespace QinSoft.Core.Data.MongoDB
         protected virtual IMongoDBClient BuildClientFromConfig(MongoDBItemConfig config)
         {
             ObjectUtils.CheckNull(config, "config");
-            return string.IsNullOrEmpty(config.Database) ? new MongoDBClient(config.ConnectionString) : new MongoDBClient(config.ConnectionString, config.Database);
+            return config.Database.IsEmpty() ? new MongoDBClient(config.ConnectionString) : new MongoDBClient(config.ConnectionString, config.Database);
         }
 
         /// <summary>

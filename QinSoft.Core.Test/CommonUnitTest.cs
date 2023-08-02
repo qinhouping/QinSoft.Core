@@ -10,6 +10,13 @@ namespace QinSoft.Core.Test
     [TestClass]
     public class CommonUnitTest
     {
+
+        [TestMethod]
+        public void TestBaseUtils()
+        {
+            Assert.AreEqual(2, ObjectUtils.CheckRange(10, 1, 5, () => 2));
+        }
+
         [TestMethod]
         public void TestJsonUtils()
         {

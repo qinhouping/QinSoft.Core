@@ -60,7 +60,7 @@ namespace QinSoft.Core.Common.Utils
         /// </summary>
         public static T FromJson<T>(this string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.IsEmpty())
             {
                 DefaultLog?.Debug(string.Format("from json:{0}", null));
                 return default;

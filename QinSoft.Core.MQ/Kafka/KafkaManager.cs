@@ -106,8 +106,8 @@ namespace QinSoft.Core.MQ.Kafka
                 EnableIdempotence = config.Producer?.EnableIdempotence,
                 BatchSize = config.Producer?.BatchSize
             };
-            ISerializer<TKEY> keySerializer = string.IsNullOrEmpty(config.Producer?.KeySerializer) ? null : (ISerializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Producer?.KeySerializer));
-            ISerializer<TVALUE> valueSerializer = string.IsNullOrEmpty(config.Producer?.ValueSerializer) ? null : (ISerializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Producer?.ValueSerializer));
+            ISerializer<TKEY> keySerializer = config.Producer?.KeySerializer.IsEmpty() == true ? null : (ISerializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Producer?.KeySerializer));
+            ISerializer<TVALUE> valueSerializer = config.Producer?.ValueSerializer.IsEmpty() == true ? null : (ISerializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Producer?.ValueSerializer));
 
             ConsumerConfig consumerConfig = new ConsumerConfig()
             {
@@ -119,8 +119,8 @@ namespace QinSoft.Core.MQ.Kafka
                 MaxPollIntervalMs = config.Consumer?.MaxPollIntervalMs,
                 PartitionAssignmentStrategy = config.Consumer?.PartitionAssignmentStrategy.ParseEnum<PartitionAssignmentStrategy>()
             };
-            IDeserializer<TKEY> keyDeserializer = string.IsNullOrEmpty(config.Consumer?.KeyDeserializer) ? null : (IDeserializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Consumer?.KeyDeserializer));
-            IDeserializer<TVALUE> valueDeserializer = string.IsNullOrEmpty(config.Consumer?.ValueDeserializer) ? null : (IDeserializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Consumer?.ValueDeserializer));
+            IDeserializer<TKEY> keyDeserializer = config.Consumer?.KeyDeserializer.IsEmpty() == true ? null : (IDeserializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Consumer?.KeyDeserializer));
+            IDeserializer<TVALUE> valueDeserializer = config.Consumer?.ValueDeserializer.IsEmpty() == true ? null : (IDeserializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Consumer?.ValueDeserializer));
 
             return new KafkaClient<TKEY, TVALUE>(producerConfig, keySerializer, valueSerializer, consumerConfig, keyDeserializer, valueDeserializer);
         }

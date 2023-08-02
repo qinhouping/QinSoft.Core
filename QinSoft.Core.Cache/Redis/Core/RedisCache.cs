@@ -51,6 +51,18 @@ namespace QinSoft.Core.Cache.Redis.Core
             this.DB = this.ConnectionMultiplexer.GetDatabase();
         }
 
+        public RedisCache(string configuration, bool isSentinels = false)
+        {
+            ObjectUtils.CheckNull(configuration, "configuration");
+            this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configuration);
+            if (isSentinels)
+            {
+                this.ConnectionMultiplexer = ((ConnectionMultiplexer)ConnectionMultiplexer).GetSentinelMasterConnection(ConfigurationOptions.Parse(configuration));
+            }
+            this.IsPoolConnection = false;
+            this.DB = this.ConnectionMultiplexer.GetDatabase();
+        }
+
         public RedisCache(RedisCacheOptions redisCacheOptions)
         {
             ObjectUtils.CheckNull(redisCacheOptions, "redisCacheOptions");

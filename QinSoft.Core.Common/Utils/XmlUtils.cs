@@ -64,7 +64,7 @@ namespace QinSoft.Core.Common.Utils
         /// </summary>
         public static T FromXml<T>(this string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (value.IsEmpty())
             {
                 DefaultLog?.Debug(string.Format("from xml:{0}", null));
                 return default;

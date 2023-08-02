@@ -131,6 +131,7 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         protected virtual IRedisCache BuildCacheFromConfig(RedisCacheItemConfig config)
         {
+            ObjectUtils.CheckNull(config, "config");
             return new RedisCache(GetRedisCacheOptions(config));
         }
 

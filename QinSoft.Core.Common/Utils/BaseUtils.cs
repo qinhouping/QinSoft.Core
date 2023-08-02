@@ -20,6 +20,14 @@ namespace QinSoft.Core.Common.Utils
         }
 
         /// <summary>
+        /// 判断列表是否不是空
+        /// </summary>
+        public static bool IsNotEmpty<T>(this IEnumerable<T> list)
+        {
+            return list != null && list.Any();
+        }
+
+        /// <summary>
         /// 解析枚举
         /// </summary>
         public static TEnum? ParseEnum<TEnum>(this string name) where TEnum : struct

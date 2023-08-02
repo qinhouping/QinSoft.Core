@@ -133,10 +133,7 @@ namespace QinSoft.Core.Configure.FileConfiger
         /// </summary>
         public virtual FileInfo GetFile(string key)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException("key");
-            }
+            ObjectUtils.CheckEmpty(key, "key");
             //从配置管理文件获取
             FileConfigManagerConfig fileConfigManagerOptions = GetConfigManagerConfig();
             if (fileConfigManagerOptions != null)
@@ -158,7 +155,7 @@ namespace QinSoft.Core.Configure.FileConfiger
         {
             lock (SingleLockObj)
             {
-                if (string.IsNullOrEmpty(key))
+                if (key.IsEmpty())
                 {
                     key = typeof(T).Name;
                 }

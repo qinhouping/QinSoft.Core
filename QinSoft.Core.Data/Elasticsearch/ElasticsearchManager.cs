@@ -98,15 +98,15 @@ namespace QinSoft.Core.Data.Elasticsearch
             ObjectUtils.CheckNull(config, "config");
             SniffingConnectionPool pool = new SniffingConnectionPool(config.Urls.Select(u => new Uri(u)));
             ConnectionSettings connectionSettings = new ConnectionSettings(pool);
-            if (!string.IsNullOrEmpty(config.ApiKey))
+            if (!config.ApiKey.IsEmpty())
             {
                 connectionSettings.ApiKeyAuthentication(new ApiKeyAuthenticationCredentials(config.ApiKey));
             }
-            if (!string.IsNullOrEmpty(config.Username) && !string.IsNullOrEmpty(config.Password))
+            if (!config.Username.IsEmpty() && !config.Password.IsEmpty())
             {
                 connectionSettings.BasicAuthentication(config.Username, config.Password);
             }
-            if (!string.IsNullOrEmpty(config.DefaultIndexName))
+            if (!config.DefaultIndexName.IsEmpty())
             {
                 connectionSettings.DefaultIndex(config.DefaultIndexName);
             }
@@ -124,7 +124,7 @@ namespace QinSoft.Core.Data.Elasticsearch
                 throw new ElasticsearchException("not found default elasticsearch client config");
             }
 
-            IElasticClient client = CacheDictionary.GetOrAdd(config.Name, (key) => BuildClientFromConfig(config));
+            IElasticClient client = CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig(config));
 
             logger.LogDebug("get default elasticsearch client from config");
 
@@ -152,7 +152,7 @@ namespace QinSoft.Core.Data.Elasticsearch
                 throw new ElasticsearchException(string.Format("not found elasticsearch client config:{0}", name));
             }
 
-            IElasticClient client = CacheDictionary.GetOrAdd(config.Name, (key) => BuildClientFromConfig(config));
+            IElasticClient client = CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig(config));
 
             logger.LogDebug(string.Format("get elasticsearch client from config:{0}", name));
 

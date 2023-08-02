@@ -9,7 +9,7 @@ using StackExchange.Redis.MultiplexerPool;
 namespace QinSoft.Core.Cache.Redis.Core
 {
     /// <summary>
-    /// Redis缓存实现
+    /// Redis缓存连接池实现
     /// </summary>
     internal class RedisCachePool : IRedisCachePool
     {
@@ -19,6 +19,12 @@ namespace QinSoft.Core.Cache.Redis.Core
         {
             ObjectUtils.CheckNull(configurationOptions, "configurationOptions");
             ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, configurationOptions, null, connectionSelectionStrategy);
+        }
+
+        public RedisCachePool(int poolSize, string configuration, ConnectionSelectionStrategy connectionSelectionStrategy = ConnectionSelectionStrategy.RoundRobin)
+        {
+            ObjectUtils.CheckNull(configuration, "configuration");
+            ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, configuration, null, connectionSelectionStrategy);
         }
 
         public RedisCachePool(RedisCachePoolOptions redisCachePoolOptions)
