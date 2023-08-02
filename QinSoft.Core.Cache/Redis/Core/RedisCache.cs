@@ -39,25 +39,32 @@ namespace QinSoft.Core.Cache.Redis.Core
         /// </summary>
         public IConnectionMultiplexer Multiplexer => ConnectionMultiplexer;
 
-        public RedisCache(ConfigurationOptions configurationOptions, bool isSentinels = false)
+        public RedisCache(ConfigurationOptions configurationOptions, bool isSentinel = false)
         {
             ObjectUtils.CheckNull(configurationOptions, "configurationOptions");
-            this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configurationOptions);
-            if (isSentinels)
+            if (isSentinel)
             {
-                this.ConnectionMultiplexer = ((ConnectionMultiplexer)ConnectionMultiplexer).GetSentinelMasterConnection(configurationOptions);
+                this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.SentinelConnect(configurationOptions).GetSentinelMasterConnection(configurationOptions.Clone());
+            }
+            else
+            {
+                this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configurationOptions);
             }
             this.IsPoolConnection = false;
             this.DB = this.ConnectionMultiplexer.GetDatabase();
         }
 
-        public RedisCache(string configuration, bool isSentinels = false)
+        public RedisCache(string configuration, bool isSentinel = false)
         {
             ObjectUtils.CheckNull(configuration, "configuration");
-            this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configuration);
-            if (isSentinels)
+            ConfigurationOptions configurationOptions = ConfigurationOptions.Parse(configuration);
+            if (isSentinel)
             {
-                this.ConnectionMultiplexer = ((ConnectionMultiplexer)ConnectionMultiplexer).GetSentinelMasterConnection(ConfigurationOptions.Parse(configuration));
+                this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.SentinelConnect(configuration).GetSentinelMasterConnection(configurationOptions.Clone());
+            }
+            else
+            {
+                this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configurationOptions);
             }
             this.IsPoolConnection = false;
             this.DB = this.ConnectionMultiplexer.GetDatabase();
@@ -66,10 +73,13 @@ namespace QinSoft.Core.Cache.Redis.Core
         public RedisCache(RedisCacheOptions redisCacheOptions)
         {
             ObjectUtils.CheckNull(redisCacheOptions, "redisCacheOptions");
-            this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(redisCacheOptions.ConfigurationOptions);
             if (redisCacheOptions.IsSentinel)
             {
-                this.ConnectionMultiplexer = ((ConnectionMultiplexer)ConnectionMultiplexer).GetSentinelMasterConnection(redisCacheOptions.ConfigurationOptions);
+                this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.SentinelConnect(redisCacheOptions.ConfigurationOptions).GetSentinelMasterConnection(redisCacheOptions.ConfigurationOptions.Clone());
+            }
+            else
+            {
+                this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(redisCacheOptions.ConfigurationOptions);
             }
             this.IsPoolConnection = false;
             this.DB = this.ConnectionMultiplexer.GetDatabase();

@@ -110,17 +110,16 @@ namespace QinSoft.Core.Cache.Redis
             options.ConfigurationOptions.Password = config.Passowrd;
             options.ConfigurationOptions.DefaultDatabase = config.DefaultDatabase;
             options.ConfigurationOptions.ConnectTimeout = config.ConnectTimeout;
+            options.ConfigurationOptions.AllowAdmin = true;
             //哨兵模式
             if (config.Sentinel != null)
             {
-                options.ConfigurationOptions.CommandMap = CommandMap.Sentinel;
                 options.ConfigurationOptions.EndPoints.Clear();
                 config.Sentinel.EndPoints?.ToList().ForEach(u =>
                 {
                     options.ConfigurationOptions.EndPoints.Add(u);
                 });
                 options.ConfigurationOptions.ServiceName = config.Sentinel.ServiceName;
-                options.ConfigurationOptions.TieBreaker = string.Empty;
                 options.IsSentinel = true;
             }
             return options;

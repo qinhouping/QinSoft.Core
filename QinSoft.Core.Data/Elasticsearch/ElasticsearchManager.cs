@@ -110,6 +110,7 @@ namespace QinSoft.Core.Data.Elasticsearch
             {
                 connectionSettings.DefaultIndex(config.DefaultIndexName);
             }
+            connectionSettings.RequestTimeout(TimeSpan.FromMilliseconds(config.RequestTimeout));
             return new ElasticClient(connectionSettings);
         }
 

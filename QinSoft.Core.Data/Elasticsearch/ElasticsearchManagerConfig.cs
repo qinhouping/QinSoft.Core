@@ -50,6 +50,13 @@ namespace QinSoft.Core.Data.Elasticsearch
         public string Name { get; set; }
 
         /// <summary>
+        /// elasticsearch地址
+        /// </summary>
+        [XmlElement("url")]
+        [JsonProperty("urls")]
+        public string[] Urls { get; set; }
+
+        /// <summary>
         /// 名称
         /// </summary>
         [XmlAttribute("username")]
@@ -78,10 +85,10 @@ namespace QinSoft.Core.Data.Elasticsearch
         public string DefaultIndexName { get; set; }
 
         /// <summary>
-        /// elasticsearch地址
+        /// elasticsearch请求超时，默认60秒
         /// </summary>
-        [XmlElement("url")]
-        [JsonProperty("urls")]
-        public string[] Urls { get; set; }
+        [XmlAttribute("requestTimeout")]
+        [JsonProperty("requestTimeout")]
+        public int RequestTimeout { get; set; } = 60000;
     }
 }
