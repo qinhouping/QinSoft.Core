@@ -26,12 +26,12 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         [XmlElement("cache")]
         [JsonProperty("caches")]
-        public RedisCachePoolItemConfig[] Items { get; set; }
+        public RedisCacheItemConfig[] Items { get; set; }
 
         /// <summary>
         /// 根据指定名称的本地缓存配置项
         /// </summary>
-        public RedisCachePoolItemConfig GetByName(string name)
+        public RedisCacheItemConfig GetByName(string name)
         {
             return Items?.FirstOrDefault(u => u.Name != null && u.Name.Equals(name));
         }
@@ -40,7 +40,7 @@ namespace QinSoft.Core.Cache.Redis
     /// <summary>
     /// Redis缓存配置项
     /// </summary>
-    public class RedisCachePoolItemConfig
+    public class RedisCacheItemConfig
     {
         /// <summary>
         /// 名称
@@ -50,68 +50,12 @@ namespace QinSoft.Core.Cache.Redis
         public string Name { get; set; }
 
         /// <summary>
-        /// 连接池大小
-        /// </summary>
-        [XmlAttribute("poolSize")]
-        [JsonProperty("poolSize")]
-        public int PoolSize { get; set; } = 20;
-
-        /// <summary>
-        /// 连接池策略
-        /// </summary>
-        [XmlAttribute("poolStrategy")]
-        [JsonProperty("poolStrategy")]
-        public string PoolStrategy { get; set; } = "RoundRobin";
-
-        /// <summary>
-        /// Redis连接配置
-        /// </summary>
-        [XmlElement("main")]
-        [JsonProperty("main")]
-        public RedisCacheItemConfig Main { get; set; }
-
-        /// <summary>
-        /// 备份缓存配置
-        /// </summary>
-        [XmlArray("backups")]
-        [XmlArrayItem("backup")]
-        [JsonProperty("backups")]
-        public RedisCacheItemConfig[] Backups { get; set; }
-    }
-
-    /// <summary>
-    /// Redis缓存配置项
-    /// </summary>
-    public class RedisCacheItemConfig
-    {
-        /// <summary>
-        /// Redis连接配置字符串
-        /// </summary>
-        [XmlElement("configurationString")]
-        [JsonProperty("configurationString")]
-        public string ConfigurationString { get; set; }
-
-        /// <summary>
-        /// 模式
-        /// </summary>
-        [XmlElement("commandMap")]
-        [JsonProperty("commandMap")]
-        public string CommandMap { get; set; } = "Default";
-
-        /// <summary>
         /// 终结点地址和端口
         /// </summary>
         [XmlArray("endPoints")]
         [XmlArrayItem("endPoint")]
         [JsonProperty("endPoints")]
         public string[] EndPoints { get; set; }
-
-        /// <summary>
-        /// 主节点的名称
-        /// </summary>
-        [XmlElement("serviceName")]
-        [JsonProperty("serviceName")]
-        public string ServiceName { get; set; }
 
         /// <summary>
         /// 密码
@@ -134,5 +78,33 @@ namespace QinSoft.Core.Cache.Redis
         [XmlElement("connectTimeout")]
         [JsonProperty("connectTimeout")]
         public int ConnectTimeout { get; set; } = 5000;
+
+        /// <summary>
+        /// Redis哨兵配置
+        /// </summary>
+        [XmlElement("sentinel")]
+        [JsonProperty("sentinel")]
+        public RedisCacheSentinelItemConfig Sentinel { get; set; }
+    }
+
+    /// <summary>
+    /// Redis缓存哨兵配置项
+    /// </summary>
+    public class RedisCacheSentinelItemConfig
+    {
+        /// <summary>
+        /// 主节点的名称
+        /// </summary>
+        [XmlElement("serviceName")]
+        [JsonProperty("serviceName")]
+        public string ServiceName { get; set; }
+
+        /// <summary>
+        /// 哨兵终结点地址和端口
+        /// </summary>
+        [XmlArray("endPoints")]
+        [XmlArrayItem("endPoint")]
+        [JsonProperty("endPoints")]
+        public string[] EndPoints { get; set; }
     }
 }

@@ -18,14 +18,14 @@ namespace QinSoft.Core.Cache.Redis
 {
     /// <summary>
     /// Redis缓存管理器
-    /// 集成缓存配置，支持多数据源，支持连接池
+    /// 集成缓存配置，支持多数据源
     /// </summary>
     public class RedisCacheManager : IRedisCacheManager
     {
         /// <summary>
         /// 缓存字典
         /// </summary>
-        protected ConcurrentDictionary<string, IRedisCachePool> CacheDictionary;
+        protected ConcurrentDictionary<string, IRedisCache> CacheDictionary;
 
         /// <summary>
         /// 日志
@@ -46,7 +46,7 @@ namespace QinSoft.Core.Cache.Redis
         {
             ObjectUtils.CheckNull(config, "config");
             ObjectUtils.CheckNull(logger, "logger");
-            CacheDictionary = new ConcurrentDictionary<string, IRedisCachePool>();
+            CacheDictionary = new ConcurrentDictionary<string, IRedisCache>();
             RedisCacheManagerConfig = config;
             this.logger = logger;
         }
@@ -60,7 +60,7 @@ namespace QinSoft.Core.Cache.Redis
             ObjectUtils.CheckNull(options, "options");
             ObjectUtils.CheckNull(configer, "configer");
             ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
-            CacheDictionary = new ConcurrentDictionary<string, IRedisCachePool>();
+            CacheDictionary = new ConcurrentDictionary<string, IRedisCache>();
             RedisCacheManagerConfig = configer.Get<RedisCacheManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<RedisCacheManager>();
         }
@@ -74,7 +74,7 @@ namespace QinSoft.Core.Cache.Redis
             ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
             ObjectUtils.CheckNull(configer, "configer");
             ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
-            CacheDictionary = new ConcurrentDictionary<string, IRedisCachePool>();
+            CacheDictionary = new ConcurrentDictionary<string, IRedisCache>();
             RedisCacheManagerConfig = configer.Get<RedisCacheManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<RedisCacheManager>();
         }
@@ -82,7 +82,7 @@ namespace QinSoft.Core.Cache.Redis
         /// <summary>
         /// 获取缓存配置
         /// </summary>
-        protected virtual RedisCachePoolItemConfig GetCacheItemConfig(string name)
+        protected virtual RedisCacheItemConfig GetCacheItemConfig(string name)
         {
             ObjectUtils.CheckNull(name, name);
             return RedisCacheManagerConfig.GetByName(name);
@@ -91,21 +91,9 @@ namespace QinSoft.Core.Cache.Redis
         /// <summary>
         /// 获取默认缓存配置
         /// </summary>
-        protected virtual RedisCachePoolItemConfig GetDefaultCacheItemConfig()
+        protected virtual RedisCacheItemConfig GetDefaultCacheItemConfig()
         {
             return GetCacheItemConfig(this.RedisCacheManagerConfig.Primary);
-        }
-
-        protected CommandMap GetCommandMap(string name)
-        {
-            switch (name)
-            {
-                case "Default": return CommandMap.Default;
-                case "Twemproxy": return CommandMap.Twemproxy;
-                case "SSDB": return CommandMap.SSDB;
-                case "Sentinel": return CommandMap.Sentinel;
-                default: return CommandMap.Default;
-            }
         }
 
         /// <summary>
@@ -114,26 +102,36 @@ namespace QinSoft.Core.Cache.Redis
         protected virtual RedisCacheOptions GetRedisCacheOptions(RedisCacheItemConfig config)
         {
             RedisCacheOptions options = new RedisCacheOptions();
-            options.Configuration = config.ConfigurationString;
             options.ConfigurationOptions = new ConfigurationOptions();
-            options.ConfigurationOptions.CommandMap = GetCommandMap(config.CommandMap);
             config.EndPoints?.ToList().ForEach(u =>
             {
                 options.ConfigurationOptions.EndPoints.Add(u);
             });
-            options.ConfigurationOptions.ServiceName = config.ServiceName;
             options.ConfigurationOptions.Password = config.Passowrd;
             options.ConfigurationOptions.DefaultDatabase = config.DefaultDatabase;
             options.ConfigurationOptions.ConnectTimeout = config.ConnectTimeout;
+            //哨兵模式
+            if (config.Sentinel != null)
+            {
+                options.ConfigurationOptions.CommandMap = CommandMap.Sentinel;
+                options.ConfigurationOptions.EndPoints.Clear();
+                config.Sentinel.EndPoints?.ToList().ForEach(u =>
+                {
+                    options.ConfigurationOptions.EndPoints.Add(u);
+                });
+                options.ConfigurationOptions.ServiceName = config.Sentinel.ServiceName;
+                options.ConfigurationOptions.TieBreaker = string.Empty;
+                options.IsSentinel = true;
+            }
             return options;
         }
 
         /// <summary>
         /// 构建缓存实例
         /// </summary>
-        protected virtual IRedisCachePool BuildCacheFromConfig(RedisCachePoolItemConfig config)
+        protected virtual IRedisCache BuildCacheFromConfig(RedisCacheItemConfig config)
         {
-            return new BackupableRedisCachePool(config.PoolSize, GetRedisCacheOptions(config.Main), config.Backups?.Select(u => GetRedisCacheOptions(u)).ToArray());
+            return new RedisCache(GetRedisCacheOptions(config));
         }
 
         /// <summary>
@@ -141,20 +139,20 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         public virtual IRedisCache GetCache()
         {
-            RedisCachePoolItemConfig config = GetDefaultCacheItemConfig();
+            RedisCacheItemConfig config = GetDefaultCacheItemConfig();
             if (config == null)
             {
                 throw new CacheExecption("not found default cache config");
             }
 
-            IRedisCachePool pool = CacheDictionary.GetOrAdd(config.Name, (key) =>
+            IRedisCache cache = CacheDictionary.GetOrAdd(config.Name, (key) =>
             {
                 return BuildCacheFromConfig(config);
             });
 
             logger.LogDebug("get default cache from config");
 
-            return pool.Get();
+            return cache;
         }
 
         /// <summary>
@@ -162,20 +160,7 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         public virtual async Task<IRedisCache> GetCacheAsync()
         {
-            RedisCachePoolItemConfig config = GetDefaultCacheItemConfig();
-            if (config == null)
-            {
-                throw new CacheExecption("not found default cache config");
-            }
-
-            IRedisCachePool pool = CacheDictionary.GetOrAdd(config.Name, (key) =>
-            {
-                return BuildCacheFromConfig(config);
-            });
-
-            logger.LogDebug("get default cache from config");
-
-            return await pool.GetAsync();
+            return await ExecuteUtils.ExecuteInTask(GetCache);
         }
 
         /// <summary>
@@ -184,20 +169,20 @@ namespace QinSoft.Core.Cache.Redis
         public virtual IRedisCache GetCache(string name)
         {
             ObjectUtils.CheckNull(name, "name");
-            RedisCachePoolItemConfig config = GetCacheItemConfig(name);
+            RedisCacheItemConfig config = GetCacheItemConfig(name);
             if (config == null)
             {
                 throw new CacheExecption(string.Format("not found cache config:{0}", name));
             }
 
-            IRedisCachePool pool = CacheDictionary.GetOrAdd(config.Name, (key) =>
+            IRedisCache cache = CacheDictionary.GetOrAdd(config.Name, (key) =>
             {
                 return BuildCacheFromConfig(config);
             });
 
             logger.LogDebug(string.Format("get cache from config:{0}", name));
 
-            return pool.Get();
+            return cache;
         }
 
         /// <summary>
@@ -205,21 +190,7 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         public virtual async Task<IRedisCache> GetCacheAsync(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
-            RedisCachePoolItemConfig config = GetCacheItemConfig(name);
-            if (config == null)
-            {
-                throw new CacheExecption(string.Format("not found cache config:{0}", name));
-            }
-
-            IRedisCachePool pool = CacheDictionary.GetOrAdd(config.Name, (key) =>
-            {
-                return BuildCacheFromConfig(config);
-            });
-
-            logger.LogDebug(string.Format("get cache from config:{0}", name));
-
-            return await pool.GetAsync();
+            return await ExecuteUtils.ExecuteInTask(GetCache, name);
         }
 
         /// <summary>
@@ -230,9 +201,9 @@ namespace QinSoft.Core.Cache.Redis
             GC.SuppressFinalize(this);
             if (CacheDictionary != null)
             {
-                foreach (KeyValuePair<string, IRedisCachePool> pair in CacheDictionary)
+                foreach (KeyValuePair<string, IRedisCache> pair in CacheDictionary)
                 {
-                    pair.Value.Dispose();
+                    pair.Value.SafeDispose();
                 }
                 CacheDictionary.Clear();
             }

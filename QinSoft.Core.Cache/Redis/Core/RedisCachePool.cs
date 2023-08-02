@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using QinSoft.Core.Common.Utils;
+using StackExchange.Redis;
 using StackExchange.Redis.MultiplexerPool;
 
 namespace QinSoft.Core.Cache.Redis.Core
@@ -14,17 +15,16 @@ namespace QinSoft.Core.Cache.Redis.Core
     {
         protected IConnectionMultiplexerPool ConnectionMultiplexerPool { get; set; }
 
-        public RedisCachePool(int poolSize, RedisCacheOptions options, ConnectionSelectionStrategy pooStrategy = ConnectionSelectionStrategy.RoundRobin)
+        public RedisCachePool(int poolSize, ConfigurationOptions configurationOptions, ConnectionSelectionStrategy connectionSelectionStrategy = ConnectionSelectionStrategy.RoundRobin)
         {
-            ObjectUtils.CheckNull(options, "options");
-            if (string.IsNullOrEmpty(options.Configuration))
-            {
-                ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, options.ConfigurationOptions, null, pooStrategy);
-            }
-            else
-            {
-                ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, options.Configuration, null, pooStrategy);
-            }
+            ObjectUtils.CheckNull(configurationOptions, "configurationOptions");
+            ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, configurationOptions, null, connectionSelectionStrategy);
+        }
+
+        public RedisCachePool(RedisCachePoolOptions redisCachePoolOptions)
+        {
+            ObjectUtils.CheckNull(redisCachePoolOptions, "redisCachePoolOptions");
+            ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(redisCachePoolOptions.PoolSize, redisCachePoolOptions.ConfigurationOptions, redisCachePoolOptions.TextWriter, redisCachePoolOptions.ConnectionSelectionStrategy);
         }
 
         public virtual void Dispose()

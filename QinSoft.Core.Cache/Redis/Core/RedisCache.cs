@@ -17,7 +17,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         /// <summary>
         /// Redis连接
         /// </summary>
-        protected IConnectionMultiplexer Connection { get; set; }
+        protected IConnectionMultiplexer ConnectionMultiplexer { get; set; }
 
         /// <summary>
         /// 是否是池连接
@@ -32,48 +32,56 @@ namespace QinSoft.Core.Cache.Redis.Core
         /// <summary>
         /// Redis数据库
         /// </summary>
-        public int Database => DB.Database;
+        public virtual int Database => DB.Database;
 
         /// <summary>
         /// Redis连接
         /// </summary>
-        public IConnectionMultiplexer Multiplexer => Connection;
+        public IConnectionMultiplexer Multiplexer => ConnectionMultiplexer;
 
-        public RedisCache(RedisCacheOptions options)
+        public RedisCache(ConfigurationOptions configurationOptions, bool isSentinels = false)
         {
-            ObjectUtils.CheckNull(options, "options");
-            if (options.ConfigurationOptions != null)
+            ObjectUtils.CheckNull(configurationOptions, "configurationOptions");
+            this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(configurationOptions);
+            if (isSentinels)
             {
-                this.Connection = ConnectionMultiplexer.Connect(options.ConfigurationOptions);
-            }
-            else
-            {
-                this.Connection = ConnectionMultiplexer.Connect(options.Configuration);
+                this.ConnectionMultiplexer = ((ConnectionMultiplexer)ConnectionMultiplexer).GetSentinelMasterConnection(configurationOptions);
             }
             this.IsPoolConnection = false;
-            this.DB = this.Connection.GetDatabase();
+            this.DB = this.ConnectionMultiplexer.GetDatabase();
         }
 
-
-        public RedisCache(IConnectionMultiplexer connection, bool isPoolConnection = false)
+        public RedisCache(RedisCacheOptions redisCacheOptions)
         {
-            ObjectUtils.CheckNull(connection, "connection");
-            this.Connection = connection;
+            ObjectUtils.CheckNull(redisCacheOptions, "redisCacheOptions");
+            this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.Connect(redisCacheOptions.ConfigurationOptions);
+            if (redisCacheOptions.IsSentinel)
+            {
+                this.ConnectionMultiplexer = ((ConnectionMultiplexer)ConnectionMultiplexer).GetSentinelMasterConnection(redisCacheOptions.ConfigurationOptions);
+            }
+            this.IsPoolConnection = false;
+            this.DB = this.ConnectionMultiplexer.GetDatabase();
+        }
+
+        public RedisCache(IConnectionMultiplexer connectionMultiplexer, bool isPoolConnection = false)
+        {
+            ObjectUtils.CheckNull(connectionMultiplexer, "connectionMultiplexer");
+            this.ConnectionMultiplexer = connectionMultiplexer;
             this.IsPoolConnection = isPoolConnection;
-            this.DB = this.Connection.GetDatabase();
+            this.DB = this.ConnectionMultiplexer.GetDatabase();
         }
 
-        public RedisCache(IReconnectableConnectionMultiplexer connection)
+        public RedisCache(IReconnectableConnectionMultiplexer reconnectableConnectionMultiplexer)
         {
-            ObjectUtils.CheckNull(connection, "connection");
-            this.Connection = connection.Connection;
+            ObjectUtils.CheckNull(reconnectableConnectionMultiplexer, "reconnectableConnectionMultiplexer");
+            this.ConnectionMultiplexer = reconnectableConnectionMultiplexer.Connection;
             this.IsPoolConnection = true;
-            this.DB = this.Connection.GetDatabase();
+            this.DB = this.ConnectionMultiplexer.GetDatabase();
         }
 
         public virtual void Select(int database)
         {
-            this.DB = this.Connection.GetDatabase(database);
+            this.DB = this.ConnectionMultiplexer.GetDatabase(database);
         }
 
         /// <summary>
@@ -81,6 +89,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         /// </summary>
         public virtual void Dispose()
         {
+
         }
 
         /// <summary>
@@ -91,7 +100,7 @@ namespace QinSoft.Core.Cache.Redis.Core
             GC.SuppressFinalize(this);
             if (!IsPoolConnection)
             {
-                this.Connection.Dispose();
+                this.ConnectionMultiplexer.Dispose();
             }
         }
 
