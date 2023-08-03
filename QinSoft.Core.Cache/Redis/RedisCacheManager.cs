@@ -97,10 +97,11 @@ namespace QinSoft.Core.Cache.Redis
         }
 
         /// <summary>
-        /// 获取redis配置
+        /// 构建缓存实例
         /// </summary>
-        protected virtual RedisCacheOptions GetRedisCacheOptions(RedisCacheItemConfig config)
+        protected virtual IRedisCache BuildCacheFromConfig(RedisCacheItemConfig config)
         {
+            ObjectUtils.CheckNull(config, "config");
             RedisCacheOptions options = new RedisCacheOptions();
             options.ConfigurationOptions = new ConfigurationOptions();
             config.EndPoints?.ToList().ForEach(u =>
@@ -122,16 +123,7 @@ namespace QinSoft.Core.Cache.Redis
                 options.ConfigurationOptions.ServiceName = config.Sentinel.ServiceName;
                 options.IsSentinel = true;
             }
-            return options;
-        }
-
-        /// <summary>
-        /// 构建缓存实例
-        /// </summary>
-        protected virtual IRedisCache BuildCacheFromConfig(RedisCacheItemConfig config)
-        {
-            ObjectUtils.CheckNull(config, "config");
-            return new RedisCache(GetRedisCacheOptions(config));
+            return new RedisCache(options);
         }
 
         /// <summary>
