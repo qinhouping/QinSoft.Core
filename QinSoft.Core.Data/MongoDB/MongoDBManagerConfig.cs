@@ -58,10 +58,10 @@ namespace QinSoft.Core.Data.MongoDB
 
 
         /// <summary>
-        /// mongodb数据库名
+        /// mongodb默认数据库名
         /// </summary>
-        [XmlElement("database")]
-        [JsonProperty("database")]
-        public string Database { get; set; }
+        [XmlElement("defaultDBName")]
+        [JsonProperty("defaultDBName")]
+        public string DefaultDBName { get; set; }
     }
 }

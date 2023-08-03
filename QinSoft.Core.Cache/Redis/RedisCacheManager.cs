@@ -145,7 +145,7 @@ namespace QinSoft.Core.Cache.Redis
                 throw new CacheExecption("not found default cache config");
             }
 
-            IRedisCache cache = CacheDictionary.GetOrAdd(config.Name, (key) =>
+            IRedisCache cache = CacheDictionary.GetOrAdd(config.Name, key =>
             {
                 return BuildCacheFromConfig(config);
             });
@@ -175,7 +175,7 @@ namespace QinSoft.Core.Cache.Redis
                 throw new CacheExecption(string.Format("not found cache config:{0}", name));
             }
 
-            IRedisCache cache = CacheDictionary.GetOrAdd(config.Name, (key) =>
+            IRedisCache cache = CacheDictionary.GetOrAdd(config.Name, key =>
             {
                 return BuildCacheFromConfig(config);
             });

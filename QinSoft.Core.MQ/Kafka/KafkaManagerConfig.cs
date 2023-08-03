@@ -160,7 +160,7 @@ namespace QinSoft.Core.MQ.Kafka
         public string AutoOffsetReset { get; set; } = "Latest";
 
         /// <summary>
-        /// 初始偏移量的策略
+        /// 是否自动提交
         /// </summary>
         [XmlAttribute("enableAutoCommit")]
         [JsonProperty("enableAutoCommit")]

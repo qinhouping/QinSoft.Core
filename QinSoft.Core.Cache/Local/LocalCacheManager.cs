@@ -116,7 +116,7 @@ namespace QinSoft.Core.Cache.Local
                 throw new CacheExecption("not found default cache config");
             }
 
-            ILocalCache cache = CacheDictionary.GetOrAdd(config.Name, (key) =>
+            ILocalCache cache = CacheDictionary.GetOrAdd(config.Name, key =>
             {
                 return BuildCacheFromConfig(config);
             });
@@ -145,7 +145,7 @@ namespace QinSoft.Core.Cache.Local
                 throw new CacheExecption(string.Format("not found cache config:{0}", name));
             }
 
-            ILocalCache cache = CacheDictionary.GetOrAdd(config.Name, (key) =>
+            ILocalCache cache = CacheDictionary.GetOrAdd(config.Name, key =>
             {
                 return BuildCacheFromConfig(config);
             });

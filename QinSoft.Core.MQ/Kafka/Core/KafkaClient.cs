@@ -66,7 +66,7 @@ namespace QinSoft.Core.MQ.Kafka.Core
         public KafkaClient(ConsumerConfig consumerConfig, IDeserializer<TKEY> keyDeserializer, IDeserializer<TVALUE> valueDeserializer)
         {
             this.ConsumerConfig = consumerConfig;
-            this.KeyDeserializer = KeyDeserializer;
+            this.KeyDeserializer = keyDeserializer;
             this.ValueDeserializer = valueDeserializer;
         }
 
@@ -80,8 +80,8 @@ namespace QinSoft.Core.MQ.Kafka.Core
             this.KeySerializer = keySerializer;
             this.ValueSerializer = valueSerializer;
             this.ConsumerConfig = consumerConfig;
-            this.KeyDeserializer = KeyDeserializer;
-            this.ValueDeserializer = ValueDeserializer;
+            this.KeyDeserializer = keyDeserializer;
+            this.ValueDeserializer = valueDeserializer;
         }
 
         /// <summary>
