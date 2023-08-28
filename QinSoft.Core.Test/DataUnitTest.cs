@@ -24,6 +24,11 @@ using MongoDB.Bson.Serialization.Attributes;
 using QinSoft.Core.Data.Elasticsearch;
 using Nest;
 using MongoDB.Bson;
+using System.Linq.Expressions;
+using QinSoft.Core.Data.Zookeeper;
+using org.apache.zookeeper;
+using QinSoft.Core.Data.Zookeeper.Core;
+using org.apache.zookeeper.data;
 
 namespace QinSoft.Core.Test
 {
@@ -41,7 +46,7 @@ namespace QinSoft.Core.Test
             {
                 using (ISqlSugarClient client = databaseManager.GetDatabase())
                 {
-                    Assert.IsTrue(client.Queryable<TestTable>().ToList().Count > 0);
+                    Assert.AreEqual(client.Queryable<Project>().Count(),0);
                 }
             }
         }
@@ -49,29 +54,26 @@ namespace QinSoft.Core.Test
         [TestMethod]
         public void TestDatabaseRepository()
         {
-            ITestTableRepository repository = Programe.ServiceProvider.GetService<ITestTableRepository>();
-            var model = new TestTable()
+            IProjectRepository repository = Programe.ServiceProvider.GetService<IProjectRepository>();
+            var model = new Project()
             {
-                id = "daf7f265-c48b-444c-a4d9-2c584a28ace2",
-                va2 = DateTime.Now.ToString()
+                Id = "qinsoft.core",
+                ProjectName = "QinSoft 核心库",
+                ProjectDescription="核心库"
             };
 
-            if (repository.Count(query => query.Where(t => t.id.Equals("daf7f265-c48b-444c-a4d9-2c584a28ace2"))) == 0)
-            {
-                Assert.AreEqual(repository.Insert(model), true);
-            }
-            else
-            {
-                Assert.AreEqual(repository.Update(model), true);
-            }
+            Assert.IsTrue(repository.Insert(model,i=>i.IgnoreColumns(true)));
 
-            TestTable result = repository.SelectOne((query) => { query.Where(t => t.id.Equals("daf7f265-c48b-444c-a4d9-2c584a28ace2")); });
+            Assert.AreEqual(repository.Count(query => query.Where(t => t.Id.Equals("qinsoft.core"))), 1);
 
-            Assert.AreEqual(result.va2, model.va2);
+            Project result = repository.SelectOne(query => { query.Where(t => t.Id.Equals("qinsoft.core")); });
 
-            Assert.AreNotEqual(repository.Count(), 0);
+            Assert.AreEqual(result.ProjectName, model.ProjectName);
+            Assert.AreEqual(result.ProjectDescription, model.ProjectDescription);
 
-            Assert.AreEqual(repository.Delete((delete) => { delete.Where(t => t.id.Equals("daf7f265-c48b-444c-a4d9-2c584a28ace2")); }), 1);
+            Assert.AreEqual(repository.Update(u => u.SetColumns(t => new Project(){ProjectDescription = "核心库2"}).Where(t => t.Id.Equals("qinsoft.core"))),1);
+
+            Assert.AreEqual(repository.Delete(delete => { delete.Where(t => t.Id.Equals("qinsoft.core")); }), 1);
         }
 
         [TestMethod]
@@ -83,7 +85,7 @@ namespace QinSoft.Core.Test
             {
                 using (IMongoDBClient client = mongodbManager.GetMongoDB())
                 {
-                    Assert.AreEqual(client.GetDatabase().GetCollection<TestTable>("t2").Find(u => true).ToList().Count, 0);
+                    Assert.AreEqual(client.GetDatabase().GetCollection<Project>("project").Find(u => true).ToList().Count, 0);
                 }
             }
         }
@@ -91,25 +93,28 @@ namespace QinSoft.Core.Test
         [TestMethod]
         public void TestMongoDBRepository()
         {
-            ITestTableMongoDBRepository repository = Programe.ServiceProvider.GetService<ITestTableMongoDBRepository>();
-            var model = new TestTable()
+            IProjectMongoDBRepository repository = Programe.ServiceProvider.GetService<IProjectMongoDBRepository>();
+            var model = new Project()
             {
-                id = "daf7f265-c48b-444c-a4d9-2c584a28ace2",
-                va2 = DateTime.Now.ToString()
+                Id = "qinsoft.core",
+                ProjectName = "QinSoft 核心库",
+                ProjectDescription = "核心库",
+                CreateTime=DateTime.Now,
+                UpdateTime=DateTime.Now
             };
 
-            if (repository.FindOne(model) == null)
-            {
-                Assert.AreEqual(repository.InsertOne(model), true);
-            }
-            else
-            {
-                Assert.AreEqual(repository.UpdateOne(model), true);
-            }
+            Assert.IsTrue(repository.InsertOne(model));
 
-            TestTable result = repository.FindOne(model);
+            Assert.AreEqual(repository.Count((Expression<Func<Project, bool>>)(t => t.Id.Equals("qinsoft.core"))),1);
 
-            Assert.AreEqual(result.va2, model.va2);
+            Project result = repository.FindOne(model);
+
+            Assert.AreEqual(result.ProjectName, model.ProjectName);
+            Assert.AreEqual(result.ProjectDescription, model.ProjectDescription);
+
+            UpdateDefinition<Project> update= Builders<Project>.Update.Combine(Builders<Project>.Update.Set(t => t.ProjectDescription, "核心库2")
+                , Builders<Project>.Update.Set(t => t.UpdateTime, DateTime.Now));
+            Assert.IsTrue(repository.UpdateOne((Expression<Func<Project, bool>>)(t => t.Id.Equals("qinsoft.core")), update));
 
             Assert.AreEqual(repository.DeleteOne(model), true);
         }
@@ -117,101 +122,130 @@ namespace QinSoft.Core.Test
         [TestMethod]
         public void TestElasticsearchManager()
         {
-            string indexName = "test_table";
             IConfiger configer = new FileConfiger(new FileConfigerOptions());
             ElasticsearchManagerConfig elasticsearchManagerConfig = configer.Get<ElasticsearchManagerConfig>("ElasticsearchManagerConfig");
             using (IElasticsearchManager elasticsearchManager = new ElasticsearchManager(elasticsearchManagerConfig))
             {
                 IElasticClient client = elasticsearchManager.GetElasticsearch();
-                CreateIndexResponse createIndexResponse = client.Indices.Create(indexName, c => c
-                     .Map<TestTable>(m => m.Properties(p => p
-                         .Keyword(t => t.Name(n => n.id))
-                         .Text(t => t.Name(n => n.va2))
-                         )
-                     )
-                 );
-
-                IndexResponse indexResponse = client.Index<TestTable>(new IndexDescriptor<TestTable>(new TestTable() { id = Guid.NewGuid().ToString(), va2 = "hello world" }, indexName));
-
-                DeleteResponse deleteResponse = client.Delete(new DeleteDescriptor<TestTable>(indexName, "2ef6965e3-fb87-4add-9a89-7e5dc30c1961"));
-
-                UpdateResponse<TestTable> updateResponse2 = client.Update<TestTable, TestTable>(new UpdateDescriptor<TestTable, TestTable>(indexName, "2993a1de-b98a-4aa9-bae1-215aaaf7600d").Doc(new TestTable() { va2 = "update2 " + DateTime.Now.ToString() }));
-
-                UpdateResponse<TestTable> updateResponse = client.Update<TestTable, TestTable>((new DocumentPath<TestTable>("2993a1de-b98a-4aa9-bae1-215aaaf7600d")).Index(indexName), u => u.Doc(new TestTable() { va2 = "update " + DateTime.Now.ToString() }));
-
-                GetResponse<TestTable> getResponse = client.Get<TestTable>(new GetDescriptor<TestTable>(indexName, "5cb891a5-2d35-40b3-8be4-bf78eac405bb"));
-
-                ISearchResponse<TestTable> searchResponse = client.Search<TestTable>(new SearchDescriptor<TestTable>(indexName).Query(q => q
-                    .Fuzzy(m => m
-                        .Field(f => f.va2).Value("update").Fuzziness(Fuzziness.EditDistance(2))
-                        )
-                    )
-                );
-
-                ISearchResponse<TestTable> searchResponse2 = client.Search<TestTable>(s => s.Index(indexName).Query(q => q
-                     .Term(t => t
-                           .Field(f => f.id).Value("2993a1de-b98a-4aa9-bae1-215aaaf7600d")
-                           )
-                    )
-                );
+                Assert.AreEqual(client.Count<Project>(d => d.Index("project")).Count,0);
             }
         }
 
         [TestMethod]
         public void TestElasticsearchRespository()
         {
-            ITestTableElasticsearchRepository repository = Programe.ServiceProvider.GetService<ITestTableElasticsearchRepository>();
-            var res = repository.Search(q => q.Match(m => m
-                .Field(f => f.id).Query("5cb891a5"))
-             );
+            IProjectElasticsearchRepository repository = Programe.ServiceProvider.GetService<IProjectElasticsearchRepository>();
+            var model = new Project()
+            {
+                Id = "qinsoft.core",
+                ProjectName = "QinSoft 核心库",
+                ProjectDescription = "核心库",
+                CreateTime = DateTime.Now,
+                UpdateTime = DateTime.Now
+            };
+
+            Assert.IsTrue(repository.Index(model).Item1);
+
+            Assert.AreEqual(repository.Count(q=>q.Match(m=>m.Field(t=>t.Id).Query("qinsoft.core"))),1);
+
+            Project result = repository.Get("qinsoft.core");
+            Assert.AreEqual(result.ProjectName, model.ProjectName);
+            Assert.AreEqual(result.ProjectDescription, model.ProjectDescription);
+
+            Assert.IsTrue(repository.Update<PartProject>("qinsoft.core", new PartProject() { ProjectDescription = "核心库2", UpdateTime= DateTime.Now }));
+
+            Assert.AreEqual(repository.Delete("qinsoft.core"), true);
+        }
+
+        [TestMethod]
+        public void TestZookeeperManager()
+        {
+            IConfiger configer = new FileConfiger(new FileConfigerOptions());
+            ZookeeperManagerConfig zookeeperManagerConfig = configer.Get<ZookeeperManagerConfig>("ZookeeperManagerConfig");
+            using (IZookeeperManager zookeeperManager = new ZookeeperManager(zookeeperManagerConfig))
+            {
+                IZookeeper client = zookeeperManager.GetZookeeper();
+                Assert.IsNull(client.Exists("/not_exists",false));
+                client.Create("/qinsoft", null, CreateMode.EPHEMERAL);
+
+                string value = Guid.NewGuid().ToString();
+                Assert.IsNotNull(client.SetData("/qinsoft", value));
+
+                string res = client.GetData("/qinsoft").Item2;
+                Assert.AreEqual(res, value);
+
+                client.Delete("/qinsoft");
+            }
         }
     }
 
-    [SugarTable("test_table")]
-    [MongoDBCollection("test_table")]
-    [ElasticsearchIndex("test_table")]
-    public class TestTable
+    [SugarTable("project")]
+    [MongoDBCollection("project")]
+    [ElasticsearchIndex("project")]
+    public class Project
     {
         [BsonId]
         [SugarColumn(IsPrimaryKey = true)]
-        public string id { get; set; }
+        [Keyword(Name ="id")]
+        public string Id { get; set; }
 
-        [BsonElement("value")]
-        [SugarColumn(ColumnName = "value")]
-        public string va2 { get; set; }
+        [BsonElement("project_name")]
+        [SugarColumn(ColumnName = "project_name")]
+        [Text(Name = "project_name")]
+        public string ProjectName { get; set; }
 
-        [BsonIgnore]
-        [SugarColumn(IsIgnore = true)]
-        public string ext { get; set; }
+        [BsonElement("project_description")]
+        [SugarColumn(ColumnName = "project_description")]
+        [Text(Name = "project_description")]
+        public string ProjectDescription { get; set; }
+
+        [BsonElement("create_time")]
+        [SugarColumn(ColumnName = "create_time")]
+        [Date(Name = "create_time")]
+        public DateTime? CreateTime { get; set; }
+
+        [BsonElement("update_time")]
+        [SugarColumn(ColumnName = "update_time")]
+        [Date(Name = "update_time")]
+        public DateTime? UpdateTime { get; set; }
     }
 
-    public interface ITestTableRepository : IDatabaseRepository<TestTable>
+    public class PartProject
+    {
+        [Text(Name = "project_description")]
+        public string ProjectDescription { get; set; }
+
+        [Date(Name = "update_time")]
+        public DateTime? UpdateTime { get; set; }
+    }
+
+    public interface IProjectRepository : IDatabaseRepository<Project>
     {
 
     }
 
     [DatabaseContext(true)]
-    public class TestTableRepository : DatabaseRepository<TestTable>, ITestTableRepository
+    public class ProjectRepository : DatabaseRepository<Project>, IProjectRepository
     {
 
     }
 
-    public interface ITestTableMongoDBRepository : IMongoDBRepository<TestTable>
+    public interface IProjectMongoDBRepository : IMongoDBRepository<Project>
     {
 
     }
 
-    public class TestTableMongoDBRepository : MongoDBRepository<TestTable>, ITestTableMongoDBRepository
+    public class ProjectMongoDBRepository : MongoDBRepository<Project>, IProjectMongoDBRepository
     {
 
     }
 
-    public interface ITestTableElasticsearchRepository : IElasticsearchRepository<TestTable>
+    public interface IProjectElasticsearchRepository : IElasticsearchRepository<Project>
     {
 
     }
 
-    public class TestTableElasticsearchRepository : ElasticsearchRepository<TestTable>, ITestTableElasticsearchRepository
+    public class ProjectElasticsearchRepository : ElasticsearchRepository<Project>, IProjectElasticsearchRepository
     {
 
     }

@@ -80,27 +80,27 @@ namespace QinSoft.Core.Data.Database
         /// <summary>
         /// 更新实体
         /// </summary>
-        public virtual bool Update(Action<IUpdateable<T>> action)
+        public virtual int Update(Action<IUpdateable<T>> action)
         {
             IUpdateable<T> updateable = Client.Updateable<T>();
             if (action != null)
             {
                 action(updateable);
             }
-            return updateable.ExecuteCommand() > 0;
+            return updateable.ExecuteCommand();
         }
 
         /// <summary>
         /// 更新实体
         /// </summary>
-        public virtual async Task<bool> UpdateAsync(Action<IUpdateable<T>> action)
+        public virtual async Task<int> UpdateAsync(Action<IUpdateable<T>> action)
         {
             IUpdateable<T> updateable = Client.Updateable<T>();
             if (action != null)
             {
                 action(updateable);
             }
-            return await updateable.ExecuteCommandAsync() > 0;
+            return await updateable.ExecuteCommandAsync();
         }
 
         /// <summary>

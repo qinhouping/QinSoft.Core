@@ -383,6 +383,22 @@ namespace QinSoft.Core.Data.Elasticsearch
         }
 
         /// <summary>
+        /// 文档计数
+        /// </summary>
+        public virtual long Count(Func<QueryContainerDescriptor<T>, QueryContainer> query=null)
+        {
+            CountResponse response = Client.Count<T>( s => s.Index(IndexName).Query(query));
+            if (response.IsValid)
+            {
+                return response.Count;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
         /// 获取文档
         /// </summary>
         public virtual T Get(string id)
@@ -420,7 +436,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual (IEnumerable<T>, long?) Search(Func<QueryContainerDescriptor<T>, QueryContainer> query, Func<SortDescriptor<T>, IPromise<IList<ISort>>> sort = null, int? from = null, int? size = null)
         {
-            ISearchResponse<T> response = Client.Search<T>(s => s.Index(IndexName).Sort(sort).From(from).Size(size).Query(query));
+            ISearchResponse<T> response = Client.Search<T>(s => s.Index(IndexName).Query(query).Sort(sort).From(from).Size(size));
             if (response.IsValid)
             {
                 return (response.Documents, response.Total);
@@ -436,7 +452,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual async Task<(IEnumerable<T>, long?)> SearchAsync(Func<QueryContainerDescriptor<T>, QueryContainer> query, Func<SortDescriptor<T>, IPromise<IList<ISort>>> sort = null, int? from = null, int? size = null)
         {
-            ISearchResponse<T> response = await Client.SearchAsync<T>(s => s.Index(IndexName).Sort(sort).From(from).Size(size).Query(query));
+            ISearchResponse<T> response = await Client.SearchAsync<T>(s => s.Index(IndexName).Query(query).Sort(sort).From(from).Size(size));
             if (response.IsValid)
             {
                 return (response.Documents, response.Total);

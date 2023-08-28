@@ -13,4 +13,10 @@
     <ProjectReference Include="..\QinSoft.Core.Configure\QinSoft.Core.Configure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="RabbitMQ\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="RabbitMQ\" />
+  </ItemGroup>
 </Project>

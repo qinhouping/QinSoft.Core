@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace QinSoft.Core.Data.Elasticsearch
 {
     /// <summary>
-    /// elasticsearch上下文特性
+    /// elasticsearch索引特性
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
     public class ElasticsearchIndexAttribute : Attribute

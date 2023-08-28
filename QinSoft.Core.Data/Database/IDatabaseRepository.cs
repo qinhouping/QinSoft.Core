@@ -41,12 +41,12 @@ namespace QinSoft.Core.Data.Database
         /// <summary>
         /// 更新实体
         /// </summary>
-        bool Update(Action<IUpdateable<T>> action);
+        int Update(Action<IUpdateable<T>> action);
 
         /// <summary>
         /// 更新实体
         /// </summary>
-        Task<bool> UpdateAsync(Action<IUpdateable<T>> action);
+        Task<int> UpdateAsync(Action<IUpdateable<T>> action);
 
         /// <summary>
         /// 更新实体

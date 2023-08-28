@@ -17,6 +17,7 @@
     <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
     <PackageReference Include="NEST" Version="7.17.0" />
     <PackageReference Include="SqlSugarCore" Version="5.0.3.4" />
+    <PackageReference Include="ZooKeeperNetEx" Version="3.4.12.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,4 +25,15 @@
     <ProjectReference Include="..\QinSoft.Core.Configure\QinSoft.Core.Configure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Solr\" />
+    <None Remove="ZooKeeper\" />
+    <None Remove="ZooKeeperNetEx" />
+    <None Remove="Zookeeper\Core\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Solr\" />
+    <Folder Include="Zookeeper\" />
+    <Folder Include="Zookeeper\Core\" />
+  </ItemGroup>
 </Project>

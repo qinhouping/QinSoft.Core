@@ -84,7 +84,6 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         Task<bool> UpsertAsync(string id, T docuemnt);
 
-
         /// <summary>
         /// 更新文档
         /// </summary>
@@ -114,6 +113,11 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// 更新文档
         /// </summary>
         Task<int> BulkUpdateAsync<TPartial>(Func<TPartial, string> idAction, params TPartial[] documents) where TPartial : class, new();
+
+        /// <summary>
+        /// 文档计数
+        /// </summary>
+        long Count(Func<QueryContainerDescriptor<T>, QueryContainer> query = null);
 
         /// <summary>
         /// 获取文档

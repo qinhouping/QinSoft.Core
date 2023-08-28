@@ -73,6 +73,22 @@ namespace QinSoft.Core.Common.Utils
         }
 
         /// <summary>
+        /// SHA256
+        /// </summary>
+        public static string SHA256(this string text)
+        {
+            return Hash(text, "SHA256", DefaultEncoding);
+        }
+
+        /// <summary>
+        /// SHA256
+        /// </summary>
+        public static string SHA512(this string text)
+        {
+            return Hash(text, "SHA512", DefaultEncoding);
+        }
+
+        /// <summary>
         /// DES解密
         /// </summary>
         public static byte[] DESDecrypt(byte[] bytes, byte[] key, byte[] iv, CipherMode mode = CipherMode.CBC, PaddingMode padding = PaddingMode.PKCS7)
