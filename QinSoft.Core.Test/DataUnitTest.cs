@@ -168,6 +168,8 @@ namespace QinSoft.Core.Test
                 Assert.IsNull(client.Exists("/not_exists",false));
                 client.Create("/qinsoft", null, CreateMode.EPHEMERAL);
 
+                client.Exists("/qinsoft", new QinSoftWatcher());
+
                 string value = Guid.NewGuid().ToString();
                 Assert.IsNotNull(client.SetData("/qinsoft", value));
 
@@ -176,6 +178,15 @@ namespace QinSoft.Core.Test
 
                 client.Delete("/qinsoft");
             }
+        }
+    }
+
+    public class QinSoftWatcher : Watcher
+    {
+        public override async Task process(WatchedEvent @event)
+        {
+            await Task.Delay(10);
+            Console.WriteLine(@event.ToString());
         }
     }
 

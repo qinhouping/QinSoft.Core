@@ -100,14 +100,21 @@ namespace QinSoft.Core.MQ.Kafka
                 BootstrapServers = config.BootstrapServers,
                 RequestTimeoutMs = config.Producer?.RequestTimeoutMs,
                 LingerMs = config.Producer?.LingerMs,
+                BatchSize = config.Producer?.BatchSize,
                 CompressionType = config.Producer?.CompressionType.ParseEnum<CompressionType>(),
                 CompressionLevel = config.Producer?.CompressionLevel,
                 Acks = config.Producer?.Acks.ParseEnum<Acks>(),
-                EnableIdempotence = config.Producer?.EnableIdempotence,
-                BatchSize = config.Producer?.BatchSize
+                EnableIdempotence = config.Producer?.EnableIdempotence
             };
-            ISerializer<TKEY> keySerializer = config.Producer?.KeySerializer.IsEmpty() == true ? null : (ISerializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Producer?.KeySerializer));
-            ISerializer<TVALUE> valueSerializer = config.Producer?.ValueSerializer.IsEmpty() == true ? null : (ISerializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Producer?.ValueSerializer));
+            if (config.Sasl != null)
+            {
+                producerConfig.SecurityProtocol = SecurityProtocol.SaslPlaintext;
+                producerConfig.SaslMechanism = config.Sasl.Mechanism.ParseEnum<SaslMechanism>();
+                producerConfig.SaslUsername = config.Sasl.Username;
+                producerConfig.SaslPassword = config.Sasl.Password;
+            }
+            ISerializer<TKEY> keySerializer = config.Producer?.KeySerializer.IsEmpty() == false ? (ISerializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Producer?.KeySerializer)) : null;
+            ISerializer<TVALUE> valueSerializer = config.Producer?.ValueSerializer.IsEmpty() == false ? (ISerializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Producer?.ValueSerializer)): null;
 
             ConsumerConfig consumerConfig = new ConsumerConfig()
             {
@@ -119,8 +126,15 @@ namespace QinSoft.Core.MQ.Kafka
                 MaxPollIntervalMs = config.Consumer?.MaxPollIntervalMs,
                 PartitionAssignmentStrategy = config.Consumer?.PartitionAssignmentStrategy.ParseEnum<PartitionAssignmentStrategy>()
             };
-            IDeserializer<TKEY> keyDeserializer = config.Consumer?.KeyDeserializer.IsEmpty() == true ? null : (IDeserializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Consumer?.KeyDeserializer));
-            IDeserializer<TVALUE> valueDeserializer = config.Consumer?.ValueDeserializer.IsEmpty() == true ? null : (IDeserializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Consumer?.ValueDeserializer));
+            if (config.Sasl != null)
+            {
+                consumerConfig.SecurityProtocol = SecurityProtocol.SaslPlaintext;
+                consumerConfig.SaslMechanism = config.Sasl.Mechanism.ParseEnum<SaslMechanism>();
+                consumerConfig.SaslUsername = config.Sasl.Username;
+                consumerConfig.SaslPassword = config.Sasl.Password;
+            }
+            IDeserializer<TKEY> keyDeserializer = config.Consumer?.KeyDeserializer.IsEmpty() == false ? (IDeserializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Consumer?.KeyDeserializer)) : null;
+            IDeserializer<TVALUE> valueDeserializer = config.Consumer?.ValueDeserializer.IsEmpty() == false ? (IDeserializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Consumer?.ValueDeserializer)) : null;
 
             return new KafkaClient<TKEY, TVALUE>(producerConfig, keySerializer, valueSerializer, consumerConfig, keyDeserializer, valueDeserializer);
         }

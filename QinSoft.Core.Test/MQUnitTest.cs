@@ -23,48 +23,50 @@ namespace QinSoft.Core.Test
     public class MQUnitTest
     {
         [TestMethod]
-        public void TestKafka()
+        public void TestKafkaManager()
         {
             IConfiger configer = new FileConfiger(new FileConfigerOptions());
             KafkaManagerConfig KafkaManagerConfig = configer.Get<KafkaManagerConfig>("KafkaManagerConfig");
 
-            string topic = "test2";
+            string topic = "qinsoft.kafka.test";
 
             using (IKafkaManager kafkaManager = new KafkaManager(KafkaManagerConfig))
             {
-                ExecuteUtils.ExecuteInTask(() =>
+                ExecuteUtils.ExecuteInThread(() =>
                 {
                     using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
                     {
                         while (true)
                         {
-                            kafka.ProduceAsync(topic, DateTime.Now.Ticks.ToString(), DateTime.Now.ToString());
+                            kafka.ProduceAsync(topic, Guid.NewGuid().ToString(), DateTime.Now.ToString());
                             Thread.Sleep(1000);
                         }
                     }
                 });
-                ExecuteUtils.ExecuteInTask(() =>
+                ExecuteUtils.ExecuteInThread(() =>
                 {
                     using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
                     {
                         kafka.Consume(topic, (consumer, result) =>
                         {
-                            Console.WriteLine(result.Message.Key + ":" + result.Message.Value);
+                            Console.WriteLine("consumer1:\n" + result.ToJson());
+                            consumer.Commit(result);
                         });
                     }
                 });
-                ExecuteUtils.ExecuteInTask(() =>
+                ExecuteUtils.ExecuteInThread(() =>
                 {
                     using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
                     {
                         kafka.Consume(topic, (consumer2, result2) =>
                         {
-                            Console.WriteLine(result2.Message.Key + ":" + result2.Message.Value);
+                            Console.WriteLine("consumer2:\n" + result2.Message.Key + ":" + result2.Message.Value);
+                            consumer2.Commit(result2);
                         });
                     }
                 });
 
-                Thread.Sleep(10000);
+                Thread.Sleep(1000 * 3600);
             }
         }
     }

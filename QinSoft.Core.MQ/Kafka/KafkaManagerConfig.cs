@@ -56,6 +56,13 @@ namespace QinSoft.Core.MQ.Kafka
         public string BootstrapServers { get; set; }
 
         /// <summary>
+        /// kafka连接配置
+        /// </summary>
+        [XmlElement("sasl")]
+        [JsonProperty("sasl")]
+        public KafkaItemSaslConfig Sasl { get; set; }
+
+        /// <summary>
         /// 生产者配置
         /// </summary>
         [XmlElement("producer")]
@@ -74,68 +81,96 @@ namespace QinSoft.Core.MQ.Kafka
     /// <summary>
     /// 生产者配置
     /// </summary>
+    public class KafkaItemSaslConfig
+    {
+        /// <summary>
+        /// sasl认证模式
+        /// </summary>
+        [XmlElement("mechanism")]
+        [JsonProperty("mechanism")]
+        public string Mechanism { get; set; } = "Plain";
+
+        /// <summary>
+        /// sasl用户名
+        /// </summary>
+        [XmlElement("username")]
+        [JsonProperty("username")]
+        public string Username { get; set; }
+
+        /// <summary>
+        /// sasl用户密码
+        /// </summary>
+        [XmlElement("password")]
+        [JsonProperty("password")]
+        public string Password { get; set; }
+    }
+
+
+        /// <summary>
+        /// 生产者配置
+        /// </summary>
     public class KafkaItemProducerConfig
     {
         /// <summary>
         /// 请求的超时时间，单位是毫秒
         /// </summary>
-        [XmlAttribute("requestTimeoutMs")]
+        [XmlElement("requestTimeoutMs")]
         [JsonProperty("requestTimeoutMs")]
         public int RequestTimeoutMs { get; set; } = 30000;
 
         /// <summary>
         /// 缓冲区等待时间
         /// </summary>
-        [XmlAttribute("lingerMs")]
+        [XmlElement("lingerMs")]
         [JsonProperty("lingerMs")]
         public int LingerMs { get; set; } = 5;
 
         /// <summary>
+        /// 一个批次中消息的总大小
+        /// </summary>
+        [XmlElement("batchSize")]
+        [JsonProperty("batchSize")]
+        public int BatchSize { get; set; } = 1000000;
+
+        /// <summary>
         /// 消息的压缩类型
         /// </summary>
-        [XmlAttribute("compressionType")]
+        [XmlElement("compressionType")]
         [JsonProperty("compressionType")]
         public string CompressionType { get; set; } = "None";
 
         /// <summary>
         /// 消息的压缩级别
         /// </summary>
-        [XmlAttribute("compressionLevel")]
+        [XmlElement("compressionLevel")]
         [JsonProperty("compressionLevel")]
         public int CompressionLevel { get; set; } = -1;
 
         /// <summary>
         /// 请求的可靠性级别
         /// </summary>
-        [XmlAttribute("acks")]
+        [XmlElement("acks")]
         [JsonProperty("acks")]
         public string Acks { get; set; } = "Leader";
 
         /// <summary>
         /// 是否启用幂等性
         /// </summary>
-        [XmlAttribute("enableIdempotence")]
+        [XmlElement("enableIdempotence")]
         [JsonProperty("enableIdempotence")]
         public bool EnableIdempotence { get; set; } = false;
 
         /// <summary>
-        /// 一个批次中消息的总大小
-        /// </summary>
-        [XmlAttribute("batchSize")]
-        [JsonProperty("batchSize")]
-        public int BatchSize { get; set; } = 1000000;
-
-        /// <summary>
         /// 键序列化
         /// </summary>
-        [XmlAttribute("keySerializer")]
+        [XmlElement("keySerializer")]
         [JsonProperty("keySerializer")]
         public string KeySerializer { get; set; } = null;
 
         /// <summary>
         /// 键序列化
         /// </summary>
-        [XmlAttribute("valueSerializer")]
+        [XmlElement("valueSerializer")]
         [JsonProperty("valueSerializer")]
         public string ValueSerializer { get; set; } = null;
     }
@@ -148,56 +183,56 @@ namespace QinSoft.Core.MQ.Kafka
         /// <summary>
         /// 消费组ID
         /// </summary>
-        [XmlAttribute("groupId")]
+        [XmlElement("groupId")]
         [JsonProperty("groupId")]
         public string GroupId { get; set; }
 
         /// <summary>
         /// 初始偏移量的策略
         /// </summary>
-        [XmlAttribute("autoOffsetReset")]
+        [XmlElement("autoOffsetReset")]
         [JsonProperty("autoOffsetReset")]
         public string AutoOffsetReset { get; set; } = "Latest";
 
         /// <summary>
         /// 是否自动提交
         /// </summary>
-        [XmlAttribute("enableAutoCommit")]
+        [XmlElement("enableAutoCommit")]
         [JsonProperty("enableAutoCommit")]
         public bool EnableAutoCommit { get; set; } = true;
 
         /// <summary>
         /// 自动提交的时间间隔（以毫秒为单位）
         /// </summary>
-        [XmlAttribute("autoCommitIntervalMs")]
+        [XmlElement("autoCommitIntervalMs")]
         [JsonProperty("autoCommitIntervalMs")]
         public int AutoCommitIntervalMs { get; set; } = 5000;
 
         /// <summary>
         /// 在拉取消息之间允许的最大间隔时间（以毫秒为单位）
         /// </summary>
-        [XmlAttribute("MaxPollIntervalMs")]
+        [XmlElement("MaxPollIntervalMs")]
         [JsonProperty("MaxPollIntervalMs")]
         public int MaxPollIntervalMs { get; set; } = 300000;
 
         /// <summary>
         /// 分区的分配策略
         /// </summary>
-        [XmlAttribute("partitionAssignmentStrategy")]
+        [XmlElement("partitionAssignmentStrategy")]
         [JsonProperty("partitionAssignmentStrategy")]
         public string PartitionAssignmentStrategy { get; set; } = "Range";
 
         /// <summary>
         /// 键反序列化
         /// </summary>
-        [XmlAttribute("KeyDeserializer")]
+        [XmlElement("KeyDeserializer")]
         [JsonProperty("KeyDeserializer")]
         public string KeyDeserializer { get; set; } = null;
 
         /// <summary>
         /// 键反序列化
         /// </summary>
-        [XmlAttribute("valueDeserializer")]
+        [XmlElement("valueDeserializer")]
         [JsonProperty("valueDeserializer")]
         public string ValueDeserializer { get; set; } = null;
     }
