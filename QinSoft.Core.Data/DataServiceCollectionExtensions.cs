@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using QinSoft.Core.Data.MongoDB;
 using QinSoft.Core.Data.Elasticsearch;
+using QinSoft.Core.Data.Zookeeper;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -94,6 +95,30 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchManager, ElasticsearchManager>());
             services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchContext, ElasticsearchContext>());
             services.TryAddSingleton<ElasticsearchContextInterceptor>();
+            services.Configure(setupAction);
+            return services;
+        }
+
+        /// <summary>
+        /// 注入Zookeeper
+        /// </summary>
+        public static IServiceCollection AddZookeeperManager(this IServiceCollection services)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchManager, ElasticsearchManager>());
+            return services;
+        }
+
+        /// <summary>
+        /// 注入Zookeeper
+        /// </summary>
+        public static IServiceCollection AddZookeeperManager(this IServiceCollection services, Action<ZookeeperManagerOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchManager, ElasticsearchManager>());
             services.Configure(setupAction);
             return services;
         }

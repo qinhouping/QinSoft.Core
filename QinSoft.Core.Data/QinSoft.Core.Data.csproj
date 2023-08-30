@@ -18,6 +18,8 @@
     <PackageReference Include="NEST" Version="7.17.0" />
     <PackageReference Include="SqlSugarCore" Version="5.0.3.4" />
     <PackageReference Include="ZooKeeperNetEx" Version="3.4.12.4" />
+    <PackageReference Include="SolrNet.Cloud" Version="1.1.1" />
+    <PackageReference Include="SolrNet" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +32,10 @@
     <None Remove="ZooKeeper\" />
     <None Remove="ZooKeeperNetEx" />
     <None Remove="Zookeeper\Core\" />
+    <None Remove="SolrNet" />
+    <None Remove="SolrNet.Core" />
+    <None Remove="SolrNet.Cloud" />
+    <None Remove="SolrNet.Cloud.Core" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Solr\" />

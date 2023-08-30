@@ -29,6 +29,8 @@ using QinSoft.Core.Data.Zookeeper;
 using org.apache.zookeeper;
 using QinSoft.Core.Data.Zookeeper.Core;
 using org.apache.zookeeper.data;
+using QinSoft.Core.Data.Solr;
+using SolrNet;
 
 namespace QinSoft.Core.Test
 {
@@ -177,6 +179,18 @@ namespace QinSoft.Core.Test
                 Assert.AreEqual(res, value);
 
                 client.Delete("/qinsoft");
+            }
+        }
+
+        [TestMethod]
+        public void TestSolrManager()
+        {
+            IConfiger configer = new FileConfiger(new FileConfigerOptions());
+            SolrManagerConfig solrManagerConfig = configer.Get<SolrManagerConfig>("SolrManagerConfig");
+            using (ISolrManager solrManager = new SolrManager(solrManagerConfig))
+            {
+                ISolrOperations<Project> client = solrManager.GetSolr<Project>();
+                ISolrOperations<Project> client2 = solrManager.GetSolr<Project>("test2");
             }
         }
     }
