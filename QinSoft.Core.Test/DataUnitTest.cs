@@ -31,6 +31,8 @@ using QinSoft.Core.Data.Zookeeper.Core;
 using org.apache.zookeeper.data;
 using QinSoft.Core.Data.Solr;
 using SolrNet;
+using SolrNet.Attributes;
+using SolrNet.Commands.Parameters;
 
 namespace QinSoft.Core.Test
 {
@@ -187,10 +189,34 @@ namespace QinSoft.Core.Test
         {
             IConfiger configer = new FileConfiger(new FileConfigerOptions());
             SolrManagerConfig solrManagerConfig = configer.Get<SolrManagerConfig>("SolrManagerConfig");
+            var model = new Project()
+            {
+                Id = "qinsoft.core",
+                ProjectName = "QinSoft 核心库",
+                ProjectDescription = "核心库",
+                CreateTime = DateTime.Now,
+                UpdateTime = DateTime.Now
+            };
             using (ISolrManager solrManager = new SolrManager(solrManagerConfig))
             {
                 ISolrOperations<Project> client = solrManager.GetSolr<Project>();
-                ISolrOperations<Project> client2 = solrManager.GetSolr<Project>("test2");
+                client.Add(model);
+                client.Commit();
+
+                ISolrOperations<Project2> client2= solrManager.GetSolr<Project2>("test2");
+                QueryOptions queryOptions = new QueryOptions
+                {
+                    Rows = 10, // 返回的结果数量
+                    Start = 0, // 起始位置
+                    OrderBy = new[] { new SolrNet.SortOrder("update_time", Order.DESC) },
+                    Fields=new string[] {"id","project_name","project_description"}
+                };
+                ISolrQuery query = new SolrQuery("id:qinsoft.core");
+                var result= client2.Query(query, queryOptions);
+                Assert.IsNotNull(result);
+
+                client2.Delete("qinsoft.core");
+                client2.Commit();
             }
         }
     }
@@ -212,27 +238,38 @@ namespace QinSoft.Core.Test
         [BsonId]
         [SugarColumn(IsPrimaryKey = true)]
         [Keyword(Name ="id")]
+        [SolrUniqueKey("id")]
         public string Id { get; set; }
 
         [BsonElement("project_name")]
         [SugarColumn(ColumnName = "project_name")]
         [Text(Name = "project_name")]
+        [SolrField("project_name")]
         public string ProjectName { get; set; }
 
         [BsonElement("project_description")]
         [SugarColumn(ColumnName = "project_description")]
         [Text(Name = "project_description")]
+        [SolrField("project_description")]
         public string ProjectDescription { get; set; }
 
         [BsonElement("create_time")]
         [SugarColumn(ColumnName = "create_time")]
         [Date(Name = "create_time")]
+        [SolrField("create_time")]
         public DateTime? CreateTime { get; set; }
 
         [BsonElement("update_time")]
         [SugarColumn(ColumnName = "update_time")]
         [Date(Name = "update_time")]
+        [SolrField("update_time")]
         public DateTime? UpdateTime { get; set; }
+    }
+
+    [ElasticsearchIndex("project")]
+    public class Project2: Project
+    {
+
     }
 
     public class PartProject

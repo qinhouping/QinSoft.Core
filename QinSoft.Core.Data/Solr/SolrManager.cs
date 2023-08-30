@@ -122,7 +122,7 @@ namespace QinSoft.Core.Data.Solr
                 throw new SolrException("not found default Solr client config");
             }
 
-            ISolrOperations<T> client =(ISolrOperations<T>) CacheDictionary.GetOrAdd(typeof(T).Name,key=> BuildClientFromConfig<T>(config));
+            ISolrOperations<T> client =(ISolrOperations<T>) CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig<T>(config));
 
             logger.LogDebug("get default Solr client from config");
 
@@ -149,7 +149,7 @@ namespace QinSoft.Core.Data.Solr
                 throw new SolrException(string.Format("not found Solr client config:{0}", name));
             }
 
-            ISolrOperations<T> client = (ISolrOperations<T>)CacheDictionary.GetOrAdd(typeof(T).Name, key => BuildClientFromConfig<T>(config));
+            ISolrOperations<T> client = (ISolrOperations<T>)CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig<T>(config));
 
             logger.LogDebug(string.Format("get Solr client from config:{0}", name));
 
