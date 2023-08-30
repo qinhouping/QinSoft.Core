@@ -12,6 +12,7 @@ using SolrNet;
 using SolrNet.Impl;
 using HttpWebAdapters;
 using CommonServiceLocator;
+using System.IO;
 
 namespace QinSoft.Core.Data.Solr
 {
@@ -98,10 +99,10 @@ namespace QinSoft.Core.Data.Solr
         /// <summary>
         /// 构建Solr客户端实例
         /// </summary>
-        protected virtual ISolrOperations<T> BuildClientFromConfig<T>(SolrItemConfig config)
+        protected virtual ISolrOperations<T> BuildClientFromConfig<T>(SolrItemConfig config,string coreName)
         {
             ObjectUtils.CheckNull(config, "config");
-            SolrConnection connection = new SolrConnection(config.Url);
+            SolrConnection connection = new SolrConnection(Path.Combine(config.Url,coreName));
             if (!config.Username.IsEmpty() && !config.Password.IsEmpty())
             {
                 connection.HttpWebRequestFactory = new BasicAuthHttpWebRequestFactory(config.Username, config.Password);
@@ -114,15 +115,16 @@ namespace QinSoft.Core.Data.Solr
         /// <summary>
         /// 获取Solr客户端
         /// </summary>
-        public virtual ISolrOperations<T> GetSolr<T>()
+        public virtual ISolrOperations<T> GetSolr<T>(string coreName)
         {
+            ObjectUtils.CheckNull(coreName, "coreName");
             SolrItemConfig config = GetDefaultSolrItemConfig();
             if (config == null)
             {
                 throw new SolrException("not found default Solr client config");
             }
 
-            ISolrOperations<T> client =(ISolrOperations<T>) CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig<T>(config));
+            ISolrOperations<T> client =(ISolrOperations<T>) CacheDictionary.GetOrAdd(config.Name+":"+coreName, key => BuildClientFromConfig<T>(config,coreName));
 
             logger.LogDebug("get default Solr client from config");
 
@@ -132,24 +134,25 @@ namespace QinSoft.Core.Data.Solr
         /// <summary>
         /// 获取Solr客户端
         /// </summary>
-        public virtual async Task<ISolrOperations<T>> GetSolrAsync<T>()
+        public virtual async Task<ISolrOperations<T>> GetSolrAsync<T>(string coreName)
         {
-            return await ExecuteUtils.ExecuteInTask(GetSolr<T>);
+            return await ExecuteUtils.ExecuteInTask(GetSolr<T>,coreName);
         }
 
         /// <summary>
         /// 获取Solr客户端
         /// </summary>
-        public virtual ISolrOperations<T> GetSolr<T>(string name)
+        public virtual ISolrOperations<T> GetSolr<T>(string name, string coreName)
         {
             ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(coreName, "coreName");
             SolrItemConfig config = GetSolrItemConfig(name);
             if (config == null)
             {
                 throw new SolrException(string.Format("not found Solr client config:{0}", name));
             }
 
-            ISolrOperations<T> client = (ISolrOperations<T>)CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig<T>(config));
+            ISolrOperations<T> client = (ISolrOperations<T>)CacheDictionary.GetOrAdd(config.Name + ":" + coreName, key => BuildClientFromConfig<T>(config,coreName));
 
             logger.LogDebug(string.Format("get Solr client from config:{0}", name));
 
@@ -159,9 +162,9 @@ namespace QinSoft.Core.Data.Solr
         /// <summary>
         /// 获取Solr客户端
         /// </summary>
-        public virtual async Task<ISolrOperations<T>> GetSolrAsync<T>(string name)
+        public virtual async Task<ISolrOperations<T>> GetSolrAsync<T>(string name, string coreName)
         {
-            return await ExecuteUtils.ExecuteInTask(GetSolr<T>, name);
+            return await ExecuteUtils.ExecuteInTask(()=>GetSolr<T>(name,coreName));
         }
 
         /// <summary>

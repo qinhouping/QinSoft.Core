@@ -33,6 +33,7 @@ using QinSoft.Core.Data.Solr;
 using SolrNet;
 using SolrNet.Attributes;
 using SolrNet.Commands.Parameters;
+using System.Linq;
 
 namespace QinSoft.Core.Test
 {
@@ -189,6 +190,18 @@ namespace QinSoft.Core.Test
         {
             IConfiger configer = new FileConfiger(new FileConfigerOptions());
             SolrManagerConfig solrManagerConfig = configer.Get<SolrManagerConfig>("SolrManagerConfig");
+            using (ISolrManager solrManager = new SolrManager(solrManagerConfig))
+            {
+                ISolrOperations<Project> client = solrManager.GetSolr<Project>("project");
+                Assert.AreEqual(client.Ping().Status,0);
+            }
+        }
+
+
+        [TestMethod]
+        public void TestSolrRespository()
+        {
+            IProjectSolrRepository repository = Programe.ServiceProvider.GetService<IProjectSolrRepository>();
             var model = new Project()
             {
                 Id = "qinsoft.core",
@@ -197,27 +210,18 @@ namespace QinSoft.Core.Test
                 CreateTime = DateTime.Now,
                 UpdateTime = DateTime.Now
             };
-            using (ISolrManager solrManager = new SolrManager(solrManagerConfig))
-            {
-                ISolrOperations<Project> client = solrManager.GetSolr<Project>();
-                client.Add(model);
-                client.Commit();
 
-                ISolrOperations<Project2> client2= solrManager.GetSolr<Project2>("test2");
-                QueryOptions queryOptions = new QueryOptions
-                {
-                    Rows = 10, // 返回的结果数量
-                    Start = 0, // 起始位置
-                    OrderBy = new[] { new SolrNet.SortOrder("update_time", Order.DESC) },
-                    Fields=new string[] {"id","project_name","project_description"}
-                };
-                ISolrQuery query = new SolrQuery("id:qinsoft.core");
-                var result= client2.Query(query, queryOptions);
-                Assert.IsNotNull(result);
+            Assert.IsTrue(repository.Add(model));
+            repository.Commit();
 
-                client2.Delete("qinsoft.core");
-                client2.Commit();
-            }
+            ISolrQuery query = new SolrQuery("id:qinsoft.core");
+            var result = repository.Query(query,(QueryOptions) null).First();
+            Assert.IsNotNull(result);
+            Assert.AreEqual(result.ProjectName, model.ProjectName);
+            Assert.AreEqual(result.ProjectDescription, model.ProjectDescription);
+
+            Assert.AreEqual(repository.Delete("qinsoft.core"), true);
+            repository.Commit();
         }
     }
 
@@ -233,6 +237,7 @@ namespace QinSoft.Core.Test
     [SugarTable("project")]
     [MongoDBCollection("project")]
     [ElasticsearchIndex("project")]
+    [SolrCore("project")]
     public class Project
     {
         [BsonId]
@@ -264,12 +269,6 @@ namespace QinSoft.Core.Test
         [Date(Name = "update_time")]
         [SolrField("update_time")]
         public DateTime? UpdateTime { get; set; }
-    }
-
-    [ElasticsearchIndex("project")]
-    public class Project2: Project
-    {
-
     }
 
     public class PartProject
@@ -308,6 +307,16 @@ namespace QinSoft.Core.Test
     }
 
     public class ProjectElasticsearchRepository : ElasticsearchRepository<Project>, IProjectElasticsearchRepository
+    {
+
+    }
+
+    public interface IProjectSolrRepository : ISolrRepository<Project>
+    {
+
+    }
+
+    public class ProjectSolrRepository : SolrRepository<Project>, IProjectSolrRepository
     {
 
     }

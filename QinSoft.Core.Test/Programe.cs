@@ -19,6 +19,7 @@ using QinSoft.Core.Data.MongoDB;
 using QinSoft.Core.Data.Elasticsearch;
 using QinSoft.Core.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using QinSoft.Core.Data.Solr;
 
 namespace QinSoft.Core.Test
 {
@@ -65,11 +66,18 @@ namespace QinSoft.Core.Test
             .AddKafkaManager(options =>
             {
 
+            })
+            .AddZookeeperManager(options => {
+
+            })
+            .AddSolrManager(options => {
+
             });
 
             services.TryProxyAddSingleton<IProjectRepository, ProjectRepository>(typeof(DatabaseContextInterceptor));
             services.TryProxyAddSingleton<IProjectMongoDBRepository, ProjectMongoDBRepository>(typeof(MongoDBContextInterceptor));
             services.TryProxyAddSingleton<IProjectElasticsearchRepository, ProjectElasticsearchRepository>(typeof(ElasticsearchContextInterceptor));
+            services.TryProxyAddSingleton<IProjectSolrRepository, ProjectSolrRepository>(typeof(SolrContextInterceptor));
             ServiceProvider = services.BuildServiceProvider();
         }
     }

@@ -7,6 +7,7 @@ using System.Text;
 using QinSoft.Core.Data.MongoDB;
 using QinSoft.Core.Data.Elasticsearch;
 using QinSoft.Core.Data.Zookeeper;
+using QinSoft.Core.Data.Solr;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -119,6 +120,34 @@ namespace Microsoft.Extensions.DependencyInjection
             ObjectUtils.CheckNull(setupAction, "setupAction");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IElasticsearchManager, ElasticsearchManager>());
+            services.Configure(setupAction);
+            return services;
+        }
+
+        /// <summary>
+        /// 注入Solr
+        /// </summary>
+        public static IServiceCollection AddSolrManager(this IServiceCollection services)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<ISolrManager, SolrManager>());
+            services.TryAdd(ServiceDescriptor.Singleton<ISolrContext, SolrContext>());
+            services.TryAddSingleton<SolrContextInterceptor>();
+            return services;
+        }
+
+        /// <summary>
+        /// 注入Solr
+        /// </summary>
+        public static IServiceCollection AddSolrManager(this IServiceCollection services, Action<SolrManagerOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<ISolrManager, SolrManager>());
+            services.TryAdd(ServiceDescriptor.Singleton<ISolrContext, SolrContext>());
+            services.TryAddSingleton<SolrContextInterceptor>();
             services.Configure(setupAction);
             return services;
         }
