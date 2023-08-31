@@ -67,9 +67,41 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// <summary>
         /// 索引文档
         /// </summary>
+        public virtual (bool, string) Index(string id,T document)
+        {
+            IndexResponse response = Client.Index<T>(document, i => i.Index(IndexName).Id(id));
+            if (response.IsValid)
+            {
+                return (Result.Created.Equals(response.Result), response.Id);
+            }
+            else
+            {
+                return (false, null);
+            }
+        }
+
+        /// <summary>
+        /// 索引文档
+        /// </summary>
         public virtual async Task<(bool, string)> IndexAsync(T document)
         {
-            IndexResponse response = await Client.IndexAsync<T>(document, (i) => i.Index(IndexName));
+            IndexResponse response = await Client.IndexAsync<T>(document, i => i.Index(IndexName));
+            if (response.IsValid)
+            {
+                return (Result.Created.Equals(response.Result), response.Id);
+            }
+            else
+            {
+                return (false, null);
+            }
+        }
+
+        /// <summary>
+        /// 索引文档
+        /// </summary>
+        public virtual async Task<(bool, string)> IndexAsync(string id,T document)
+        {
+            IndexResponse response = await Client.IndexAsync<T>(document, i => i.Index(IndexName).Id(id));
             if (response.IsValid)
             {
                 return (Result.Created.Equals(response.Result), response.Id);
@@ -99,9 +131,41 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// <summary>
         /// 批量索引文档
         /// </summary>
+        public virtual int BulkIndex(Func<T, string> idAction, params T[] documents)
+        {
+            BulkResponse response = Client.Bulk(s => s.IndexMany<T>(documents, (i, t) => i.Index(IndexName).Id(idAction(t))));
+            if (response.IsValid)
+            {
+                return response.Items.Count();
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 批量索引文档
+        /// </summary>
         public virtual async Task<int> BulkIndexAsync(params T[] documents)
         {
             BulkResponse response = await Client.BulkAsync(s => s.IndexMany<T>(documents, (i, t) => i.Index(IndexName)));
+            if (response.IsValid)
+            {
+                return response.Items.Count();
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        /// <summary>
+        /// 批量索引文档
+        /// </summary>
+        public virtual async Task<int> BulkIndexAsync(Func<T, string> idAction, params T[] documents)
+        {
+            BulkResponse response = await Client.BulkAsync(s => s.IndexMany<T>(documents, (i, t) => i.Index(IndexName).Id(idAction(t))));
             if (response.IsValid)
             {
                 return response.Items.Count();

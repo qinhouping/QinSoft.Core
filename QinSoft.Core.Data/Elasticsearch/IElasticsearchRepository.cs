@@ -22,7 +22,17 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// <summary>
         /// 索引文档
         /// </summary>
+        (bool, string) Index(string id, T document);
+
+        /// <summary>
+        /// 索引文档
+        /// </summary>
         Task<(bool, string)> IndexAsync(T document);
+
+        /// <summary>
+        /// 索引文档
+        /// </summary>
+        Task<(bool, string)> IndexAsync(string id, T document);
 
         /// <summary>
         /// 批量索引文档
@@ -32,7 +42,18 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// <summary>
         /// 批量索引文档
         /// </summary>
+        int BulkIndex(Func<T, string> idAction, params T[] documents);
+
+        /// <summary>
+        /// 批量索引文档
+        /// </summary>
         Task<int> BulkIndexAsync(params T[] documents);
+
+
+        /// <summary>
+        /// 批量索引文档
+        /// </summary>
+        Task<int> BulkIndexAsync(Func<T, string> idAction, params T[] documents);
 
         /// <summary>
         /// 移除文档
