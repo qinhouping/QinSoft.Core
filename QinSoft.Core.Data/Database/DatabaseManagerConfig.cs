@@ -91,13 +91,6 @@ namespace QinSoft.Core.Data.Database
         public bool IsAutoCloseConnection { get; set; } = true;
 
         /// <summary>
-        /// 相同线程共享
-        /// </summary>
-        [XmlElement("isShardSameThread")]
-        [JsonProperty("isShardSameThread")]
-        public bool IsShardSameThread { get; set; } = false;
-
-        /// <summary>
         /// 从库配置
         /// </summary>
         [XmlElement("slave")]
@@ -137,14 +130,141 @@ namespace QinSoft.Core.Data.Database
     /// </summary>
     public class DatabaseConnectionMoreSetting
     {
-        public bool PgSqlIsAutoToLower { get; set; } = true;
+        [XmlElement("isAutoRemoveDataCache")]
+        [JsonProperty("isAutoRemoveDataCache")]
+        public bool IsAutoRemoveDataCache
+        {
+            get;
+            set;
+        }
 
-        public bool IsAutoRemoveDataCache { get; set; } = true;
+        [XmlElement("isWithNoLockQuery")]
+        [JsonProperty("isWithNoLockQuery")]
+        public bool IsWithNoLockQuery
+        {
+            get;
+            set;
+        }
 
-        public bool IsWithNoLockQuery { get; set; } = true;
+        [XmlElement("isWithNoLockSubquery")]
+        [JsonProperty("isWithNoLockSubquery")]
+        public bool IsWithNoLockSubquery
+        {
+            get;
+            set;
+        }
 
-        public bool DisableNvarchar { get; set; } = true;
+        [XmlElement("disableNvarchar")]
+        [JsonProperty("disableNvarchar")]
+        public bool DisableNvarchar
+        {
+            get;
+            set;
+        }
 
-        public int DefaultCacheDurationInSeconds { get; set; } = 60;
+        [XmlElement("disableMillisecond")]
+        [JsonProperty("disableMillisecond")]
+        public bool DisableMillisecond
+        {
+            get;
+            set;
+        }
+
+        [XmlElement("pgSqlIsAutoToLower")]
+        [JsonProperty("pgSqlIsAutoToLower")]
+        public bool PgSqlIsAutoToLower
+        {
+            get;
+            set;
+        } = true;
+
+        [XmlElement("pgSqlIsAutoToLowerCodeFirst")]
+        [JsonProperty("pgSqlIsAutoToLowerCodeFirst")]
+        public bool PgSqlIsAutoToLowerCodeFirst
+        {
+            get;
+            set;
+        } = true;
+
+        [XmlElement("isAutoToUpper")]
+        [JsonProperty("isAutoToUpper")]
+        public bool IsAutoToUpper
+        {
+            get;
+            set;
+        } = true;
+
+        [XmlElement("defaultCacheDurationInSeconds")]
+        [JsonProperty("defaultCacheDurationInSeconds")]
+        public int DefaultCacheDurationInSeconds
+        {
+            get;
+            set;
+        }
+
+        [XmlElement("defaultCacheDurationInSeconds")]
+        [JsonProperty("defaultCacheDurationInSeconds")]
+        public bool? TableEnumIsString
+        {
+            get;
+            set;
+        }
+
+        [XmlElement("dbMinDate")]
+        [JsonProperty("dbMinDate")]
+        public DateTime? DbMinDate
+        {
+            get;
+            set;
+        } = Convert.ToDateTime("1900-01-01");
+
+        [XmlElement("isNoReadXmlDescription")]
+        [JsonProperty("isNoReadXmlDescription")]
+        public bool IsNoReadXmlDescription
+        {
+            get;
+            set;
+        }
+
+        [XmlElement("sqlServerCodeFirstNvarchar")]
+        [JsonProperty("sqlServerCodeFirstNvarchar")]
+        public bool SqlServerCodeFirstNvarchar
+        {
+            get;
+            set;
+        }
+
+        [XmlElement("isAutoUpdateQueryFilter")]
+        [JsonProperty("isAutoUpdateQueryFilter")]
+        public bool IsAutoUpdateQueryFilter
+        {
+            get;
+            set;
+        }
+
+
+        [XmlElement("isAutoDeleteQueryFilter")]
+        [JsonProperty("isAutoDeleteQueryFilter")]
+        public bool IsAutoDeleteQueryFilter
+        {
+            get;
+            set;
+        }
+
+        [XmlElement("enableModelFuncMappingColumn")]
+        [JsonProperty("enableModelFuncMappingColumn")]
+        public bool EnableModelFuncMappingColumn
+        {
+            get;
+            set;
+        }
+
+        [XmlElement("enableOracleIdentity")]
+        [JsonProperty("enableOracleIdentity")]
+        public bool EnableOracleIdentity
+        {
+            get;
+            set;
+        }
     }
 }

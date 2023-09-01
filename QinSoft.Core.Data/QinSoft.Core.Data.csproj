@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Users\Administrator\source\repos\ConsoleApp1\QinSoft.Core.Data\QinSoft.Core.Data.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\C:\Users\Administrator\source\repos\ConsoleApp1\QinSoft.Core.Data\QinSoft.Core.Data.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,9 +16,9 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
     <PackageReference Include="NEST" Version="7.17.0" />
-    <PackageReference Include="SqlSugarCore" Version="5.0.3.4" />
     <PackageReference Include="ZooKeeperNetEx" Version="3.4.12.4" />
     <PackageReference Include="SolrNet" Version="1.1.1" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.4.102" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +35,7 @@
     <None Remove="SolrNet.Core" />
     <None Remove="SolrNet.Cloud" />
     <None Remove="SolrNet.Cloud.Core" />
+    <None Remove="SqlSugarCore" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Solr\" />

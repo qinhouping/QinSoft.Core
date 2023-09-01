@@ -99,7 +99,6 @@ namespace QinSoft.Core.Data.Database
                 connectionConfig.DbType = u.DbType;
                 connectionConfig.ConnectionString = u.ConnectionString;
                 connectionConfig.IsAutoCloseConnection = u.IsAutoCloseConnection;
-                connectionConfig.IsShardSameThread = u.IsShardSameThread;
                 connectionConfig.SlaveConnectionConfigs = u.Slaves?.Select(s =>
                 {
                     SlaveConnectionConfig slaveConnectionConfig = new SlaveConnectionConfig();
@@ -110,11 +109,22 @@ namespace QinSoft.Core.Data.Database
                 if (u.MoreSetting != null)
                 {
                     ConnMoreSettings moreSettings = new ConnMoreSettings();
-                    moreSettings.PgSqlIsAutoToLower = u.MoreSetting.PgSqlIsAutoToLower;
                     moreSettings.IsAutoRemoveDataCache = u.MoreSetting.IsAutoRemoveDataCache;
                     moreSettings.IsWithNoLockQuery = u.MoreSetting.IsWithNoLockQuery;
+                    moreSettings.IsWithNoLockSubquery = u.MoreSetting.IsWithNoLockSubquery;
                     moreSettings.DisableNvarchar = u.MoreSetting.DisableNvarchar;
+                    moreSettings.DisableMillisecond = u.MoreSetting.DisableMillisecond;
+                    moreSettings.PgSqlIsAutoToLower = u.MoreSetting.PgSqlIsAutoToLower;
+                    moreSettings.PgSqlIsAutoToLowerCodeFirst = u.MoreSetting.PgSqlIsAutoToLowerCodeFirst;
+                    moreSettings.IsAutoToUpper = u.MoreSetting.IsAutoToUpper;
                     moreSettings.DefaultCacheDurationInSeconds = u.MoreSetting.DefaultCacheDurationInSeconds;
+                    moreSettings.TableEnumIsString = u.MoreSetting.TableEnumIsString;
+                    moreSettings.DbMinDate = u.MoreSetting.DbMinDate;
+                    moreSettings.IsNoReadXmlDescription = u.MoreSetting.IsNoReadXmlDescription;
+                    moreSettings.SqlServerCodeFirstNvarchar = u.MoreSetting.SqlServerCodeFirstNvarchar;
+                    moreSettings.IsAutoUpdateQueryFilter = u.MoreSetting.IsAutoUpdateQueryFilter;
+                    moreSettings.EnableModelFuncMappingColumn = u.MoreSetting.EnableModelFuncMappingColumn;
+                    moreSettings.EnableOracleIdentity = u.MoreSetting.EnableOracleIdentity;
                     connectionConfig.MoreSettings = moreSettings;
                 }
                 connectionConfig.AopEvents = new AopEvents()

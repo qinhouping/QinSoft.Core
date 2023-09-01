@@ -2,7 +2,6 @@
 using QinSoft.Core.Configure.FileConfiger;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MySql.Data.MySqlClient;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
