@@ -94,18 +94,35 @@ namespace QinSoft.Core.Data.Zookeeper
         }
 
         /// <summary>
+        /// 资源释放事件处理
+        /// </summary>
+        protected virtual void ZookeeperDisposeHandle(object sender,EventArgs args)
+        {
+            IZookeeper zookeeper = (IZookeeper)sender;
+            if (CacheDictionary != null)
+            {
+                CacheDictionary.Remove(zookeeper.ConfigId,out _);
+            }
+            zookeeper.Disposed -= ZookeeperDisposeHandle;
+        }
+
+        /// <summary>
         /// 构建zookeeper客户端实例
         /// </summary>
         protected virtual IZookeeper BuildClientFromConfig(ZookeeperItemConfig config)
         {
             ObjectUtils.CheckNull(config, "config");
-            Core.Zookeeper zooKeeper = new Core.Zookeeper(config.ConnectionString, config.SessionTimeout);
+            IZookeeper zooKeeper = new Core.Zookeeper(config.ConnectionString, config.SessionTimeout)
+            {
+                ConfigId = config.Name
+            };
             if(!config.AuthInfos.IsEmpty()){
                foreach(ZookeeperAuthConfig authConfig in config.AuthInfos )
                {
-                    zooKeeper.addAuthInfo(authConfig.Schema, Encoding.Default.GetBytes(authConfig.Auth));
+                    zooKeeper.AddAuthInfo(authConfig.Schema, authConfig.Auth);
                }
             }
+            zooKeeper.Disposed += ZookeeperDisposeHandle;
             return zooKeeper;
         }
 
@@ -168,6 +185,15 @@ namespace QinSoft.Core.Data.Zookeeper
         public virtual void Dispose()
         {
             GC.SuppressFinalize(this);
+            if (CacheDictionary != null)
+            {
+                foreach (KeyValuePair<string, IZookeeper> pair in CacheDictionary)
+                {
+                    pair.Value.SafeDispose();
+                }
+                CacheDictionary.Clear();
+            }
         }
+
     }
 }

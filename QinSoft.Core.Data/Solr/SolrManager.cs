@@ -172,8 +172,12 @@ namespace QinSoft.Core.Data.Solr
         /// </summary>
         public virtual void Dispose()
         {
-            Startup.Container.Clear();
             GC.SuppressFinalize(this);
+            if (CacheDictionary != null)
+            {
+                CacheDictionary.Clear();
+            }
+            Startup.Container.Clear();
         }
     }
 }
