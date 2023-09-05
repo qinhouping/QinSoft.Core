@@ -81,6 +81,20 @@ namespace QinSoft.Core.Test
         }
 
         [TestMethod]
+        public void TestDatabaseManagerOfClickHouse()
+        {
+            IConfiger configer = new FileConfiger(new FileConfigerOptions());
+            DatabaseManagerConfig databaseManagerConfig = configer.Get<DatabaseManagerConfig>("DatabaseManager");
+            using (IDatabaseManager databaseManager = new DatabaseManager(databaseManagerConfig))
+            {
+                using (ISqlSugarClient client = databaseManager.GetDatabase("ch_test"))
+                {
+                    Assert.AreEqual(client.Queryable<Project>().Count(), 0);
+                }
+            }
+        }
+
+        [TestMethod]
         public void TestMongoDBManager()
         {
             IConfiger configer = new FileConfiger(new FileConfigerOptions());

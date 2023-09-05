@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,7 +73,7 @@ namespace QinSoft.Core.Data.Database
         /// </summary>
         [XmlElement("dbType")]
         [JsonProperty("dbType")]
-        public DbType DbType { get; set; }
+        public string DbType { get; set; } = "MySql";
 
         /// <summary>
         /// 主库连接字符串
@@ -202,8 +201,8 @@ namespace QinSoft.Core.Data.Database
             set;
         }
 
-        [XmlElement("defaultCacheDurationInSeconds")]
-        [JsonProperty("defaultCacheDurationInSeconds")]
+        [XmlElement("tableEnumIsString")]
+        [JsonProperty("tableEnumIsString")]
         public bool? TableEnumIsString
         {
             get;

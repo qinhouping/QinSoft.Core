@@ -96,7 +96,7 @@ namespace QinSoft.Core.Data.Database
             {
                 ConnectionConfig connectionConfig = new ConnectionConfig();
                 connectionConfig.ConfigId = u.ConfigId;
-                connectionConfig.DbType = u.DbType;
+                connectionConfig.DbType = u.DbType.ParseEnum<DbType>().Value;
                 connectionConfig.ConnectionString = u.ConnectionString;
                 connectionConfig.IsAutoCloseConnection = u.IsAutoCloseConnection;
                 connectionConfig.SlaveConnectionConfigs = u.Slaves?.Select(s =>

@@ -19,6 +19,7 @@
     <PackageReference Include="ZooKeeperNetEx" Version="3.4.12.4" />
     <PackageReference Include="SolrNet" Version="1.1.1" />
     <PackageReference Include="SqlSugarCore" Version="5.1.4.102" />
+    <PackageReference Include="SqlSugar.ClickHouseCore" Version="5.1.4.91" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +37,7 @@
     <None Remove="SolrNet.Cloud" />
     <None Remove="SolrNet.Cloud.Core" />
     <None Remove="SqlSugarCore" />
+    <None Remove="SqlSugar.ClickHouseCore" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Solr\" />
