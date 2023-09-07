@@ -127,7 +127,7 @@ namespace QinSoft.Core.Common.Utils
         public static string DESDecrypt(this string data, string key, string iv, Encoding encoding)
         {
             byte[] res = DESDecrypt(Convert.FromBase64String(data), encoding.GetBytes(key), encoding.GetBytes(iv));
-            return encoding.GetString(res);
+            return res.ToString(encoding);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace QinSoft.Core.Common.Utils
         public static string DESDecrypt(this string data, string key, string iv)
         {
             byte[] res = DESDecrypt(Convert.FromBase64String(data), DefaultEncoding.GetBytes(key), DefaultEncoding.GetBytes(iv));
-            return DefaultEncoding.GetString(res);
+            return res.ToString(DefaultEncoding);
         }
 
         /// <summary>
@@ -229,7 +229,7 @@ namespace QinSoft.Core.Common.Utils
         public static string AESDecrypt(this string data, string key, string iv, Encoding encoding)
         {
             byte[] res = AESDecrypt(Convert.FromBase64String(data), encoding.GetBytes(key), encoding.GetBytes(iv));
-            return encoding.GetString(res);
+            return res.ToString(encoding);
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace QinSoft.Core.Common.Utils
         public static string AESDecrypt(this string data, string key, string iv)
         {
             byte[] res = AESDecrypt(Convert.FromBase64String(data), DefaultEncoding.GetBytes(key), DefaultEncoding.GetBytes(iv));
-            return DefaultEncoding.GetString(res);
+            return res.ToString(DefaultEncoding);
         }
 
         /// <summary>
@@ -318,7 +318,7 @@ namespace QinSoft.Core.Common.Utils
         public static string RSADecrypt(this string text, string privateKey, Encoding encoding)
         {
             byte[] res = RSADecrypt(Convert.FromBase64String(text), privateKey);
-            return encoding.GetString(res);
+            return res.ToString(encoding);
         }
 
         /// <summary>
@@ -327,7 +327,7 @@ namespace QinSoft.Core.Common.Utils
         public static string RSADecrypt(this string text, string privateKey)
         {
             byte[] res = RSADecrypt(Convert.FromBase64String(text), privateKey);
-            return DefaultEncoding.GetString(res);
+            return res.ToString(DefaultEncoding);
         }
 
         /// <summary>

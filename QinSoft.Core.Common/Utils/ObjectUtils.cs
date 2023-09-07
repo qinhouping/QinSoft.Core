@@ -12,7 +12,7 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 判断参数是否是NULL
         /// </summary>
-        public static void CheckNull<T>(T argument, string paramName)
+        public static void CheckNull<T>(this T argument, string paramName)
         {
             if (argument == null)
             {
@@ -23,7 +23,7 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 判断参数是否是NULL
         /// </summary>
-        public static T CheckNull<T>(T argument, Func<T> action)
+        public static T CheckNull<T>(this T argument, Func<T> action)
         {
             if (argument == null)
             {
@@ -35,7 +35,7 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 判断参数是否超过范围
         /// </summary>
-        public static void CheckRange<T>(T argument, T begin, T end, string paramName) where T : IComparable
+        public static void CheckRange<T>(this T argument, T begin, T end, string paramName) where T : IComparable
         {
             if (argument.CompareTo(begin) < 0 || argument.CompareTo(end) >= 0)
             {
@@ -46,7 +46,7 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 判断参数是否超过范围
         /// </summary>
-        public static T CheckRange<T>(T argument, T begin, T end, Func<T> action) where T : IComparable
+        public static T CheckRange<T>(this T argument, T begin, T end, Func<T> action) where T : IComparable
         {
             if (argument.CompareTo(begin) < 0 || argument.CompareTo(end) >= 0)
             {
@@ -58,7 +58,7 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 判断列表是否是空
         /// </summary>
-        public static void CheckEmpty<T>(IEnumerable<T> argument, string paramName)
+        public static void CheckEmpty<T>(this IEnumerable<T> argument, string paramName)
         {
             if (argument.IsEmpty())
             {
@@ -69,7 +69,7 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 判断列表是否是空
         /// </summary>
-        public static T CheckEmpty<T, I>(T argument, Func<T> action) where T : IEnumerable<I>
+        public static T CheckEmpty<T, I>(this T argument, Func<T> action) where T : IEnumerable<I>
         {
             if (argument.IsEmpty())
             {
@@ -81,7 +81,7 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 通用检测
         /// </summary>
-        public static T Check<T>(T arguemnt, Func<T, T> checkAction)
+        public static T Check<T>(this T arguemnt, Func<T, T> checkAction)
         {
             return checkAction(arguemnt);
         }

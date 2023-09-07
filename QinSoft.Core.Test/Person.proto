@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "QinSoft.Core.Test";
+
+message Person {
+  string name = 1;
+  int32 age = 2;
+  repeated string hobbies = 3;
+}

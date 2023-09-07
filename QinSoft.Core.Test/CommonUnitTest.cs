@@ -77,5 +77,55 @@ namespace QinSoft.Core.Test
             string r4 = CipherUtils.AESDecrypt(r3, "FIbsyly50QyjI534", "FIbsyly50QyjI534");
             Assert.AreEqual(r4, "test");
         }
+
+        [TestMethod]
+        public void TestCancel()
+        {
+            try
+            {
+                CancellationTokenSource source = new CancellationTokenSource();
+                CancellationToken token = source.Token;
+                CancellationTokenRegistration? registration = null;
+                registration= token.Register(() =>
+                {
+                    registration?.Dispose();
+                });
+                bool r1 = token.CanBeCanceled;
+                bool r2 = token.IsCancellationRequested;
+                token.ThrowIfCancellationRequested();
+
+                source.Cancel();
+                source.Cancel();
+
+                bool r3 = token.CanBeCanceled;
+                bool r4 = token.IsCancellationRequested;
+                token.ThrowIfCancellationRequested();
+
+            }
+            catch(OperationCanceledException e)
+            {
+
+            }
+        }
+
+        [TestMethod]
+        public void TestProtobuf()
+        {
+            Person person = new Person
+            {
+                Name = "test",
+                Age = 30,
+                Hobbies = { "test" }
+            };
+
+            // 序列化
+            byte[] bytes = ProtobufUtils.ToProtobuf(person);
+
+            // 反序列化
+            Person p = ProtobufUtils.FromProtobuf<Person>(bytes);
+
+            // 使用反序列化后的 Person 实例
+            Assert.AreEqual(p.Name, person.Name);
+        }
     }
 }

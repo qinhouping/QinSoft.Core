@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using Confluent.Kafka;
 using QinSoft.Core.Common.Utils;
+using QinSoft.Core.MQ.RabbitMQ;
+using RabbitMQ.Client;
+using QinSoft.Core.MQ.RabbitMQ.Core;
 
 namespace QinSoft.Core.Test
 {
@@ -69,5 +72,38 @@ namespace QinSoft.Core.Test
                 Thread.Sleep(1000 * 3600);
             }
         }
+
+
+        [TestMethod]
+        public void TestRabbitMQManager() {
+            IConfiger configer = new FileConfiger(new FileConfigerOptions());
+            RabbitMQManagerConfig rabbitMQManagerConfig = configer.Get<RabbitMQManagerConfig>("RabbitMQManagerConfig");
+
+            using (IRabbitMQManager manager=new RabbitMQManager(rabbitMQManagerConfig))
+            {
+                ExecuteUtils.ExecuteInThread(() =>
+                {
+                    using (IRabbitMQClient client = manager.GetRabbitMQ())
+                    {
+                        while (true)
+                        {
+                            string message = Guid.NewGuid().ToString();
+                            client.Publish("amq.direct", "test", null, message);
+                            Thread.Sleep(1000);
+                        }
+                    }
+                });
+
+                using (IRabbitMQClient client = manager.GetRabbitMQ())
+                {
+                    client.Consume("test_queue", true, (c,sender, args,msg) => {
+                        Console.WriteLine(msg);
+                    });
+                }
+
+                Thread.Sleep(1000 * 3600);
+            }
+        }
+
     }
 }

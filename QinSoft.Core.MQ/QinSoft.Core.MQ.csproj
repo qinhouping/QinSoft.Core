@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Confluent.Kafka" Version="2.1.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,8 +16,11 @@
 
   <ItemGroup>
     <None Remove="RabbitMQ\" />
+    <None Remove="RabbitMQ.Client" />
+    <None Remove="RabbitMQ\Core\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="RabbitMQ\" />
+    <Folder Include="RabbitMQ\Core\" />
   </ItemGroup>
 </Project>

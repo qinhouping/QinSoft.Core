@@ -25,6 +25,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Test\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Update="Configs\ConfigManager.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -64,6 +67,15 @@
     <None Update="Configs\dev\SolrManager.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Configs\dev\ZookeeperManager %28副本%29.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Configs\dev\RabbitMQManager.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Doc\" />
+  </ItemGroup>
 </Project>
