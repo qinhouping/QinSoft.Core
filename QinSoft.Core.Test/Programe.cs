@@ -72,6 +72,10 @@ namespace QinSoft.Core.Test
             })
             .AddSolrManager(options => {
 
+            })
+            .AddRabbitMQManager(options =>
+            {
+
             });
 
             services.TryProxyAddSingleton<IProjectRepository, ProjectRepository>(typeof(DatabaseContextInterceptor));

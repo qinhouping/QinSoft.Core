@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using QinSoft.Core.MQ.Kafka;
+using QinSoft.Core.MQ.RabbitMQ;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -24,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// 注入Database
+        /// 注入Kafka
         /// </summary>
         public static IServiceCollection AddKafkaManager(this IServiceCollection services, Action<KafkaManagerOptions> setupAction)
         {
@@ -32,6 +33,30 @@ namespace Microsoft.Extensions.DependencyInjection
             ObjectUtils.CheckNull(setupAction, "setupAction");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IKafkaManager, KafkaManager>());
+            services.Configure(setupAction);
+            return services;
+        }
+
+        /// <summary>
+        /// 注入RabbitMQ
+        /// </summary>
+        public static IServiceCollection AddRabbitMQManager(this IServiceCollection services)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<IRabbitMQManager, RabbitMQManager>());
+            return services;
+        }
+
+        /// <summary>
+        /// 注入RabbitMQ
+        /// </summary>
+        public static IServiceCollection AddRabbitMQManager(this IServiceCollection services, Action<RabbitMQManagerOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<IRabbitMQManager, RabbitMQManager>());
             services.Configure(setupAction);
             return services;
         }
