@@ -5,11 +5,6 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
-    <DocumentationFile>C:\Users\Administrator\source\repos\ConsoleApp1\QinSoft.Core.Common\QinSoft.Core.Common.xml</DocumentationFile>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.0.0" />
     <PackageReference Include="log4net" Version="2.0.13" />

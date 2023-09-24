@@ -104,7 +104,7 @@ namespace QinSoft.Core.Test
             }
             catch(OperationCanceledException e)
             {
-
+                Console.WriteLine(e);
             }
         }
 

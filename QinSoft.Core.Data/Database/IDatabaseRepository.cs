@@ -71,22 +71,22 @@ namespace QinSoft.Core.Data.Database
         /// <summary>
         /// 保存实体
         /// </summary>
-        bool Save(T entity, Action<ISaveable<T>> action = null);
+        bool Save(T entity, Action<IStorageable<T>> action = null);
 
         /// <summary>
         /// 批量保存实体
         /// </summary>
-        int Save(IEnumerable<T> entities, Action<ISaveable<T>> action = null);
+        int Save(IEnumerable<T> entities, Action<IStorageable<T>> action = null);
 
         /// <summary>
         /// 保存实体
         /// </summary>
-        Task<bool> SaveAsync(T entity, Action<ISaveable<T>> action = null);
+        Task<bool> SaveAsync(T entity, Action<IStorageable<T>> action = null);
 
         /// <summary>
         /// 批量保存实体
         /// </summary>
-        Task<int> SaveAsync(IEnumerable<T> entities, Action<ISaveable<T>> action = null);
+        Task<int> SaveAsync(IEnumerable<T> entities, Action<IStorageable<T>> action = null);
 
         /// <summary>
         /// 移除实体

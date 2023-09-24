@@ -1,31 +1,32 @@
-﻿using QinSoft.Core.Data.MongoDB.Core;
+﻿using InfluxDB.Client;
+using QinSoft.Core.Data.MongoDB.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QinSoft.Core.Data.Influx
+namespace QinSoft.Core.Data.InfluxDB
 {
-    public interface IInfluxManager : IDisposable
+    public interface IInfluxDBManager : IDisposable
     {
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        IInflux GetInflux();
+        IInfluxDBClient GetInflux();
 
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        Task<IInflux> GetInfluxAsync();
+        Task<IInfluxDBClient> GetInfluxAsync();
 
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        IInflux GetInflux(string name);
+        IInfluxDBClient GetInflux(string name);
 
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        Task<IInflux> GetInfluxAsync(string name);
+        Task<IInfluxDBClient> GetInfluxAsync(string name);
     }
 }

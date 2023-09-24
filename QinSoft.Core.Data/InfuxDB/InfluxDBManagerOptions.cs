@@ -3,17 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace QinSoft.Core.Data.Influx
+namespace QinSoft.Core.Data.InfluxDB
 {
     /// <summary>
     /// Influx管理选项
     /// </summary>
-    public class InfluxManagerOptions
+    public class InfluxDBManagerOptions
     {
         /// <summary>
-        /// 配置名称，默认"InfluxManagerConfig"
+        /// 配置名称，默认"InfluxDBManagerConfig"
         /// </summary>
-        public string ConfigName { get; set; } = "InfluxManagerConfig";
+        public string ConfigName { get; set; } = "InfluxDBManagerConfig";
 
         /// <summary>
         /// 配置格式，默认"ConfigFormat.XML"

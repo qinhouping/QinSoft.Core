@@ -4,10 +4,6 @@
     <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\C:\Users\Administrator\source\repos\ConsoleApp1\QinSoft.Core.Data\QinSoft.Core.Data.xml</DocumentationFile>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Castle.Core" Version="5.0.0" />
     <PackageReference Include="Elasticsearch.Net" Version="7.17.0" />
@@ -45,6 +41,5 @@
     <Folder Include="Solr\" />
     <Folder Include="Zookeeper\" />
     <Folder Include="Zookeeper\Core\" />
-    <Folder Include="InfuxDB\" />
   </ItemGroup>
 </Project>

@@ -158,9 +158,9 @@ namespace QinSoft.Core.Data.Database
         /// <summary>
         /// 保存实体
         /// </summary>
-        public virtual bool Save(T entity, Action<ISaveable<T>> action = null)
+        public virtual bool Save(T entity, Action<IStorageable<T>> action = null)
         {
-            ISaveable<T> saveable = Client.Saveable<T>(entity);
+            IStorageable<T> saveable = Client.Storageable<T>(entity);
             if (action != null)
             {
                 action(saveable);
@@ -171,9 +171,9 @@ namespace QinSoft.Core.Data.Database
         /// <summary>
         /// 保存实体
         /// </summary>
-        public virtual async Task<bool> SaveAsync(T entity, Action<ISaveable<T>> action = null)
+        public virtual async Task<bool> SaveAsync(T entity, Action<IStorageable<T>> action = null)
         {
-            ISaveable<T> saveable = Client.Saveable<T>(entity);
+            IStorageable<T> saveable = Client.Storageable<T>(entity);
             if (action != null)
             {
                 action(saveable);
@@ -184,9 +184,9 @@ namespace QinSoft.Core.Data.Database
         /// <summary>
         /// 批量保存实体
         /// </summary>
-        public virtual int Save(IEnumerable<T> entities, Action<ISaveable<T>> action = null)
+        public virtual int Save(IEnumerable<T> entities, Action<IStorageable<T>> action = null)
         {
-            ISaveable<T> saveable = Client.Saveable<T>(new List<T>(entities));
+            IStorageable<T> saveable = Client.Storageable<T>(new List<T>(entities));
             if (action != null)
             {
                 action(saveable);
@@ -198,9 +198,9 @@ namespace QinSoft.Core.Data.Database
         /// <summary>
         /// 批量保存实体
         /// </summary>
-        public virtual async Task<int> SaveAsync(IEnumerable<T> entities, Action<ISaveable<T>> action = null)
+        public virtual async Task<int> SaveAsync(IEnumerable<T> entities, Action<IStorageable<T>> action = null)
         {
-            ISaveable<T> saveable = Client.Saveable<T>(new List<T>(entities));
+            IStorageable<T> saveable = Client.Storageable<T>(new List<T>(entities));
             if (action != null)
             {
                 action(saveable);
