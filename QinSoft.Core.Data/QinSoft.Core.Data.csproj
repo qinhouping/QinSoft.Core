@@ -20,6 +20,7 @@
     <PackageReference Include="SolrNet" Version="1.1.1" />
     <PackageReference Include="SqlSugarCore" Version="5.1.4.102" />
     <PackageReference Include="SqlSugar.ClickHouseCore" Version="5.1.4.91" />
+    <PackageReference Include="InfluxDB.Client" Version="4.12.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,10 +39,12 @@
     <None Remove="SolrNet.Cloud.Core" />
     <None Remove="SqlSugarCore" />
     <None Remove="SqlSugar.ClickHouseCore" />
+    <None Remove="InfuxDB\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Solr\" />
     <Folder Include="Zookeeper\" />
     <Folder Include="Zookeeper\Core\" />
+    <Folder Include="InfuxDB\" />
   </ItemGroup>
 </Project>
