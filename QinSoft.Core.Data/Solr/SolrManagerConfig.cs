@@ -59,14 +59,14 @@ namespace QinSoft.Core.Data.Solr
         /// <summary>
         /// 名称
         /// </summary>
-        [XmlAttribute("username")]
+        [XmlElement("username")]
         [JsonProperty("username")]
         public string Username { get; set; }
 
         /// <summary>
         /// 名称
         /// </summary>
-        [XmlAttribute("password")]
+        [XmlElement("password")]
         [JsonProperty("password")]
         public string Password { get; set; }
     }

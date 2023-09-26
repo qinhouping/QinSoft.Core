@@ -59,35 +59,35 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// <summary>
         /// 名称
         /// </summary>
-        [XmlAttribute("username")]
+        [XmlElement("username")]
         [JsonProperty("username")]
         public string Username { get; set; }
 
         /// <summary>
         /// 名称
         /// </summary>
-        [XmlAttribute("password")]
+        [XmlElement("password")]
         [JsonProperty("password")]
         public string Password { get; set; }
 
         /// <summary>
         /// 认证令牌
         /// </summary>
-        [XmlAttribute("apiKey")]
+        [XmlElement("apiKey")]
         [JsonProperty("apiKey")]
         public string ApiKey { get; set; }
 
         /// <summary>
         /// elasticsearch默认索引
         /// </summary>
-        [XmlAttribute("indexName")]
+        [XmlElement("indexName")]
         [JsonProperty("indexName")]
         public string DefaultIndexName { get; set; }
 
         /// <summary>
         /// elasticsearch请求超时，默认60秒
         /// </summary>
-        [XmlAttribute("requestTimeout")]
+        [XmlElement("requestTimeout")]
         [JsonProperty("requestTimeout")]
         public int RequestTimeout { get; set; } = 60000;
     }

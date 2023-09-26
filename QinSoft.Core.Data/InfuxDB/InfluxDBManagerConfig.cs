@@ -68,7 +68,7 @@ namespace QinSoft.Core.Data.InfluxDB
         /// </summary>
         [XmlElement("org")]
         [JsonProperty("org")]
-        public string Org { get; set; }
+        public string Org { get; set; } = "-";
 
         /// <summary>
         /// Influx默认桶

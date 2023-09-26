@@ -1,4 +1,5 @@
 ﻿using InfluxDB.Client;
+using QinSoft.Core.Data.InfuxDB.Core;
 using QinSoft.Core.Data.MongoDB.Core;
 using System;
 using System.Collections.Generic;
@@ -12,21 +13,21 @@ namespace QinSoft.Core.Data.InfluxDB
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        IInfluxDBClient GetInflux();
+        IInfluxClient GetInflux();
 
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        Task<IInfluxDBClient> GetInfluxAsync();
+        Task<IInfluxClient> GetInfluxAsync();
 
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        IInfluxDBClient GetInflux(string name);
+        IInfluxClient GetInflux(string name);
 
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        Task<IInfluxDBClient> GetInfluxAsync(string name);
+        Task<IInfluxClient> GetInfluxAsync(string name);
     }
 }

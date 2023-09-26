@@ -33,6 +33,12 @@ using SolrNet;
 using SolrNet.Attributes;
 using SolrNet.Commands.Parameters;
 using System.Linq;
+using QinSoft.Core.Data.InfluxDB;
+using QinSoft.Core.Data.InfuxDB.Core;
+using InfluxDB.Client;
+using InfluxDB.Client.Api.Domain;
+using InfluxDB.Client.Writes;
+using InfluxDB.Client.Core.Flux.Domain;
 
 namespace QinSoft.Core.Test
 {
@@ -50,7 +56,7 @@ namespace QinSoft.Core.Test
             {
                 using (ISqlSugarClient client = databaseManager.GetDatabase())
                 {
-                    Assert.AreEqual(client.Queryable<Project>().Count(),0);
+                    Assert.AreEqual(client.Queryable<Project>().Count(), 0);
                 }
             }
         }
@@ -63,10 +69,10 @@ namespace QinSoft.Core.Test
             {
                 Id = "qinsoft.core",
                 ProjectName = "QinSoft 核心库",
-                ProjectDescription="核心库"
+                ProjectDescription = "核心库"
             };
 
-            Assert.IsTrue(repository.Insert(model,i=>i.IgnoreColumns(true)));
+            Assert.IsTrue(repository.Insert(model, i => i.IgnoreColumns(true)));
 
             Assert.AreEqual(repository.Count(query => query.Where(t => t.Id.Equals("qinsoft.core"))), 1);
 
@@ -75,7 +81,7 @@ namespace QinSoft.Core.Test
             Assert.AreEqual(result.ProjectName, model.ProjectName);
             Assert.AreEqual(result.ProjectDescription, model.ProjectDescription);
 
-            Assert.AreEqual(repository.Update(u => u.SetColumns(t => new Project(){ProjectDescription = "核心库2"}).Where(t => t.Id.Equals("qinsoft.core"))),1);
+            Assert.AreEqual(repository.Update(u => u.SetColumns(t => new Project() { ProjectDescription = "核心库2" }).Where(t => t.Id.Equals("qinsoft.core"))), 1);
 
             Assert.AreEqual(repository.Delete(delete => { delete.Where(t => t.Id.Equals("qinsoft.core")); }), 1);
         }
@@ -117,20 +123,20 @@ namespace QinSoft.Core.Test
                 Id = "qinsoft.core",
                 ProjectName = "QinSoft 核心库",
                 ProjectDescription = "核心库",
-                CreateTime=DateTime.Now,
-                UpdateTime=DateTime.Now
+                CreateTime = DateTime.Now,
+                UpdateTime = DateTime.Now
             };
 
             Assert.IsTrue(repository.InsertOne(model));
 
-            Assert.AreEqual(repository.Count((Expression<Func<Project, bool>>)(t => t.Id.Equals("qinsoft.core"))),1);
+            Assert.AreEqual(repository.Count((Expression<Func<Project, bool>>)(t => t.Id.Equals("qinsoft.core"))), 1);
 
             Project result = repository.FindOne(model);
 
             Assert.AreEqual(result.ProjectName, model.ProjectName);
             Assert.AreEqual(result.ProjectDescription, model.ProjectDescription);
 
-            UpdateDefinition<Project> update= Builders<Project>.Update.Combine(Builders<Project>.Update.Set(t => t.ProjectDescription, "核心库2")
+            UpdateDefinition<Project> update = Builders<Project>.Update.Combine(Builders<Project>.Update.Set(t => t.ProjectDescription, "核心库2")
                 , Builders<Project>.Update.Set(t => t.UpdateTime, DateTime.Now));
             Assert.IsTrue(repository.UpdateOne((Expression<Func<Project, bool>>)(t => t.Id.Equals("qinsoft.core")), update));
 
@@ -145,7 +151,7 @@ namespace QinSoft.Core.Test
             using (IElasticsearchManager elasticsearchManager = new ElasticsearchManager(elasticsearchManagerConfig))
             {
                 IElasticClient client = elasticsearchManager.GetElasticsearch();
-                Assert.AreEqual(client.Count<Project>(d => d.Index("project")).Count,0);
+                Assert.AreEqual(client.Count<Project>(d => d.Index("project")).Count, 0);
             }
         }
 
@@ -164,13 +170,13 @@ namespace QinSoft.Core.Test
 
             Assert.IsTrue(repository.Index(model).Item1);
 
-            Assert.AreEqual(repository.Count(q=>q.Match(m=>m.Field(t=>t.Id).Query("qinsoft.core"))),1);
+            Assert.AreEqual(repository.Count(q => q.Match(m => m.Field(t => t.Id).Query("qinsoft.core"))), 1);
 
             Project result = repository.Get("qinsoft.core");
             Assert.AreEqual(result.ProjectName, model.ProjectName);
             Assert.AreEqual(result.ProjectDescription, model.ProjectDescription);
 
-            Assert.IsTrue(repository.Update<PartProject>("qinsoft.core", new PartProject() { ProjectDescription = "核心库2", UpdateTime= DateTime.Now }));
+            Assert.IsTrue(repository.Update<PartProject>("qinsoft.core", new PartProject() { ProjectDescription = "核心库2", UpdateTime = DateTime.Now }));
 
             Assert.AreEqual(repository.Delete("qinsoft.core"), true);
         }
@@ -209,7 +215,7 @@ namespace QinSoft.Core.Test
             using (ISolrManager solrManager = new SolrManager(solrManagerConfig))
             {
                 ISolrOperations<Project> client = solrManager.GetSolr<Project>("project");
-                Assert.AreEqual(client.Ping().Status,0);
+                Assert.AreEqual(client.Ping().Status, 0);
             }
         }
 
@@ -231,13 +237,42 @@ namespace QinSoft.Core.Test
             repository.Commit();
 
             ISolrQuery query = new SolrQuery("id:qinsoft.core");
-            var result = repository.Query(query,(QueryOptions) null).First();
+            var result = repository.Query(query, (QueryOptions)null).First();
             Assert.IsNotNull(result);
             Assert.AreEqual(result.ProjectName, model.ProjectName);
             Assert.AreEqual(result.ProjectDescription, model.ProjectDescription);
 
             Assert.AreEqual(repository.Delete("qinsoft.core"), true);
             repository.Commit();
+        }
+
+        [TestMethod]
+        public void TestInfluxDBManager()
+        {
+            IConfiger configer = new FileConfiger(new FileConfigerOptions());
+            InfluxDBManagerConfig influxdbManagerConfig = configer.Get<InfluxDBManagerConfig>("InfluxDBManagerConfig");
+            using (IInfluxDBManager solrManager = new InfluxDBManager(influxdbManagerConfig))
+            {
+                IInfluxClient client = solrManager.GetInflux();
+                IWriteApi write = client.GetWriteApi();
+                PointData point = PointData
+                    .Measurement("project")
+                    .Tag("project_id", "qinsoft.core")
+                    .Field("rate", 30)
+                    .Timestamp(DateTime.Now, WritePrecision.Ns);
+                write.WritePoint(point);
+                //write.WriteRecord(@"project,project_id=qinsoft.core rate=30 " + DateTime.Now.ToTimeStamp(DateTimeUtils.TimeStampPrecision.Ns), WritePrecision.Ns);
+
+                IQueryApi query = client.GetQueryApi();
+                string q = @"from(bucket:""qinsoft"") 
+                                |> range(start: -1h) 
+                                |> filter(fn:(r)=>r._measurement==""project"")";
+                List<FluxTable> tables = query.QueryAsync(q).Result;
+                Assert.AreEqual(1, tables.Count);
+
+                IDeleteApi delete = client.GetDeleteApi();
+                delete.Delete(DateTime.Today, DateTime.Today.AddDays(1), @"_measurement=""project""", "qinsoft", "qinsoft").Wait();
+            }
         }
     }
 
@@ -258,7 +293,7 @@ namespace QinSoft.Core.Test
     {
         [BsonId]
         [SugarColumn(IsPrimaryKey = true)]
-        [Keyword(Name ="id")]
+        [Keyword(Name = "id")]
         [SolrUniqueKey("id")]
         public string Id { get; set; }
 

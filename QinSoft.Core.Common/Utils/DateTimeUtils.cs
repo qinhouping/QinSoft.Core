@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Google.Protobuf.WellKnownTypes;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Numerics;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace QinSoft.Core.Common.Utils
@@ -10,12 +13,32 @@ namespace QinSoft.Core.Common.Utils
     /// </summary>
     public static class DateTimeUtils
     {
+        public enum TimeStampPrecision
+        {
+            [EnumMember(Value = "ms")]
+            Ms = 1,
+            [EnumMember(Value = "s")]
+            S,
+            [EnumMember(Value = "us")]
+            Us,
+            [EnumMember(Value = "ns")]
+            Ns
+        }
+
         /// <summary>
         /// 获取时间戳
         /// </summary>
-        public static long ToTimeStamp(this DateTime dateTime)
+        public static long ToTimeStamp(this DateTime dateTime, TimeStampPrecision precision = TimeStampPrecision.Ms)
         {
-            return (long)(dateTime.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+            TimeSpan timeSpan = dateTime.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+            switch (precision)
+            {
+                case TimeStampPrecision.Ns: return timeSpan.Ticks * 100;
+                case TimeStampPrecision.Us: return (long)(timeSpan.Ticks * 0.1);
+                case TimeStampPrecision.Ms: return (long)timeSpan.TotalMilliseconds;
+                case TimeStampPrecision.S: return (long)timeSpan.TotalSeconds;
+                default: throw new ArgumentException("precision");
+            };
         }
 
         /// <summary>

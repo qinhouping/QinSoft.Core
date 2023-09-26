@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace QinSoft.Core.Data.InfluxDB
+namespace QinSoft.Core.Data.InfuxDB.Core
 {
     public class InfluxDBException : Exception
     {

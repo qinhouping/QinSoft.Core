@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using InfluxDB.Client;
+using QinSoft.Core.Data.InfuxDB.Core;
 
 namespace QinSoft.Core.Data.InfluxDB
 {
@@ -31,7 +32,7 @@ namespace QinSoft.Core.Data.InfluxDB
         /// <summary>
         /// 缓存字典
         /// </summary>
-        protected ConcurrentDictionary<string, IInfluxDBClient> CacheDictionary;
+        protected ConcurrentDictionary<string, IInfluxClient> CacheDictionary;
 
         public InfluxDBManager(InfluxDBManagerConfig config) : this(config, NullLoggerFactory.Instance.CreateLogger<InfluxDBManager>())
         {
@@ -42,7 +43,7 @@ namespace QinSoft.Core.Data.InfluxDB
         {
             ObjectUtils.CheckNull(config, "config");
             ObjectUtils.CheckNull(logger, "logger");
-            this.CacheDictionary = new ConcurrentDictionary<string, IInfluxDBClient>();
+            this.CacheDictionary = new ConcurrentDictionary<string, IInfluxClient>();
             InfluxManagerConfig = config;
             this.logger = logger;
         }
@@ -56,7 +57,7 @@ namespace QinSoft.Core.Data.InfluxDB
             ObjectUtils.CheckNull(options, "options");
             ObjectUtils.CheckNull(configer, "configer");
             ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
-            this.CacheDictionary = new ConcurrentDictionary<string, IInfluxDBClient>();
+            this.CacheDictionary = new ConcurrentDictionary<string, IInfluxClient>();
             InfluxManagerConfig = configer.Get<InfluxDBManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<InfluxDBManager>();
         }
@@ -70,7 +71,7 @@ namespace QinSoft.Core.Data.InfluxDB
             ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
             ObjectUtils.CheckNull(configer, "configer");
             ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
-            this.CacheDictionary = new ConcurrentDictionary<string, IInfluxDBClient>();
+            this.CacheDictionary = new ConcurrentDictionary<string, IInfluxClient>();
             InfluxManagerConfig = configer.Get<InfluxDBManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<InfluxDBManager>();
         }
@@ -95,7 +96,7 @@ namespace QinSoft.Core.Data.InfluxDB
         /// <summary>
         /// 构建Influx客户端实例
         /// </summary>
-        protected virtual IInfluxDBClient BuildClientFromConfig(InfluxDBItemConfig config)
+        protected virtual IInfluxClient BuildClientFromConfig(InfluxDBItemConfig config)
         {
             ObjectUtils.CheckNull(config, "config");
             InfluxDBClientOptions options = InfluxDBClientOptions.Builder
@@ -105,13 +106,13 @@ namespace QinSoft.Core.Data.InfluxDB
                 .Org(config.Org)
                 .Bucket(config.Bucket)
                 .Build();
-            return new InfluxDBClient(options); 
+            return new InfluxClient(options); 
         }
 
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        public virtual IInfluxDBClient GetInflux()
+        public virtual IInfluxClient GetInflux()
         {
             InfluxDBItemConfig config = GetDefaultInfluxItemConfig();
             if (config == null)
@@ -119,7 +120,7 @@ namespace QinSoft.Core.Data.InfluxDB
                 throw new InfluxDBException("not found default influxdb client config");
             }
 
-            IInfluxDBClient client = BuildClientFromConfig(config);
+            IInfluxClient client = CacheDictionary.GetOrAdd(config.Name, BuildClientFromConfig(config));
 
             logger.LogDebug("get default influxdb client from config");
 
@@ -129,7 +130,7 @@ namespace QinSoft.Core.Data.InfluxDB
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        public virtual async Task<IInfluxDBClient> GetInfluxAsync()
+        public virtual async Task<IInfluxClient> GetInfluxAsync()
         {
             return await ExecuteUtils.ExecuteInTask(GetInflux);
         }
@@ -137,7 +138,7 @@ namespace QinSoft.Core.Data.InfluxDB
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        public virtual IInfluxDBClient GetInflux(string name)
+        public virtual IInfluxClient GetInflux(string name)
         {
             ObjectUtils.CheckNull(name, "name");
             InfluxDBItemConfig config = GetInfluxItemConfig(name);
@@ -146,7 +147,7 @@ namespace QinSoft.Core.Data.InfluxDB
                 throw new InfluxDBException(string.Format("not found influxdb client config:{0}", name));
             }
 
-            IInfluxDBClient client = BuildClientFromConfig(config);
+            IInfluxClient client = CacheDictionary.GetOrAdd(config.Name, BuildClientFromConfig(config));
 
             logger.LogDebug(string.Format("get influxdb client from config:{0}", name));
 
@@ -156,7 +157,7 @@ namespace QinSoft.Core.Data.InfluxDB
         /// <summary>
         /// 获取Influx客户端
         /// </summary>
-        public virtual async Task<IInfluxDBClient> GetInfluxAsync(string name)
+        public virtual async Task<IInfluxClient> GetInfluxAsync(string name)
         {
             return await ExecuteUtils.ExecuteInTask(GetInflux, name);
         }
@@ -167,6 +168,14 @@ namespace QinSoft.Core.Data.InfluxDB
         public virtual void Dispose()
         {
             GC.SuppressFinalize(this);
+            if (CacheDictionary != null)
+            {
+                foreach (KeyValuePair<string, IInfluxClient> pair in CacheDictionary)
+                {
+                    pair.Value.SafeDispose();
+                }
+                CacheDictionary.Clear();
+            }
         }
 
     }
