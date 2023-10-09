@@ -13,30 +13,26 @@ namespace QinSoft.Core.Common.Utils
     /// </summary>
     public static class DateTimeUtils
     {
-        public enum TimeStampPrecision
+        public enum TimestampPrecision
         {
-            [EnumMember(Value = "ms")]
-            Ms = 1,
-            [EnumMember(Value = "s")]
             S,
-            [EnumMember(Value = "us")]
+            Ms,
             Us,
-            [EnumMember(Value = "ns")]
             Ns
         }
 
         /// <summary>
         /// 获取时间戳
         /// </summary>
-        public static long ToTimeStamp(this DateTime dateTime, TimeStampPrecision precision = TimeStampPrecision.Ms)
+        public static long ToTimestamp(this DateTime dateTime, TimestampPrecision precision = TimestampPrecision.Ms)
         {
             TimeSpan timeSpan = dateTime.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             switch (precision)
             {
-                case TimeStampPrecision.Ns: return timeSpan.Ticks * 100;
-                case TimeStampPrecision.Us: return (long)(timeSpan.Ticks * 0.1);
-                case TimeStampPrecision.Ms: return (long)timeSpan.TotalMilliseconds;
-                case TimeStampPrecision.S: return (long)timeSpan.TotalSeconds;
+                case TimestampPrecision.Ns: return timeSpan.Ticks * 100;
+                case TimestampPrecision.Us: return (long)(timeSpan.Ticks * 0.1);
+                case TimestampPrecision.Ms: return (long)timeSpan.TotalMilliseconds;
+                case TimestampPrecision.S: return (long)timeSpan.TotalSeconds;
                 default: throw new ArgumentException("precision");
             };
         }

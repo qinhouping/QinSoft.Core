@@ -261,7 +261,7 @@ namespace QinSoft.Core.Test
                     .Field("rate", 30)
                     .Timestamp(DateTime.Now, WritePrecision.Ns);
                 write.WritePoint(point);
-                //write.WriteRecord(@"project,project_id=qinsoft.core rate=30 " + DateTime.Now.ToTimeStamp(DateTimeUtils.TimeStampPrecision.Ns), WritePrecision.Ns);
+                //write.WriteRecord(@"project,project_id=qinsoft.core rate=30 " + DateTime.Now.ToTimestamp(DateTimeUtils.TimestampPrecision.Ns), WritePrecision.Ns);
 
                 IQueryApi query = client.GetQueryApi();
                 string q = @"from(bucket:""qinsoft"") 

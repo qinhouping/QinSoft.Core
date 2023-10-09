@@ -43,7 +43,7 @@ namespace QinSoft.Core.Test
         public void TestDateTimeUtils()
         {
             DateTime dateTime = DateTime.Parse("2022-10-12 10:47:58");
-            long timeStamp = dateTime.ToTimeStamp();
+            long timeStamp = dateTime.ToTimestamp();
             Assert.AreEqual(timeStamp, 1665542878000);
 
             DateTime dateTime2 = timeStamp.ToDateTime();
