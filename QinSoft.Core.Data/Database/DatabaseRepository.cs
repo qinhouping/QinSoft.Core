@@ -20,7 +20,7 @@ namespace QinSoft.Core.Data.Database
         {
             get
             {
-                return DatabaseContextStack.Instance.Peek();
+                return DatabaseContextStack.Instance.Peek().AsTenant().GetConnectionWithAttr<T>();
             }
         }
 

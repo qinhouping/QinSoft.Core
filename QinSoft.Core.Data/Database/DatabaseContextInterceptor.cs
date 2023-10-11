@@ -45,24 +45,24 @@ namespace QinSoft.Core.Data.Database
                     DatabaseContextStack.Push(client);
                     try
                     {
-                        if (client is SqlSugarClient && databaseContext.UseTran)
+                        if (databaseContext.UseTran)
                         {
-                            (client as SqlSugarClient).BeginTran();
+                            client.AsTenant().BeginTran();
                         }
 
                         //调用业务方法
                         invocation.Proceed();
 
-                        if (client is SqlSugarClient && databaseContext.UseTran)
+                        if (databaseContext.UseTran)
                         {
-                            (client as SqlSugarClient).CommitTran();
+                            client.AsTenant().CommitTran();
                         }
                     }
                     catch (Exception e)
                     {
-                        if (client is SqlSugarClient && databaseContext.UseTran)
+                        if (databaseContext.UseTran)
                         {
-                            (client as SqlSugarClient).RollbackTran();
+                            client.AsTenant().RollbackTran();
                         }
                         throw e;
                     }
