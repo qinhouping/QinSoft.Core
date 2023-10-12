@@ -57,7 +57,7 @@ namespace QinSoft.Core.Data.Elasticsearch
             {
                 Context.Value = new ConcurrentDictionary<string, IElasticClient>();
             }
-            return Context.Value.GetOrAdd(name, ElasticsearchManager.GetElasticsearch(name));
+            return Context.Value.GetOrAdd(name, key => ElasticsearchManager.GetElasticsearch(key));
         }
 
         /// <summary>

@@ -57,7 +57,7 @@ namespace QinSoft.Core.Data.MongoDB
             {
                 Context.Value = new ConcurrentDictionary<string, IMongoDBClient>();
             }
-            return Context.Value.GetOrAdd(name, mongodbManager.GetMongoDB(name));
+            return Context.Value.GetOrAdd(name, key => mongodbManager.GetMongoDB(key));
         }
 
         /// <summary>

@@ -46,19 +46,19 @@ namespace QinSoft.Core.Data.Solr
             {
                 DefaultContext.Value = new ConcurrentDictionary<string, object>();
             }
-            return (ISolrOperations<T>)DefaultContext.Value.GetOrAdd(coreName, SolrManager.GetSolr<T>(coreName));
+            return (ISolrOperations<T>)DefaultContext.Value.GetOrAdd(coreName, key => SolrManager.GetSolr<T>(key));
         }
 
         /// <summary>
         /// 获取mongodb客户端
         /// </summary>
-        public virtual ISolrOperations<T> Get<T>(string name,string coreName)
+        public virtual ISolrOperations<T> Get<T>(string name, string coreName)
         {
             if (Context.Value == null)
             {
                 Context.Value = new ConcurrentDictionary<string, object>();
             }
-            return (ISolrOperations<T>) Context.Value.GetOrAdd(name+":"+coreName, SolrManager.GetSolr<T>(name, coreName));
+            return (ISolrOperations<T>)Context.Value.GetOrAdd(name + ":" + coreName, key => SolrManager.GetSolr<T>(name, coreName));
         }
 
         /// <summary>
