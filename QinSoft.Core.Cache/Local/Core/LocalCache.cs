@@ -15,20 +15,5 @@ namespace QinSoft.Core.Cache.Local.Core
         public LocalCache(LocalCacheOptions options) : base(options)
         {
         }
-
-        /// <summary>
-        /// 安全资源释放
-        /// </summary>
-        public virtual void SafeDispose()
-        {
-            base.Dispose();
-        }
-
-        /// <summary>
-        /// 资源释放，覆盖原有资源释放防止使用using产生异常
-        /// </summary>
-        public new virtual void Dispose()
-        {
-        }
     }
 }

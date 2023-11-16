@@ -195,7 +195,7 @@ namespace QinSoft.Core.Cache.Redis
             {
                 foreach (KeyValuePair<string, IRedisCache> pair in CacheDictionary)
                 {
-                    pair.Value.SafeDispose();
+                    pair.Value.Dispose();
                 }
                 CacheDictionary.Clear();
             }

@@ -24,14 +24,11 @@ namespace QinSoft.Core.Test
 
             using (ILocalCacheManager localCacheManager = new LocalCacheManager(LocalCacheConfig))
             {
-
-                using (ILocalCache cache = localCacheManager.GetCache("test"))
-                {
-                    string value = Guid.NewGuid().ToString();
-                    cache.Set("test", value);
-                    Assert.AreEqual(cache.Get<string>("test"), value);
-                    cache.Remove("test");
-                }
+                ILocalCache cache = localCacheManager.GetCache("test");
+                string value = Guid.NewGuid().ToString();
+                cache.Set("test", value);
+                Assert.AreEqual(cache.Get<string>("test"), value);
+                cache.Remove("test");
             }
         }
 
@@ -43,13 +40,11 @@ namespace QinSoft.Core.Test
 
             using (IRedisCacheManager redisCacheManager = new RedisCacheManager(redisCacheConfig))
             {
-                using (IRedisCache cache = redisCacheManager.GetCache("test"))
-                {
-                    string value = Guid.NewGuid().ToString();
-                    cache.StringSet("test", value);
-                    Assert.AreEqual(cache.StringGet("test").ToString(), value);
-                    cache.KeyDelete("test");
-                }
+                IRedisCache cache = redisCacheManager.GetCache("test");
+                string value = Guid.NewGuid().ToString();
+                cache.StringSet("test", value);
+                Assert.AreEqual(cache.StringGet("test").ToString(), value);
+                cache.KeyDelete("test");
             }
         }
     }

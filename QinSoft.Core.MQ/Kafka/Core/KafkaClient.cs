@@ -360,22 +360,14 @@ namespace QinSoft.Core.MQ.Kafka.Core
         }
 
         /// <summary>
-        /// 安全资源释放
+        /// 资源释放，覆盖原有资源释放防止使用using产生异常
         /// </summary>
-        public virtual void SafeDispose()
+        public virtual void Dispose()
         {
             if (Producer != null)
             {
                 Producer.Dispose();
             }
-        }
-
-        /// <summary>
-        /// 资源释放，覆盖原有资源释放防止使用using产生异常
-        /// </summary>
-        public virtual void Dispose()
-        {
-
         }
     }
 }

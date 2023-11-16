@@ -96,12 +96,12 @@ namespace QinSoft.Core.Data.Zookeeper
         /// <summary>
         /// 资源释放事件处理
         /// </summary>
-        protected virtual void ZookeeperDisposeHandle(object sender,EventArgs args)
+        protected virtual void ZookeeperDisposeHandle(object sender, EventArgs args)
         {
             IZookeeper zookeeper = (IZookeeper)sender;
             if (CacheDictionary != null)
             {
-                CacheDictionary.Remove(zookeeper.ConfigId,out _);
+                CacheDictionary.Remove(zookeeper.ConfigId, out _);
             }
             zookeeper.Disposed -= ZookeeperDisposeHandle;
         }
@@ -116,11 +116,12 @@ namespace QinSoft.Core.Data.Zookeeper
             {
                 ConfigId = config.Name
             };
-            if(!config.AuthInfos.IsEmpty()){
-               foreach(ZookeeperAuthConfig authConfig in config.AuthInfos )
-               {
+            if (!config.AuthInfos.IsEmpty())
+            {
+                foreach (ZookeeperAuthConfig authConfig in config.AuthInfos)
+                {
                     zooKeeper.AddAuthInfo(authConfig.Schema, authConfig.Auth);
-               }
+                }
             }
             zooKeeper.Disposed += ZookeeperDisposeHandle;
             return zooKeeper;
@@ -164,7 +165,7 @@ namespace QinSoft.Core.Data.Zookeeper
                 throw new ZookeeperException(string.Format("not found zookeeper client config:{0}", name));
             }
 
-            IZookeeper client =CacheDictionary.GetOrAdd(config.Name, key=> BuildClientFromConfig(config));
+            IZookeeper client = CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig(config));
 
             logger.LogDebug(string.Format("get zookeeper client from config:{0}", name));
 
@@ -187,9 +188,9 @@ namespace QinSoft.Core.Data.Zookeeper
             GC.SuppressFinalize(this);
             if (CacheDictionary != null)
             {
-                foreach (KeyValuePair<string, IZookeeper> pair in CacheDictionary)
+                foreach (KeyValuePair<string, IZookeeper> pair in CacheDictionary.ToArray())
                 {
-                    pair.Value.SafeDispose();
+                    pair.Value.Dispose();
                 }
                 CacheDictionary.Clear();
             }

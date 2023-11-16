@@ -175,10 +175,5 @@ namespace QinSoft.Core.Data.Zookeeper.Core
         /// 获取子节点
         /// </summary>
         Task<string[]> GetChildrenAsync(string path);
-
-        /// <summary>
-        /// 安全释放资源
-        /// </summary>
-        void SafeDispose();
     }
 }

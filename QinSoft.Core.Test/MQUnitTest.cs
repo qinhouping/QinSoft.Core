@@ -19,6 +19,9 @@ using QinSoft.Core.Common.Utils;
 using QinSoft.Core.MQ.RabbitMQ;
 using RabbitMQ.Client;
 using QinSoft.Core.MQ.RabbitMQ.Core;
+using QinSoft.Core.MQ.MQTT;
+using MQTTnet.Client;
+using System.Diagnostics;
 
 namespace QinSoft.Core.Test
 {
@@ -37,36 +40,30 @@ namespace QinSoft.Core.Test
             {
                 ExecuteUtils.ExecuteInThread(() =>
                 {
-                    using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
+                    IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>();
+                    while (true)
                     {
-                        while (true)
-                        {
-                            kafka.ProduceAsync(topic, Guid.NewGuid().ToString(), DateTime.Now.ToString());
-                            Thread.Sleep(1000);
-                        }
+                        kafka.ProduceAsync(topic, Guid.NewGuid().ToString(), DateTime.Now.ToString());
+                        Thread.Sleep(1000);
                     }
                 });
                 ExecuteUtils.ExecuteInThread(() =>
                 {
-                    using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
+                    IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>();
+                    kafka.Consume(topic, (consumer, result) =>
                     {
-                        kafka.Consume(topic, (consumer, result) =>
-                        {
-                            Console.WriteLine("consumer1:\n" + result.ToJson());
-                            consumer.Commit(result);
-                        });
-                    }
+                        Debug.WriteLine("consumer1:\n" + result.ToJson());
+                        consumer.Commit(result);
+                    });
                 });
                 ExecuteUtils.ExecuteInThread(() =>
                 {
-                    using (IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>())
+                    IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>();
+                    kafka.Consume(topic, (consumer2, result2) =>
                     {
-                        kafka.Consume(topic, (consumer2, result2) =>
-                        {
-                            Console.WriteLine("consumer2:\n" + result2.Message.Key + ":" + result2.Message.Value);
-                            consumer2.Commit(result2);
-                        });
-                    }
+                        Debug.WriteLine("consumer2:\n" + result2.Message.Key + ":" + result2.Message.Value);
+                        consumer2.Commit(result2);
+                    });
                 });
 
                 Thread.Sleep(1000 * 3600);
@@ -75,35 +72,78 @@ namespace QinSoft.Core.Test
 
 
         [TestMethod]
-        public void TestRabbitMQManager() {
+        public void TestRabbitMQManager()
+        {
             IConfiger configer = new FileConfiger(new FileConfigerOptions());
             RabbitMQManagerConfig rabbitMQManagerConfig = configer.Get<RabbitMQManagerConfig>("RabbitMQManagerConfig");
 
-            using (IRabbitMQManager manager=new RabbitMQManager(rabbitMQManagerConfig))
+            using (IRabbitMQManager manager = new RabbitMQManager(rabbitMQManagerConfig))
             {
                 ExecuteUtils.ExecuteInThread(() =>
                 {
-                    using (IRabbitMQClient client = manager.GetRabbitMQ())
+                    IRabbitMQClient client = manager.GetRabbitMQ();
+                    while (true)
                     {
-                        while (true)
-                        {
-                            string message = Guid.NewGuid().ToString();
-                            client.Publish("amq.direct", "test", null, message);
-                            Thread.Sleep(1000);
-                        }
+                        string message = Guid.NewGuid().ToString();
+                        client.Publish("amq.direct", "test", null, message);
+                        Thread.Sleep(1000);
                     }
                 });
 
-                using (IRabbitMQClient client = manager.GetRabbitMQ())
+                IRabbitMQClient client = manager.GetRabbitMQ();
+                client.Consume("test_queue", true, (c, sender, args, msg) =>
                 {
-                    client.Consume("test_queue", true, (c,sender, args,msg) => {
-                        Console.WriteLine(msg);
-                    });
-                }
+                    Debug.WriteLine("consumer1:\n" + msg);
+                });
+
+                IRabbitMQClient client2 = manager.GetRabbitMQ();
+                client.Consume("test_queue", true, (c, sender, args, msg) =>
+                {
+                    Debug.WriteLine("consumer2:\n" + msg);
+                });
 
                 Thread.Sleep(1000 * 3600);
             }
         }
 
+
+        [TestMethod]
+        public void TestMQTTManager()
+        {
+            IConfiger configer = new FileConfiger(new FileConfigerOptions());
+            MQTTManagerConfig mqttManagerConfig = configer.Get<MQTTManagerConfig>("MQTTManagerConfig");
+
+            using (IMQTTManager manager = new MQTTManager(mqttManagerConfig))
+            {
+                ExecuteUtils.ExecuteInThread(() =>
+                {
+                    IMqttClient client = manager.GetMqtt();
+                    while (true)
+                    {
+                        MqttClientPublishResult result = client.PublishStringAsync("/qinsoft.core/test", "test:" + DateTime.Now.ToString()).Result;
+                        Thread.Sleep(1000);
+                    }
+                });
+
+                IMqttClient client = manager.GetMqtt();
+
+                client.ApplicationMessageReceivedAsync += async e =>
+                {
+                    Debug.WriteLine("consumer1:\n" + e.ApplicationMessage.Topic + "\n" + Encoding.Default.GetString(e.ApplicationMessage.Payload));
+                    await Task.CompletedTask;
+                };
+                client.SubscribeAsync("/qinsoft.core/test");
+
+                IMqttClient client2 = manager.GetMqtt();
+                client2.ApplicationMessageReceivedAsync += async e =>
+                {
+                    Debug.WriteLine("consumer2:\n" + e.ApplicationMessage.Topic + "\n" + Encoding.Default.GetString(e.ApplicationMessage.Payload));
+                    await Task.CompletedTask;
+                };
+                client2.SubscribeAsync("/qinsoft.core/test");
+
+                Thread.Sleep(1000 * 3600);
+            }
+        }
     }
 }

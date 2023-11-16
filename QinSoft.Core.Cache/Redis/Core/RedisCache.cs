@@ -111,14 +111,6 @@ namespace QinSoft.Core.Cache.Redis.Core
         /// </summary>
         public virtual void Dispose()
         {
-
-        }
-
-        /// <summary>
-        /// 安全释放资源
-        /// </summary>
-        public virtual void SafeDispose()
-        {
             GC.SuppressFinalize(this);
             if (!IsPoolConnection)
             {

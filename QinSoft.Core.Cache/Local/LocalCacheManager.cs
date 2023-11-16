@@ -173,7 +173,7 @@ namespace QinSoft.Core.Cache.Local
             {
                 foreach (KeyValuePair<string, ILocalCache> pair in CacheDictionary)
                 {
-                    pair.Value.SafeDispose();
+                    pair.Value.Dispose();
                 }
                 CacheDictionary.Clear();
             }

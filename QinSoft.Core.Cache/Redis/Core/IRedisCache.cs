@@ -14,10 +14,5 @@ namespace QinSoft.Core.Cache.Redis.Core
         /// 切换DB
         /// </summary>
         void Select(int database);
-
-        /// <summary>
-        /// 安全释放资源
-        /// </summary>
-        void SafeDispose();
     }
 }

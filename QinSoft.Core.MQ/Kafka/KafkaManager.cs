@@ -202,7 +202,7 @@ namespace QinSoft.Core.MQ.Kafka
             {
                 foreach (KeyValuePair<string, IKafkaClient> pair in CacheDictionary)
                 {
-                    pair.Value.SafeDispose();
+                    pair.Value.Dispose();
                 }
                 CacheDictionary.Clear();
             }

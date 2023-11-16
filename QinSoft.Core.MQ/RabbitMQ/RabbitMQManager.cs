@@ -169,7 +169,7 @@ namespace QinSoft.Core.MQ.RabbitMQ
             {
                 foreach (KeyValuePair<string, IRabbitMQClient> pair in CacheDictionary)
                 {
-                    pair.Value.SafeDispose();
+                    pair.Value.Dispose();
                 }
                 CacheDictionary.Clear();
             }

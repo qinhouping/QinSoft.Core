@@ -43,6 +43,9 @@
     <None Update="Configs\dev\ElasticsearchManager.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Configs\dev\MQTTManager.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configs\dev\KafkaManager.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

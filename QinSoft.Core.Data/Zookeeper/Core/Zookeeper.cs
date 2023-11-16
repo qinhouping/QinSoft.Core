@@ -294,15 +294,5 @@ namespace QinSoft.Core.Data.Zookeeper.Core
             base.closeAsync().Wait();
             Disposed?.Invoke(this,new EventArgs());
         }
-
-
-        /// <summary>
-        /// 安全释放资源
-        /// </summary>
-        public virtual void SafeDispose()
-        {
-            GC.SuppressFinalize(this);
-            base.closeAsync().Wait();
-        }
     }
 }

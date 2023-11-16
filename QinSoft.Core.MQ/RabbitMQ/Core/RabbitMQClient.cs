@@ -202,10 +202,7 @@ namespace QinSoft.Core.MQ.RabbitMQ.Core
             await ExecuteUtils.ExecuteInTask(() => Consume(queue, autoAck, received, cancellationToken));
         }
 
-        /// <summary>
-        /// 安全资源释放
-        /// </summary>
-        public virtual void SafeDispose()
+        public virtual void Dispose()
         {
             if (Channel != null)
             {
@@ -215,14 +212,6 @@ namespace QinSoft.Core.MQ.RabbitMQ.Core
             {
                 Connection.Dispose();
             }
-        }
-
-        /// <summary>
-        /// 资源释放，覆盖原有资源释放防止使用using产生异常
-        /// </summary>
-        public virtual void Dispose()
-        {
-
         }
     }
 }

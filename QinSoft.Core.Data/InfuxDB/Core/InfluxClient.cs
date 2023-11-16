@@ -32,15 +32,5 @@ namespace QinSoft.Core.Data.InfuxDB.Core
         {
 
         }
-
-        public new virtual void Dispose()
-        {
-
-        }
-
-        public virtual void SafeDispose()
-        {
-            base.Dispose();
-        }
     }
 }

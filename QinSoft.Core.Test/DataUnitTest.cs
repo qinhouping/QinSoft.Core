@@ -188,22 +188,20 @@ namespace QinSoft.Core.Test
             ZookeeperManagerConfig zookeeperManagerConfig = configer.Get<ZookeeperManagerConfig>("ZookeeperManagerConfig");
             using (IZookeeperManager zookeeperManager = new ZookeeperManager(zookeeperManagerConfig))
             {
-                using (IZookeeper client = zookeeperManager.GetZookeeper())
-                {
-                    client.Dispose();
-                    Assert.IsNull(client.Exists("/not_exists", false));
-                    client.Create("/qinsoft", null, CreateMode.EPHEMERAL);
+                IZookeeper client = zookeeperManager.GetZookeeper();
+                client.Dispose();
+                Assert.IsNull(client.Exists("/not_exists", false));
+                client.Create("/qinsoft", null, CreateMode.EPHEMERAL);
 
-                    client.Exists("/qinsoft", new QinSoftWatcher());
+                client.Exists("/qinsoft", new QinSoftWatcher());
 
-                    string value = Guid.NewGuid().ToString();
-                    Assert.IsNotNull(client.SetData("/qinsoft", value));
+                string value = Guid.NewGuid().ToString();
+                Assert.IsNotNull(client.SetData("/qinsoft", value));
 
-                    string res = client.GetData("/qinsoft").Item2;
-                    Assert.AreEqual(res, value);
+                string res = client.GetData("/qinsoft").Item2;
+                Assert.AreEqual(res, value);
 
-                    client.Delete("/qinsoft");
-                }
+                client.Delete("/qinsoft");
             }
         }
 

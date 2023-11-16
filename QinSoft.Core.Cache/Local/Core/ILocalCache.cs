@@ -10,9 +10,6 @@ namespace QinSoft.Core.Cache.Local.Core
     /// </summary>
     public interface ILocalCache : IMemoryCache, IDisposable
     {
-        /// <summary>
-        /// 安全资源释放
-        /// </summary>
-        void SafeDispose();
+
     }
 }

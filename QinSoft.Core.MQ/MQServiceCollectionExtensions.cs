@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using QinSoft.Core.MQ.Kafka;
 using QinSoft.Core.MQ.RabbitMQ;
+using QinSoft.Core.MQ.MQTT;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -57,6 +58,30 @@ namespace Microsoft.Extensions.DependencyInjection
             ObjectUtils.CheckNull(setupAction, "setupAction");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IRabbitMQManager, RabbitMQManager>());
+            services.Configure(setupAction);
+            return services;
+        }
+
+        /// <summary>
+        /// 注入MQTT
+        /// </summary>
+        public static IServiceCollection AddMQTTManager(this IServiceCollection services)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<IMQTTManager, MQTTManager>());
+            return services;
+        }
+
+        /// <summary>
+        /// 注入MQTT
+        /// </summary>
+        public static IServiceCollection AddMQTTManager(this IServiceCollection services, Action<MQTTManagerOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<IMQTTManager, MQTTManager>());
             services.Configure(setupAction);
             return services;
         }

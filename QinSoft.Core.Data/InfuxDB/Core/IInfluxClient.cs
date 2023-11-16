@@ -5,8 +5,8 @@ using System.Text;
 
 namespace QinSoft.Core.Data.InfuxDB.Core
 {
-    public interface IInfluxClient:IInfluxDBClient,IDisposable
+    public interface IInfluxClient:IInfluxDBClient
     {
-        void SafeDispose();
+
     }
 }

@@ -109,10 +109,5 @@ namespace QinSoft.Core.MQ.RabbitMQ.Core
         /// 消费者消费队列
         /// </summary>
         Task ConsumeAsync(string queue, bool autoAck, Action<IRabbitMQClient, IBasicConsumer, BasicDeliverEventArgs, string> received, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// 安全资源释放
-        /// </summary>
-        void SafeDispose();
     }
 }

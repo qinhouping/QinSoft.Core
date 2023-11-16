@@ -9,10 +9,7 @@ namespace QinSoft.Core.MQ.Kafka.Core
 {
     public interface IKafkaClient : IDisposable
     {
-        /// <summary>
-        /// 安全资源释放
-        /// </summary>
-        void SafeDispose();
+
     }
     /// <summary>
     /// kafka客户端

@@ -172,7 +172,7 @@ namespace QinSoft.Core.Data.InfluxDB
             {
                 foreach (KeyValuePair<string, IInfluxClient> pair in CacheDictionary)
                 {
-                    pair.Value.SafeDispose();
+                    pair.Value.Dispose();
                 }
                 CacheDictionary.Clear();
             }
