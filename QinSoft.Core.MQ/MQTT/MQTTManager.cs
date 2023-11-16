@@ -100,8 +100,8 @@ namespace QinSoft.Core.MQ.MQTT
             var options = new MqttClientOptionsBuilder()
              .WithTcpServer(config.Ip, config.Port)
              .WithCredentials(config.Username, config.Password)
-             .WithClientId(Guid.NewGuid().ToString().Replace("-", "").ToUpper())
-             .WithCleanSession()
+             .WithClientId(config.ClientId)
+             .WithCleanSession(config.CleanSession)
              .Build();
             //创建连接
             var mqttClient = new MqttFactory().CreateMqttClient();

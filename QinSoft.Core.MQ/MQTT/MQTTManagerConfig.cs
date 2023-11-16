@@ -75,5 +75,19 @@ namespace QinSoft.Core.MQ.MQTT
         [XmlElement("password")]
         [JsonProperty("password")]
         public string Password { get; set; }
+
+        /// <summary>
+        /// 客户id
+        /// </summary>
+        [XmlElement("clientId")]
+        [JsonProperty("clientId")]
+        public string ClientId { get; set; } = Guid.NewGuid().ToString().Replace("-", "").ToUpper();
+
+        /// <summary>
+        /// 客户id
+        /// </summary>
+        [XmlElement("cleanSession")]
+        [JsonProperty("cleanSession")]
+        public bool CleanSession { get; set; } = false;
     }
 }
