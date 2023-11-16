@@ -22,6 +22,7 @@ using QinSoft.Core.MQ.RabbitMQ.Core;
 using QinSoft.Core.MQ.MQTT;
 using MQTTnet.Client;
 using System.Diagnostics;
+using MQTTnet.Protocol;
 
 namespace QinSoft.Core.Test
 {
@@ -129,7 +130,7 @@ namespace QinSoft.Core.Test
 
                 client.ApplicationMessageReceivedAsync += async e =>
                 {
-                    Debug.WriteLine("consumer1:\n" + e.ApplicationMessage.Topic + "\n" + Encoding.Default.GetString(e.ApplicationMessage.Payload));
+                    Debug.WriteLine("consumer1:\n" + e.ClientId + "\n" + e.ApplicationMessage.Topic + "\n" + Encoding.Default.GetString(e.ApplicationMessage.Payload));
                     await Task.CompletedTask;
                 };
                 client.SubscribeAsync("/qinsoft.core/test");
@@ -137,7 +138,7 @@ namespace QinSoft.Core.Test
                 IMqttClient client2 = manager.GetMqtt();
                 client2.ApplicationMessageReceivedAsync += async e =>
                 {
-                    Debug.WriteLine("consumer2:\n" + e.ApplicationMessage.Topic + "\n" + Encoding.Default.GetString(e.ApplicationMessage.Payload));
+                    Debug.WriteLine("consumer2:\n" + e.ClientId + "\n" + e.ApplicationMessage.Topic + "\n" + Encoding.Default.GetString(e.ApplicationMessage.Payload));
                     await Task.CompletedTask;
                 };
                 client2.SubscribeAsync("/qinsoft.core/test");
