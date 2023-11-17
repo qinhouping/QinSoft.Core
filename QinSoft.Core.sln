@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32802.440
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QinSoft.Core.Common", "QinSoft.Core.Common\QinSoft.Core.Common.csproj", "{4F560B95-3727-42C8-971E-CC5E1F6DB87F}"
 EndProject
@@ -22,7 +22,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QinSoft.Core.Data", "QinSof
 		{4F560B95-3727-42C8-971E-CC5E1F6DB87F} = {4F560B95-3727-42C8-971E-CC5E1F6DB87F}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QinSoft.Core.MQ", "QinSoft.Core.MQ\QinSoft.Core.MQ.csproj", "{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QinSoft.Core.MQ", "QinSoft.Core.MQ\QinSoft.Core.MQ.csproj", "{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QinSoft.Core.Job", "QinSoft.Core.Job\QinSoft.Core.Job.csproj", "{2B30CC9F-0180-46AF-A881-660D1DDC242B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QinSoft.Core.EventBus", "QinSoft.Core.EventBus\QinSoft.Core.EventBus.csproj", "{F101F929-B891-42C1-8660-BDDCC14F2989}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,6 +62,14 @@ Global
 		{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F1B0C096-0D4D-4EF1-BE2A-2A5DE28CB93C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B30CC9F-0180-46AF-A881-660D1DDC242B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B30CC9F-0180-46AF-A881-660D1DDC242B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B30CC9F-0180-46AF-A881-660D1DDC242B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B30CC9F-0180-46AF-A881-660D1DDC242B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F101F929-B891-42C1-8660-BDDCC14F2989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F101F929-B891-42C1-8660-BDDCC14F2989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F101F929-B891-42C1-8660-BDDCC14F2989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F101F929-B891-42C1-8660-BDDCC14F2989}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

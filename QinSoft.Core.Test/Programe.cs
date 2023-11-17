@@ -67,21 +67,27 @@ namespace QinSoft.Core.Test
             {
 
             })
-            .AddZookeeperManager(options => {
+            .AddZookeeperManager(options =>
+            {
 
             })
-            .AddSolrManager(options => {
+            .AddSolrManager(options =>
+            {
 
             })
             .AddRabbitMQManager(options =>
             {
 
-            });
+            })
+            .AddJobScheduler();
 
             services.TryProxyAddSingleton<IProjectRepository, ProjectRepository>(typeof(DatabaseContextInterceptor));
             services.TryProxyAddSingleton<IProjectMongoDBRepository, ProjectMongoDBRepository>(typeof(MongoDBContextInterceptor));
             services.TryProxyAddSingleton<IProjectElasticsearchRepository, ProjectElasticsearchRepository>(typeof(ElasticsearchContextInterceptor));
             services.TryProxyAddSingleton<IProjectSolrRepository, ProjectSolrRepository>(typeof(SolrContextInterceptor));
+
+            services.AddTransient<TestJob>();
+
             ServiceProvider = services.BuildServiceProvider();
         }
     }
