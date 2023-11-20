@@ -39,6 +39,8 @@ using InfluxDB.Client;
 using InfluxDB.Client.Api.Domain;
 using InfluxDB.Client.Writes;
 using InfluxDB.Client.Core.Flux.Domain;
+using InfluxDB.Client.Core;
+using InfluxDB.Client.Linq;
 
 namespace QinSoft.Core.Test
 {
@@ -266,6 +268,7 @@ namespace QinSoft.Core.Test
                                 |> range(start: -1h) 
                                 |> filter(fn:(r)=>r._measurement==""project"")";
                 List<FluxTable> tables = query.QueryAsync(q).Result;
+
                 Assert.AreEqual(1, tables.Count);
 
                 IDeleteApi delete = client.GetDeleteApi();
@@ -287,18 +290,21 @@ namespace QinSoft.Core.Test
     [MongoDBCollection("project")]
     [ElasticsearchIndex("project")]
     [SolrCore("project")]
+    [Measurement("project")]
     public class Project
     {
         [BsonId]
         [SugarColumn(IsPrimaryKey = true)]
         [Keyword(Name = "id")]
         [SolrUniqueKey("id")]
+        [Column("id", IsTag = true)]
         public string Id { get; set; }
 
         [BsonElement("project_name")]
         [SugarColumn(ColumnName = "project_name")]
         [Text(Name = "project_name")]
         [SolrField("project_name")]
+        [Column("project_name", IsTag = true)]
         public string ProjectName { get; set; }
 
         [BsonElement("project_description")]
@@ -311,6 +317,7 @@ namespace QinSoft.Core.Test
         [SugarColumn(ColumnName = "create_time")]
         [Date(Name = "create_time")]
         [SolrField("create_time")]
+        [Column("create_time", IsTimestamp = true)]
         public DateTime? CreateTime { get; set; }
 
         [BsonElement("update_time")]

@@ -48,6 +48,18 @@ namespace QinSoft.Core.Test
 
             DateTime dateTime2 = timeStamp.ToDateTime();
             Assert.AreEqual(dateTime, dateTime2);
+
+            var time = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            var time2 = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Local);
+
+            var timespan = time - time2;
+            Assert.AreEqual(timespan.TotalSeconds, 0);
+
+            Assert.AreEqual(time.Format(), time2.Format());
+
+            var time3 = new DateTime(1970, 1, 1, 0, 0, 0);
+            var time4 = time3.ToLocalTime();
+            var time5 = time3.ToUniversalTime();
         }
 
         [TestMethod]
@@ -86,7 +98,7 @@ namespace QinSoft.Core.Test
                 CancellationTokenSource source = new CancellationTokenSource();
                 CancellationToken token = source.Token;
                 CancellationTokenRegistration? registration = null;
-                registration= token.Register(() =>
+                registration = token.Register(() =>
                 {
                     registration?.Dispose();
                 });
@@ -102,7 +114,7 @@ namespace QinSoft.Core.Test
                 token.ThrowIfCancellationRequested();
 
             }
-            catch(OperationCanceledException e)
+            catch (OperationCanceledException e)
             {
                 Console.WriteLine(e);
             }
