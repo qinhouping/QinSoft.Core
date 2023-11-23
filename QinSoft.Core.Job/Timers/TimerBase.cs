@@ -1,5 +1,6 @@
 ﻿
 using QinSoft.Core.Common.Utils;
+using System;
 using System.ComponentModel;
 using System.Timers;
 
@@ -15,6 +16,16 @@ namespace QinSoft.Core.Job.Timers
         /// </summary>
         protected Timer InnerTimer { get; set; }
 
+        /// <summary>
+        /// 异常事件
+        /// </summary>
+        public event EventHandler<Exception> Abnormal;
+
+        /// <summary>
+        /// 触发器定时事件
+        /// </summary>
+        public virtual event ElapsedEventHandler Elapsed;
+
         public TimerBase()
         {
             InnerTimer = new Timer();
@@ -22,7 +33,7 @@ namespace QinSoft.Core.Job.Timers
         }
 
         /// <summary>
-        /// 内部定时器时间处理
+        /// 内部定时器事件处理
         /// </summary>
         protected virtual void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
@@ -38,8 +49,9 @@ namespace QinSoft.Core.Job.Timers
             {
                 this.Elapsed?.Invoke(this, e);
             }
-            catch
+            catch (Exception ex)
             {
+                Abnormal?.Invoke(this, ex);
             }
             if (autoStart && this.ExecuteType == TimerExecuteType.Serial)
             {
@@ -86,8 +98,6 @@ namespace QinSoft.Core.Job.Timers
                 return this.InnerTimer.Interval;
             }
         }
-
-        public virtual event ElapsedEventHandler Elapsed;
 
         public virtual void Start()
         {

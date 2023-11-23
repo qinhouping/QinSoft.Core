@@ -1957,5 +1957,29 @@ namespace QinSoft.Core.Cache.Redis.Core
         {
             DB.WaitAll(tasks);
         }
+
+        public bool Set<T>(string key, T value, TimeSpan? timeSpan = null) where T : class
+        {
+            return this.StringSet(key, value.ToJson(), timeSpan);
+        }
+
+        public T GetT<T>(string key, Func<string, T> getValue = null, TimeSpan? timeSpan = null) where T : class
+        {
+            if (this.KeyExists(key))
+            {
+                return Convert.ToString(this.StringGet(key)).FromJson<T>();
+            }
+            else
+            {
+                T value = getValue(key);
+                this.Set<T>(key, value, timeSpan);
+                return value;
+            }
+        }
+
+        public bool Delete(string key)
+        {
+            return this.KeyDelete(key);
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace QinSoft.Core.Cache.Redis
     /// <summary>
     /// Redis缓存管理器配置
     /// </summary>
-    [XmlRoot("cacheManager", Namespace = "http://www.qinsoft.com")]
+    [XmlRoot("redisManager", Namespace = "http://www.qinsoft.com")]
     public class RedisCacheManagerConfig
     {
         /// <summary>
@@ -24,8 +24,8 @@ namespace QinSoft.Core.Cache.Redis
         /// <summary>
         /// 配置项列表
         /// </summary>
-        [XmlElement("cache")]
-        [JsonProperty("caches")]
+        [XmlElement("redis")]
+        [JsonProperty("redises")]
         public RedisCacheItemConfig[] Items { get; set; }
 
         /// <summary>

@@ -11,14 +11,14 @@ namespace QinSoft.Core.Cache.Local
     /// <summary>
     /// 本地缓存配置
     /// </summary>
-    [XmlRoot("cacheManager", Namespace = "http://www.qinsoft.com")]
+    [XmlRoot("localManager", Namespace = "http://www.qinsoft.com")]
     public class LocalCacheManagerConfig
     {
         /// <summary>
         /// 本地缓存配置项列表
         /// </summary>
-        [XmlElement("cache")]
-        [JsonProperty("caches")]
+        [XmlElement("local")]
+        [JsonProperty("locals")]
         public LocalCacheItemConfig[] Items { get; set; }
 
         /// <summary>

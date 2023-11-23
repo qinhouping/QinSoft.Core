@@ -46,7 +46,7 @@ namespace QinSoft.Core.Test
         public void TestJobScheduler()
         {
             IScheduler scheduler = new SimpleScheduler();
-            scheduler.AddJob<TestJob>("test_job", "1-2 * * * * ?", new IocJobFactory(), "测试参数");
+            scheduler.AddJob<TestJob>("test_job", "* * * * * ?", new JobFactory(Programe.ServiceProvider), "测试参数");
             scheduler.StartJob("test_job");
 
             Thread.Sleep(1000 * 3600);
@@ -58,19 +58,6 @@ namespace QinSoft.Core.Test
         public void Execute(JobContext context)
         {
             Debug.WriteLine("execute job:" + context.ToJson());
-        }
-    }
-
-    class IocJobFactory : JobFactory
-    {
-        public override IJob CreateJob(Type type)
-        {
-            return Programe.ServiceProvider.GetService(type) as IJob;
-        }
-
-        public override IJob CreateJob<T>()
-        {
-            return Programe.ServiceProvider.GetService<T>();
         }
     }
 }

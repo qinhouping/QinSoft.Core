@@ -1,4 +1,6 @@
-﻿using QinSoft.Core.Common.Utils;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using QinSoft.Core.Common.Utils;
 using QinSoft.Core.Job.Timers;
 using System;
 using System.Collections.Concurrent;
@@ -12,10 +14,28 @@ namespace QinSoft.Core.Job.Schedulers
     /// </summary>
     public class SimpleScheduler : IScheduler
     {
+        /// <summary>
+        /// 日志
+        /// </summary>
+        protected ILogger logger;
+
         protected ConcurrentDictionary<string, JobItem> JobItems { get; set; }
         public SimpleScheduler()
         {
             this.JobItems = new ConcurrentDictionary<string, JobItem>();
+            this.logger = NullLoggerFactory.Instance.CreateLogger<SimpleScheduler>();
+        }
+
+        public SimpleScheduler(ILogger logger)
+        {
+            this.JobItems = new ConcurrentDictionary<string, JobItem>();
+            this.logger = logger;
+        }
+
+        public SimpleScheduler(ILoggerFactory loggerFactory)
+        {
+            this.JobItems = new ConcurrentDictionary<string, JobItem>();
+            logger = loggerFactory.CreateLogger<SimpleScheduler>();
         }
 
         protected virtual void BeginSchedule(JobItem item)
@@ -55,14 +75,11 @@ namespace QinSoft.Core.Job.Schedulers
                 int tally = 0;
                 item.JobTimer.Elapsed += (s, e) =>
                 {
-                    try
-                    {
-                        item.Job.Execute(new JobContext(item.JobTimer, item.JobParam, ++tally));
-                    }
-                    catch
-                    {
-
-                    }
+                    item.Job.Execute(new JobContext(item.JobTimer, item.JobParam, ++tally));
+                };
+                item.JobTimer.Abnormal += (s, e) =>
+                {
+                    this.logger.LogError(e, e.Message);
                 };
                 return true;
             }
@@ -82,7 +99,7 @@ namespace QinSoft.Core.Job.Schedulers
             return false;
         }
 
-        public virtual bool Exists(string jobName)
+        public virtual bool ExistsJob(string jobName)
         {
             return this.JobItems.ContainsKey(jobName);
         }

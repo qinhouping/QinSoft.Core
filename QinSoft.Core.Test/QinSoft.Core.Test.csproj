@@ -56,6 +56,9 @@
     <None Update="Configs\dev\DatabaseManager.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Configs\dev\CSRedisCacheManager.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configs\dev\RedisCacheManager.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

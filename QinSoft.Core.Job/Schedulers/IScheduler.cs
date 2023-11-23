@@ -18,6 +18,6 @@ namespace QinSoft.Core.Job.Schedulers
 
         bool StopJob(string jobName);
 
-        bool Exists(string jobName);
+        bool ExistsJob(string jobName);
     }
 }

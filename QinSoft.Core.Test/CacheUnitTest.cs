@@ -10,6 +10,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using QinSoft.Core.Cache.CSRedis;
+using CSRedis;
+using QinSoft.Core.Cache.CSRedis.Core;
 
 namespace QinSoft.Core.Test
 {
@@ -45,6 +48,22 @@ namespace QinSoft.Core.Test
                 cache.StringSet("test", value);
                 Assert.AreEqual(cache.StringGet("test").ToString(), value);
                 cache.KeyDelete("test");
+            }
+        }
+
+        [TestMethod]
+        public void TestCSRedisCache()
+        {
+            IConfiger configer = new FileConfiger(new FileConfigerOptions());
+            CSRedisCacheManagerConfig redisCacheConfig = configer.Get<CSRedisCacheManagerConfig>("CSRedisCacheManagerConfig");
+
+            using (ICSRedisCacheManager redisCacheManager = new CSRedisCacheManager(redisCacheConfig))
+            {
+                CSRedisCache cache = redisCacheManager.GetCache("test");
+                string value = Guid.NewGuid().ToString();
+                cache.Set("test", value);
+                Assert.AreEqual(cache.Get("test").ToString(), value);
+                cache.Del("test");
             }
         }
     }

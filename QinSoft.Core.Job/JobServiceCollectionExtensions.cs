@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection.Extensions;
 using QinSoft.Core.Common.Utils;
+using QinSoft.Core.Job;
 using QinSoft.Core.Job.Schedulers;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
             ObjectUtils.CheckNull(services, "services");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IScheduler, SimpleScheduler>());
+            services.TryAdd(ServiceDescriptor.Singleton<IJobFactory, JobFactory>());
             return services;
         }
     }

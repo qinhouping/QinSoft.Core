@@ -8,7 +8,7 @@ namespace QinSoft.Core.Cache.Redis.Core
     /// <summary>
     /// Redis缓存
     /// </summary>
-    public interface IRedisCache : IDatabase, IDisposable
+    public interface IRedisCache : IDatabase, ICache, IDisposable
     {
         /// <summary>
         /// 切换DB

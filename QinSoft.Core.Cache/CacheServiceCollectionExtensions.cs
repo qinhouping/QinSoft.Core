@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using QinSoft.Core.Cache.CSRedis;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -61,6 +62,30 @@ namespace Microsoft.Extensions.DependencyInjection
             ObjectUtils.CheckNull(setupAction, "setupAction");
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IRedisCacheManager, RedisCacheManager>());
+            services.Configure(setupAction);
+            return services;
+        }
+
+        /// <summary>
+        /// 注入CSRedis缓存
+        /// </summary>
+        public static IServiceCollection AddCSRedisCacheManager(this IServiceCollection services)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<ICSRedisCacheManager, CSRedisCacheManager>());
+            return services;
+        }
+
+        /// <summary>
+        /// 注入CSRedis缓存
+        /// </summary>
+        public static IServiceCollection AddCSRedisCacheManager(this IServiceCollection services, Action<CSRedisCacheManagerOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(setupAction, "setupAction");
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<ICSRedisCacheManager, CSRedisCacheManager>());
             services.Configure(setupAction);
             return services;
         }

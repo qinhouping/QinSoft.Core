@@ -7,9 +7,12 @@ namespace QinSoft.Core.Job.Timers
 {
     public class CronTimer : TimerBase
     {
+        public string CronExpress { get; protected set; }
+
         public CronExpression CronExpression { get; protected set; }
         public CronTimer(string cronExpression)
         {
+            this.CronExpress = cronExpression;
             this.CronExpression = CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds);
         }
 
