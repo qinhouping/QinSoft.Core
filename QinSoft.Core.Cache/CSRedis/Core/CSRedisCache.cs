@@ -40,9 +40,13 @@ namespace QinSoft.Core.Cache.CSRedis.Core
             }
             else
             {
-                T value = getValue(key);
-                this.Set(key, value, timeSpan);
-                return value;
+                if (getValue != null)
+                {
+                    T value = getValue(key);
+                    this.Set(key, value, timeSpan);
+                    return value;
+                }
+                return null;
             }
         }
 

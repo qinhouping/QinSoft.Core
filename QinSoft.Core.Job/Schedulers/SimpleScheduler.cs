@@ -79,7 +79,7 @@ namespace QinSoft.Core.Job.Schedulers
                 };
                 item.JobTimer.Abnormal += (s, e) =>
                 {
-                    this.logger.LogError(e, e.Message);
+                    this.logger.LogError(e, "Job scheduler Error:" + e.Message);
                 };
                 return true;
             }

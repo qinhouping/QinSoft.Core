@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <summary>
         /// 注入Database
         /// </summary>
-        public static IServiceCollection AddJobScheduler(this IServiceCollection services)
+        public static IServiceCollection AddJobSchedule(this IServiceCollection services)
         {
             ObjectUtils.CheckNull(services, "services");
             services.AddOptions();

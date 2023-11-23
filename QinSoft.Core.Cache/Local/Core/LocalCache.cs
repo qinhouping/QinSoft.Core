@@ -31,9 +31,13 @@ namespace QinSoft.Core.Cache.Local.Core
             }
             else
             {
-                value = getValue(key);
-                this.Set<T>(key, value, timeSpan);
-                return value;
+                if (getValue != null)
+                {
+                    value = getValue(key);
+                    this.Set<T>(key, value, timeSpan);
+                    return value;
+                }
+                return null;
             }
         }
 

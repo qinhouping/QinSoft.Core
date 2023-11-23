@@ -2,7 +2,7 @@
 
 namespace QinSoft.Core.EventBus
 {
-    public class Class1
+    public class IPublisher
     {
 
     }

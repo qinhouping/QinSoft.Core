@@ -1971,9 +1971,13 @@ namespace QinSoft.Core.Cache.Redis.Core
             }
             else
             {
-                T value = getValue(key);
-                this.Set<T>(key, value, timeSpan);
-                return value;
+                if (getValue != null)
+                {
+                    T value = getValue(key);
+                    this.Set<T>(key, value, timeSpan);
+                    return value;
+                }
+                return null;
             }
         }
 
