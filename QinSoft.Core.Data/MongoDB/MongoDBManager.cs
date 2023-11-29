@@ -10,6 +10,7 @@ using System.Text;
 using QinSoft.Core.Data.MongoDB.Core;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using static NodaTime.TimeZones.ZoneEqualityComparer;
 
 namespace QinSoft.Core.Data.MongoDB
 {
@@ -36,8 +37,8 @@ namespace QinSoft.Core.Data.MongoDB
 
         public MongoDBManager(MongoDBManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             MongoDBManagerConfig = config;
             this.logger = logger;
         }
@@ -48,9 +49,9 @@ namespace QinSoft.Core.Data.MongoDB
 
         public MongoDBManager(MongoDBManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             MongoDBManagerConfig = configer.Get<MongoDBManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<MongoDBManager>();
         }
@@ -61,9 +62,9 @@ namespace QinSoft.Core.Data.MongoDB
 
         public MongoDBManager(IOptions<MongoDBManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             MongoDBManagerConfig = configer.Get<MongoDBManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<MongoDBManager>();
         }
@@ -90,7 +91,7 @@ namespace QinSoft.Core.Data.MongoDB
         /// </summary>
         protected virtual IMongoDBClient BuildClientFromConfig(MongoDBItemConfig config)
         {
-            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(config, nameof(config));
             return config.DefaultDBName.IsEmpty() ? new MongoDBClient(config.ConnectionString) : new MongoDBClient(config.ConnectionString, config.DefaultDBName);
         }
 
@@ -125,7 +126,7 @@ namespace QinSoft.Core.Data.MongoDB
         /// </summary>
         public virtual IMongoDBClient GetMongoDB(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             MongoDBItemConfig config = GetMongoDBItemConfig(name);
             if (config == null)
             {

@@ -26,7 +26,7 @@ namespace QinSoft.Core.Data.Database
 
         public DatabaseContextAttribute(string name, bool useTran = false)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             this.Name = name;
             this.UseTran = useTran;
         }

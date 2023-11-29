@@ -71,6 +71,10 @@ namespace QinSoft.Core.Test
             {
 
             })
+            .AddMQTTManager(options =>
+            {
+
+            })
             .AddSolrManager(options =>
             {
 
@@ -79,7 +83,14 @@ namespace QinSoft.Core.Test
             {
 
             })
-            .AddJobScheduler();
+            .AddJobSchedule()
+            .AddEventBus(builder =>
+            {
+                builder.AddMQTTChannel(options =>
+                {
+
+                });
+            });
 
             services.TryProxyAddSingleton<IProjectRepository, ProjectRepository>(typeof(DatabaseContextInterceptor));
             services.TryProxyAddSingleton<IProjectMongoDBRepository, ProjectMongoDBRepository>(typeof(MongoDBContextInterceptor));

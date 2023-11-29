@@ -12,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static NodaTime.TimeZones.ZoneEqualityComparer;
 
 namespace QinSoft.Core.Data.Database
 {
@@ -38,8 +39,8 @@ namespace QinSoft.Core.Data.Database
 
         public DatabaseManager(DatabaseManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             DatabaseManagerConfig = config;
             this.logger = logger;
         }
@@ -50,9 +51,9 @@ namespace QinSoft.Core.Data.Database
 
         public DatabaseManager(DatabaseManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             DatabaseManagerConfig = configer.Get<DatabaseManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<DatabaseManager>();
         }
@@ -63,9 +64,9 @@ namespace QinSoft.Core.Data.Database
 
         public DatabaseManager(IOptions<DatabaseManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             DatabaseManagerConfig = configer.Get<DatabaseManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<DatabaseManager>();
         }
@@ -178,7 +179,7 @@ namespace QinSoft.Core.Data.Database
         /// </summary>
         public virtual ISqlSugarClient GetDatabase(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             DatabaseItemConfig config = GetDatabaseItemConfig(name);
             if (config == null)
             {

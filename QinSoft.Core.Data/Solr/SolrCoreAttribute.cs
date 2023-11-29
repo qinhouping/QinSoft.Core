@@ -26,14 +26,14 @@ namespace QinSoft.Core.Data.Solr
 
         public SolrCoreAttribute(string coreName)
         {
-            ObjectUtils.CheckNull(coreName, "coreName");
+            ObjectUtils.CheckNull(coreName, nameof(coreName));
             this.CoreName = coreName;
         }
 
         public SolrCoreAttribute(string name, string coreName)
         {
-            ObjectUtils.CheckNull(name, "name");
-            ObjectUtils.CheckNull(coreName, "coreName");
+            ObjectUtils.CheckNull(name, nameof(name));
+            ObjectUtils.CheckNull(coreName, nameof(coreName));
             this.Name = name;
             this.CoreName = coreName;
         }

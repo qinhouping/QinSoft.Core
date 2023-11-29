@@ -8,7 +8,7 @@ namespace QinSoft.Core.Common.Utils
 {
     public static class ByteUtils
     {
-        public static string ToString(this byte[] bytes,Encoding encoding)
+        public static string ToString(this byte[] bytes, Encoding encoding)
         {
             if (bytes == null) return null;
             return encoding.GetString(bytes);
@@ -19,7 +19,7 @@ namespace QinSoft.Core.Common.Utils
             return ToString(bytes, Encoding.Default);
         }
 
-        public static byte[] ToBytes(this string str,Encoding encoding)
+        public static byte[] ToBytes(this string str, Encoding encoding)
         {
             if (str == null) return null;
             return encoding.GetBytes(str);

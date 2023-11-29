@@ -37,8 +37,8 @@ namespace QinSoft.Core.MQ.Kafka
 
         public KafkaManager(KafkaManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             CacheDictionary = new ConcurrentDictionary<string, IKafkaClient>();
             KafkaManagerConfig = config;
             this.logger = logger;
@@ -50,9 +50,9 @@ namespace QinSoft.Core.MQ.Kafka
 
         public KafkaManager(KafkaManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IKafkaClient>();
             KafkaManagerConfig = configer.Get<KafkaManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<KafkaManager>();
@@ -64,9 +64,9 @@ namespace QinSoft.Core.MQ.Kafka
 
         public KafkaManager(IOptions<KafkaManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IKafkaClient>();
             KafkaManagerConfig = configer.Get<KafkaManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<KafkaManager>();
@@ -77,7 +77,7 @@ namespace QinSoft.Core.MQ.Kafka
         /// </summary>
         protected virtual KafkaItemConfig GetKafkaItemConfig(string name)
         {
-            ObjectUtils.CheckNull(name, name);
+            ObjectUtils.CheckNull(name, nameof(name));
             return KafkaManagerConfig.GetByName(name);
         }
 
@@ -94,7 +94,7 @@ namespace QinSoft.Core.MQ.Kafka
         /// </summary>
         protected virtual IKafkaClient<TKEY, TVALUE> BuildClientFromConfig<TKEY, TVALUE>(KafkaItemConfig config)
         {
-            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(config, nameof(config));
             ProducerConfig producerConfig = new ProducerConfig()
             {
                 BootstrapServers = config.BootstrapServers,
@@ -114,7 +114,7 @@ namespace QinSoft.Core.MQ.Kafka
                 producerConfig.SaslPassword = config.Sasl.Password;
             }
             ISerializer<TKEY> keySerializer = config.Producer?.KeySerializer.IsEmpty() == false ? (ISerializer<TKEY>)Activator.CreateInstance(Type.GetType(config.Producer?.KeySerializer)) : null;
-            ISerializer<TVALUE> valueSerializer = config.Producer?.ValueSerializer.IsEmpty() == false ? (ISerializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Producer?.ValueSerializer)): null;
+            ISerializer<TVALUE> valueSerializer = config.Producer?.ValueSerializer.IsEmpty() == false ? (ISerializer<TVALUE>)Activator.CreateInstance(Type.GetType(config.Producer?.ValueSerializer)) : null;
 
             ConsumerConfig consumerConfig = new ConsumerConfig()
             {
@@ -170,7 +170,7 @@ namespace QinSoft.Core.MQ.Kafka
         /// </summary>
         public virtual IKafkaClient<TKEY, TVALUE> GetKafka<TKEY, TVALUE>(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             KafkaItemConfig config = GetKafkaItemConfig(name);
             if (config == null)
             {

@@ -26,8 +26,8 @@ namespace QinSoft.Core.Data.Solr
 
         public SolrContextInterceptor(ISolrManager solrManager, ISolrContext solrContext)
         {
-            ObjectUtils.CheckNull(solrManager, "solrManager");
-            ObjectUtils.CheckNull(solrContext, "solrContext");
+            ObjectUtils.CheckNull(solrManager, nameof(solrManager));
+            ObjectUtils.CheckNull(solrContext, nameof(solrContext));
             this.SolrManager = solrManager;
             this.SolrContext = solrContext;
         }

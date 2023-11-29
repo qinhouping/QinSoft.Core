@@ -19,6 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IConfiger, FileConfiger>());
+            services.Configure((FileConfigerOptions options) => { });
             return services;
         }
 

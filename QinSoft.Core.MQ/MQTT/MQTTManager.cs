@@ -12,6 +12,7 @@ using MQTTnet;
 using MQTTnet.Client;
 using QinSoft.Core.MQ.Kafka;
 using RabbitMQ.Client;
+using Google.Protobuf.WellKnownTypes;
 
 namespace QinSoft.Core.MQ.MQTT
 {
@@ -39,8 +40,8 @@ namespace QinSoft.Core.MQ.MQTT
 
         public MQTTManager(MQTTManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             CacheDictionary = new ConcurrentDictionary<string, IMqttClient>();
             MQTTManagerConfig = config;
             this.logger = logger;
@@ -52,9 +53,9 @@ namespace QinSoft.Core.MQ.MQTT
 
         public MQTTManager(MQTTManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IMqttClient>();
             MQTTManagerConfig = configer.Get<MQTTManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<MQTTManager>();
@@ -66,9 +67,9 @@ namespace QinSoft.Core.MQ.MQTT
 
         public MQTTManager(IOptions<MQTTManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IMqttClient>();
             MQTTManagerConfig = configer.Get<MQTTManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<MQTTManager>();
@@ -79,7 +80,7 @@ namespace QinSoft.Core.MQ.MQTT
         /// </summary>
         protected virtual MQTTItemConfig GetMqttItemConfig(string name)
         {
-            ObjectUtils.CheckNull(name, name);
+            ObjectUtils.CheckNull(name, nameof(name));
             return MQTTManagerConfig.GetByName(name);
         }
 
@@ -140,7 +141,7 @@ namespace QinSoft.Core.MQ.MQTT
         /// </summary>
         public virtual IMqttClient GetMqtt(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             MQTTItemConfig config = GetMqttItemConfig(name);
             if (config == null)
             {

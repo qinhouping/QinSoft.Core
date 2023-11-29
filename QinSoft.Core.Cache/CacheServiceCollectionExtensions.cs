@@ -23,9 +23,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddLocalCacheManager(this IServiceCollection services)
         {
-            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, nameof(services));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<ILocalCacheManager, LocalCacheManager>());
+            services.Configure((LocalCacheManagerOptions options) => { });
             return services;
         }
 
@@ -34,8 +35,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddLocalCacheManager(this IServiceCollection services, Action<LocalCacheManagerOptions> setupAction)
         {
-            ObjectUtils.CheckNull(services, "services");
-            ObjectUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, nameof(services));
+            ObjectUtils.CheckNull(setupAction, nameof(setupAction));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<ILocalCacheManager, LocalCacheManager>());
             services.Configure(setupAction);
@@ -47,9 +48,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddRedisCacheManager(this IServiceCollection services)
         {
-            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, nameof(services));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IRedisCacheManager, RedisCacheManager>());
+            services.Configure((RedisCacheManagerOptions options) => { });
             return services;
         }
 
@@ -58,8 +60,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddRedisCacheManager(this IServiceCollection services, Action<RedisCacheManagerOptions> setupAction)
         {
-            ObjectUtils.CheckNull(services, "services");
-            ObjectUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, nameof(services));
+            ObjectUtils.CheckNull(setupAction, nameof(setupAction));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IRedisCacheManager, RedisCacheManager>());
             services.Configure(setupAction);
@@ -71,9 +73,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddCSRedisCacheManager(this IServiceCollection services)
         {
-            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, nameof(services));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<ICSRedisCacheManager, CSRedisCacheManager>());
+            services.Configure((CSRedisCacheManagerOptions options) => { });
             return services;
         }
 
@@ -82,8 +85,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddCSRedisCacheManager(this IServiceCollection services, Action<CSRedisCacheManagerOptions> setupAction)
         {
-            ObjectUtils.CheckNull(services, "services");
-            ObjectUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, nameof(services));
+            ObjectUtils.CheckNull(setupAction, nameof(setupAction));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<ICSRedisCacheManager, CSRedisCacheManager>());
             services.Configure(setupAction);

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RabbitMQ.Client;
 using QinSoft.Core.MQ.RabbitMQ.Core;
+using Google.Protobuf.WellKnownTypes;
 
 namespace QinSoft.Core.MQ.RabbitMQ
 {
@@ -37,8 +38,8 @@ namespace QinSoft.Core.MQ.RabbitMQ
 
         public RabbitMQManager(RabbitMQManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             CacheDictionary = new ConcurrentDictionary<string, IRabbitMQClient>();
             RabbitMQManagerConfig = config;
             this.logger = logger;
@@ -50,9 +51,9 @@ namespace QinSoft.Core.MQ.RabbitMQ
 
         public RabbitMQManager(RabbitMQManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IRabbitMQClient>();
             RabbitMQManagerConfig = configer.Get<RabbitMQManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<RabbitMQManager>();
@@ -64,9 +65,9 @@ namespace QinSoft.Core.MQ.RabbitMQ
 
         public RabbitMQManager(IOptions<RabbitMQManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IRabbitMQClient>();
             RabbitMQManagerConfig = configer.Get<RabbitMQManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<RabbitMQManager>();
@@ -77,7 +78,7 @@ namespace QinSoft.Core.MQ.RabbitMQ
         /// </summary>
         protected virtual RabbitMQItemConfig GetRabbitMQItemConfig(string name)
         {
-            ObjectUtils.CheckNull(name, name);
+            ObjectUtils.CheckNull(name, nameof(name));
             return RabbitMQManagerConfig.GetByName(name);
         }
 
@@ -98,8 +99,8 @@ namespace QinSoft.Core.MQ.RabbitMQ
             var factory = new ConnectionFactory()
             {
                 HostName = config.Hostname,
-                Port=config.port,
-                VirtualHost=config.VirtualHost,
+                Port = config.port,
+                VirtualHost = config.VirtualHost,
                 UserName = config.Username,
                 Password = config.Password
             };
@@ -137,7 +138,7 @@ namespace QinSoft.Core.MQ.RabbitMQ
         /// </summary>
         public virtual IRabbitMQClient GetRabbitMQ(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             RabbitMQItemConfig config = GetRabbitMQItemConfig(name);
             if (config == null)
             {

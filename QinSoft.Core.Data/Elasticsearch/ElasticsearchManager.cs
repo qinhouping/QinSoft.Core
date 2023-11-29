@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using static NodaTime.TimeZones.ZoneEqualityComparer;
 
 namespace QinSoft.Core.Data.Elasticsearch
 {
@@ -38,8 +39,8 @@ namespace QinSoft.Core.Data.Elasticsearch
 
         public ElasticsearchManager(ElasticsearchManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             CacheDictionary = new ConcurrentDictionary<string, IElasticClient>();
             ElasticsearchManagerConfig = config;
             this.logger = logger;
@@ -51,9 +52,9 @@ namespace QinSoft.Core.Data.Elasticsearch
 
         public ElasticsearchManager(ElasticsearchManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IElasticClient>();
             ElasticsearchManagerConfig = configer.Get<ElasticsearchManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<ElasticsearchManager>();
@@ -65,9 +66,9 @@ namespace QinSoft.Core.Data.Elasticsearch
 
         public ElasticsearchManager(IOptions<ElasticsearchManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, paramName: nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IElasticClient>();
             ElasticsearchManagerConfig = configer.Get<ElasticsearchManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<ElasticsearchManager>();
@@ -95,7 +96,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         protected virtual IElasticClient BuildClientFromConfig(ElasticsearchItemConfig config)
         {
-            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(config, nameof(config));
             SniffingConnectionPool pool = new SniffingConnectionPool(config.Urls.Select(u => new Uri(u)));
             ConnectionSettings connectionSettings = new ConnectionSettings(pool);
             if (!config.ApiKey.IsEmpty())
@@ -146,7 +147,7 @@ namespace QinSoft.Core.Data.Elasticsearch
         /// </summary>
         public virtual IElasticClient GetElasticsearch(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             ElasticsearchItemConfig config = GetElasticsearchItemConfig(name);
             if (config == null)
             {

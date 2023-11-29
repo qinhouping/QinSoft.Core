@@ -26,8 +26,8 @@ namespace QinSoft.Core.Data.Elasticsearch
 
         public ElasticsearchContextInterceptor(IElasticsearchManager elasticsearchManager, IElasticsearchContext elasticsearchContext)
         {
-            ObjectUtils.CheckNull(elasticsearchManager, "elasticsearchManager");
-            ObjectUtils.CheckNull(elasticsearchContext, "elasticsearchContext");
+            ObjectUtils.CheckNull(elasticsearchManager, nameof(elasticsearchManager));
+            ObjectUtils.CheckNull(elasticsearchContext, nameof(elasticsearchContext));
             this.ElasticsearchManager = elasticsearchManager;
             this.ElasticsearchContext = elasticsearchContext;
         }

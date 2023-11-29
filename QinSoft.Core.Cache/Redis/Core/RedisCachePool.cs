@@ -17,19 +17,19 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCachePool(int poolSize, ConfigurationOptions configurationOptions, ConnectionSelectionStrategy connectionSelectionStrategy = ConnectionSelectionStrategy.RoundRobin)
         {
-            ObjectUtils.CheckNull(configurationOptions, "configurationOptions");
+            ObjectUtils.CheckNull(configurationOptions, nameof(configurationOptions));
             ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, configurationOptions, null, connectionSelectionStrategy);
         }
 
         public RedisCachePool(int poolSize, string configuration, ConnectionSelectionStrategy connectionSelectionStrategy = ConnectionSelectionStrategy.RoundRobin)
         {
-            ObjectUtils.CheckNull(configuration, "configuration");
+            ObjectUtils.CheckNull(configuration, nameof(configuration));
             ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(poolSize, configuration, null, connectionSelectionStrategy);
         }
 
         public RedisCachePool(RedisCachePoolOptions redisCachePoolOptions)
         {
-            ObjectUtils.CheckNull(redisCachePoolOptions, "redisCachePoolOptions");
+            ObjectUtils.CheckNull(redisCachePoolOptions, nameof(redisCachePoolOptions));
             ConnectionMultiplexerPool = ConnectionMultiplexerPoolFactory.Create(redisCachePoolOptions.PoolSize, redisCachePoolOptions.ConfigurationOptions, redisCachePoolOptions.TextWriter, redisCachePoolOptions.ConnectionSelectionStrategy);
         }
 

@@ -19,9 +19,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddKafkaManager(this IServiceCollection services)
         {
-            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, nameof(services));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IKafkaManager, KafkaManager>());
+            services.Configure((KafkaManagerOptions options) => { });
             return services;
         }
 
@@ -30,8 +31,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddKafkaManager(this IServiceCollection services, Action<KafkaManagerOptions> setupAction)
         {
-            ObjectUtils.CheckNull(services, "services");
-            ObjectUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, nameof(services));
+            ObjectUtils.CheckNull(services, nameof(setupAction));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IKafkaManager, KafkaManager>());
             services.Configure(setupAction);
@@ -43,9 +44,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddRabbitMQManager(this IServiceCollection services)
         {
-            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, nameof(services));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IRabbitMQManager, RabbitMQManager>());
+            services.Configure((RabbitMQManagerOptions options) => { });
             return services;
         }
 
@@ -54,8 +56,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddRabbitMQManager(this IServiceCollection services, Action<RabbitMQManagerOptions> setupAction)
         {
-            ObjectUtils.CheckNull(services, "services");
-            ObjectUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, nameof(services));
+            ObjectUtils.CheckNull(services, nameof(setupAction));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IRabbitMQManager, RabbitMQManager>());
             services.Configure(setupAction);
@@ -67,9 +69,10 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddMQTTManager(this IServiceCollection services)
         {
-            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, nameof(services));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IMQTTManager, MQTTManager>());
+            services.Configure((MQTTManagerOptions options) => { });
             return services;
         }
 
@@ -78,8 +81,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddMQTTManager(this IServiceCollection services, Action<MQTTManagerOptions> setupAction)
         {
-            ObjectUtils.CheckNull(services, "services");
-            ObjectUtils.CheckNull(setupAction, "setupAction");
+            ObjectUtils.CheckNull(services, nameof(services));
+            ObjectUtils.CheckNull(services, nameof(setupAction));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IMQTTManager, MQTTManager>());
             services.Configure(setupAction);

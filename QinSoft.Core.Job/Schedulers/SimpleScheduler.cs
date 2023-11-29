@@ -57,9 +57,9 @@ namespace QinSoft.Core.Job.Schedulers
 
         public virtual bool AddJob(string jobName, TimerBase jobTimer, IJob job, object jobParam = null)
         {
-            ObjectUtils.CheckEmpty(jobName, "jobName");
-            ObjectUtils.CheckNull(jobTimer, "jobTimer");
-            ObjectUtils.CheckNull(job, "job");
+            ObjectUtils.CheckEmpty(jobName, nameof(jobName));
+            ObjectUtils.CheckNull(jobTimer, nameof(jobTimer));
+            ObjectUtils.CheckNull(job, nameof(job));
 
             JobItem item = new JobItem()
             {

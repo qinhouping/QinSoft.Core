@@ -38,7 +38,7 @@ namespace QinSoft.Core.Data.Database
 
         public DatabaseContextStack(IDatabaseManager databaseManager)
         {
-            ObjectUtils.CheckNull(databaseManager, "databaseManager");
+            ObjectUtils.CheckNull(databaseManager, nameof(databaseManager));
             this.ContextStack = new AsyncLocal<ConcurrentStack<ISqlSugarClient>>();
             this.DefaultContext = new AsyncLocal<ISqlSugarClient>();
             this.DatabaseManager = databaseManager;
@@ -50,7 +50,7 @@ namespace QinSoft.Core.Data.Database
         /// </summary>
         public virtual void Push(ISqlSugarClient client)
         {
-            ObjectUtils.CheckNull(client, "client");
+            ObjectUtils.CheckNull(client, nameof(client));
 
             if (ContextStack.Value == null)
             {

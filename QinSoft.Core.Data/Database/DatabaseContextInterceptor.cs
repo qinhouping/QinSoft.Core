@@ -26,8 +26,8 @@ namespace QinSoft.Core.Data.Database
 
         public DatabaseContextInterceptor(IDatabaseManager databaseManager, IDatabaseContextStack databaseContextStack)
         {
-            ObjectUtils.CheckNull(databaseManager, "databaseManager");
-            ObjectUtils.CheckNull(databaseContextStack, "databaseContextStack");
+            ObjectUtils.CheckNull(databaseManager, nameof(databaseManager));
+            ObjectUtils.CheckNull(databaseContextStack, nameof(databaseContextStack));
             this.DatabaseManager = databaseManager;
             this.DatabaseContextStack = databaseContextStack;
         }

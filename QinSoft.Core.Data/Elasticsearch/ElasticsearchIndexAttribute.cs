@@ -26,14 +26,14 @@ namespace QinSoft.Core.Data.Elasticsearch
 
         public ElasticsearchIndexAttribute(string indexName)
         {
-            ObjectUtils.CheckNull(indexName, "indexName");
+            ObjectUtils.CheckNull(indexName, nameof(indexName));
             this.IndexName = indexName;
         }
 
         public ElasticsearchIndexAttribute(string name, string indexName)
         {
-            ObjectUtils.CheckNull(name, "name");
-            ObjectUtils.CheckNull(indexName, "indexName");
+            ObjectUtils.CheckNull(name, nameof(name));
+            ObjectUtils.CheckNull(indexName, nameof(indexName));
             this.Name = name;
             this.IndexName = indexName;
         }

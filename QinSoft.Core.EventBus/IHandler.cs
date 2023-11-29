@@ -4,7 +4,8 @@ using System.Text;
 
 namespace QinSoft.Core.EventBus
 {
-    public class EventBus
+    public interface IHandler
     {
+
     }
 }

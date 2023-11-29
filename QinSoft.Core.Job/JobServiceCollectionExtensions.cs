@@ -15,7 +15,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static IServiceCollection AddJobSchedule(this IServiceCollection services)
         {
-            ObjectUtils.CheckNull(services, "services");
+            ObjectUtils.CheckNull(services, nameof(services));
             services.AddOptions();
             services.TryAdd(ServiceDescriptor.Singleton<IScheduler, SimpleScheduler>());
             services.TryAdd(ServiceDescriptor.Singleton<IJobFactory, JobFactory>());

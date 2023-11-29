@@ -46,8 +46,8 @@ namespace QinSoft.Core.Cache.CSRedis
 
         public CSRedisCacheManager(CSRedisCacheManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             CacheDictionary = new ConcurrentDictionary<string, CSRedisCache>();
             CSRedisCacheManagerConfig = config;
             this.logger = logger;
@@ -59,9 +59,9 @@ namespace QinSoft.Core.Cache.CSRedis
 
         public CSRedisCacheManager(CSRedisCacheManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, CSRedisCache>();
             CSRedisCacheManagerConfig = configer.Get<CSRedisCacheManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<CSRedisCacheManager>();
@@ -73,9 +73,9 @@ namespace QinSoft.Core.Cache.CSRedis
 
         public CSRedisCacheManager(IOptions<CSRedisCacheManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, CSRedisCache>();
             CSRedisCacheManagerConfig = configer.Get<CSRedisCacheManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<CSRedisCacheManager>();
@@ -103,7 +103,7 @@ namespace QinSoft.Core.Cache.CSRedis
         /// </summary>
         protected virtual CSRedisCache BuildCacheFromConfig(CSRedisCacheItemConfig config)
         {
-            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(config, nameof(config));
             if (config.ConnectionStrings.IsNotEmpty())
             {
                 IKeyRule keyRule = null;

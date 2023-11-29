@@ -29,7 +29,7 @@ namespace QinSoft.Core.Data.MongoDB
 
         public MongoDBContext(IMongoDBManager mongodbManager)
         {
-            ObjectUtils.CheckNull(mongodbManager, "mongodbManager");
+            ObjectUtils.CheckNull(mongodbManager, nameof(mongodbManager));
             this.Context = new AsyncLocal<ConcurrentDictionary<string, IMongoDBClient>>();
             this.DefaultContext = new AsyncLocal<IMongoDBClient>();
             this.mongodbManager = mongodbManager;

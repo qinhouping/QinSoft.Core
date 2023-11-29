@@ -41,8 +41,8 @@ namespace QinSoft.Core.Data.InfluxDB
 
         public InfluxDBManager(InfluxDBManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             this.CacheDictionary = new ConcurrentDictionary<string, IInfluxClient>();
             InfluxManagerConfig = config;
             this.logger = logger;
@@ -54,9 +54,9 @@ namespace QinSoft.Core.Data.InfluxDB
 
         public InfluxDBManager(InfluxDBManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             this.CacheDictionary = new ConcurrentDictionary<string, IInfluxClient>();
             InfluxManagerConfig = configer.Get<InfluxDBManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<InfluxDBManager>();
@@ -68,9 +68,9 @@ namespace QinSoft.Core.Data.InfluxDB
 
         public InfluxDBManager(IOptions<InfluxDBManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, paramName: nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             this.CacheDictionary = new ConcurrentDictionary<string, IInfluxClient>();
             InfluxManagerConfig = configer.Get<InfluxDBManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<InfluxDBManager>();
@@ -81,7 +81,7 @@ namespace QinSoft.Core.Data.InfluxDB
         /// </summary>
         protected virtual InfluxDBItemConfig GetInfluxItemConfig(string name)
         {
-            ObjectUtils.CheckNull(name, name);
+            ObjectUtils.CheckNull(name, nameof(name));
             return InfluxManagerConfig.GetByName(name);
         }
 
@@ -98,7 +98,7 @@ namespace QinSoft.Core.Data.InfluxDB
         /// </summary>
         protected virtual IInfluxClient BuildClientFromConfig(InfluxDBItemConfig config)
         {
-            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(config, nameof(config));
             InfluxDBClientOptions options = InfluxDBClientOptions.Builder
                 .CreateNew()
                 .Url(config.Url)
@@ -106,7 +106,7 @@ namespace QinSoft.Core.Data.InfluxDB
                 .Org(config.Org)
                 .Bucket(config.Bucket)
                 .Build();
-            return new InfluxClient(options); 
+            return new InfluxClient(options);
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace QinSoft.Core.Data.InfluxDB
         /// </summary>
         public virtual IInfluxClient GetInflux(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             InfluxDBItemConfig config = GetInfluxItemConfig(name);
             if (config == null)
             {

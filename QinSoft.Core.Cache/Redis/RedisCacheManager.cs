@@ -44,8 +44,8 @@ namespace QinSoft.Core.Cache.Redis
 
         public RedisCacheManager(RedisCacheManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             CacheDictionary = new ConcurrentDictionary<string, IRedisCache>();
             RedisCacheManagerConfig = config;
             this.logger = logger;
@@ -57,9 +57,9 @@ namespace QinSoft.Core.Cache.Redis
 
         public RedisCacheManager(RedisCacheManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IRedisCache>();
             RedisCacheManagerConfig = configer.Get<RedisCacheManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<RedisCacheManager>();
@@ -71,9 +71,9 @@ namespace QinSoft.Core.Cache.Redis
 
         public RedisCacheManager(IOptions<RedisCacheManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, IRedisCache>();
             RedisCacheManagerConfig = configer.Get<RedisCacheManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<RedisCacheManager>();
@@ -84,7 +84,7 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         protected virtual RedisCacheItemConfig GetCacheItemConfig(string name)
         {
-            ObjectUtils.CheckNull(name, name);
+            ObjectUtils.CheckNull(name, nameof(name));
             return RedisCacheManagerConfig.GetByName(name);
         }
 
@@ -101,7 +101,7 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         protected virtual IRedisCache BuildCacheFromConfig(RedisCacheItemConfig config)
         {
-            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(config, nameof(config));
             RedisCacheOptions options = new RedisCacheOptions();
             options.ConfigurationOptions = new ConfigurationOptions();
             config.EndPoints?.ToList().ForEach(u =>
@@ -160,7 +160,7 @@ namespace QinSoft.Core.Cache.Redis
         /// </summary>
         public virtual IRedisCache GetCache(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             RedisCacheItemConfig config = GetCacheItemConfig(name);
             if (config == null)
             {

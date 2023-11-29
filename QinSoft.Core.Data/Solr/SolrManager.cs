@@ -13,6 +13,7 @@ using SolrNet.Impl;
 using HttpWebAdapters;
 using CommonServiceLocator;
 using System.IO;
+using static NodaTime.TimeZones.ZoneEqualityComparer;
 
 namespace QinSoft.Core.Data.Solr
 {
@@ -44,8 +45,8 @@ namespace QinSoft.Core.Data.Solr
 
         public SolrManager(SolrManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             this.CacheDictionary = new ConcurrentDictionary<string, object>();
             SolrManagerConfig = config;
             this.logger = logger;
@@ -57,9 +58,9 @@ namespace QinSoft.Core.Data.Solr
 
         public SolrManager(SolrManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             this.CacheDictionary = new ConcurrentDictionary<string, object>();
             SolrManagerConfig = configer.Get<SolrManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<SolrManager>();
@@ -71,9 +72,9 @@ namespace QinSoft.Core.Data.Solr
 
         public SolrManager(IOptions<SolrManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             this.CacheDictionary = new ConcurrentDictionary<string, object>();
             SolrManagerConfig = configer.Get<SolrManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<SolrManager>();
@@ -99,10 +100,10 @@ namespace QinSoft.Core.Data.Solr
         /// <summary>
         /// 构建Solr客户端实例
         /// </summary>
-        protected virtual ISolrOperations<T> BuildClientFromConfig<T>(SolrItemConfig config,string coreName)
+        protected virtual ISolrOperations<T> BuildClientFromConfig<T>(SolrItemConfig config, string coreName)
         {
-            ObjectUtils.CheckNull(config, "config");
-            SolrConnection connection = new SolrConnection(Path.Combine(config.Url,coreName));
+            ObjectUtils.CheckNull(config, nameof(config));
+            SolrConnection connection = new SolrConnection(Path.Combine(config.Url, coreName));
             if (!config.Username.IsEmpty() && !config.Password.IsEmpty())
             {
                 connection.HttpWebRequestFactory = new BasicAuthHttpWebRequestFactory(config.Username, config.Password);
@@ -117,14 +118,14 @@ namespace QinSoft.Core.Data.Solr
         /// </summary>
         public virtual ISolrOperations<T> GetSolr<T>(string coreName)
         {
-            ObjectUtils.CheckNull(coreName, "coreName");
+            ObjectUtils.CheckNull(coreName, nameof(coreName));
             SolrItemConfig config = GetDefaultSolrItemConfig();
             if (config == null)
             {
                 throw new SolrException("not found default Solr client config");
             }
 
-            ISolrOperations<T> client =(ISolrOperations<T>) CacheDictionary.GetOrAdd(config.Name+":"+coreName, key => BuildClientFromConfig<T>(config,coreName));
+            ISolrOperations<T> client = (ISolrOperations<T>)CacheDictionary.GetOrAdd(config.Name + ":" + coreName, key => BuildClientFromConfig<T>(config, coreName));
 
             logger.LogDebug("get default Solr client from config");
 
@@ -136,7 +137,7 @@ namespace QinSoft.Core.Data.Solr
         /// </summary>
         public virtual async Task<ISolrOperations<T>> GetSolrAsync<T>(string coreName)
         {
-            return await ExecuteUtils.ExecuteInTask(GetSolr<T>,coreName);
+            return await ExecuteUtils.ExecuteInTask(GetSolr<T>, coreName);
         }
 
         /// <summary>
@@ -144,15 +145,15 @@ namespace QinSoft.Core.Data.Solr
         /// </summary>
         public virtual ISolrOperations<T> GetSolr<T>(string name, string coreName)
         {
-            ObjectUtils.CheckNull(name, "name");
-            ObjectUtils.CheckNull(coreName, "coreName");
+            ObjectUtils.CheckNull(name, nameof(name));
+            ObjectUtils.CheckNull(coreName, nameof(coreName));
             SolrItemConfig config = GetSolrItemConfig(name);
             if (config == null)
             {
                 throw new SolrException(string.Format("not found Solr client config:{0}", name));
             }
 
-            ISolrOperations<T> client = (ISolrOperations<T>)CacheDictionary.GetOrAdd(config.Name + ":" + coreName, key => BuildClientFromConfig<T>(config,coreName));
+            ISolrOperations<T> client = (ISolrOperations<T>)CacheDictionary.GetOrAdd(config.Name + ":" + coreName, key => BuildClientFromConfig<T>(config, coreName));
 
             logger.LogDebug(string.Format("get Solr client from config:{0}", name));
 
@@ -164,7 +165,7 @@ namespace QinSoft.Core.Data.Solr
         /// </summary>
         public virtual async Task<ISolrOperations<T>> GetSolrAsync<T>(string name, string coreName)
         {
-            return await ExecuteUtils.ExecuteInTask(()=>GetSolr<T>(name,coreName));
+            return await ExecuteUtils.ExecuteInTask(() => GetSolr<T>(name, coreName));
         }
 
         /// <summary>

@@ -5,4 +5,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QinSoft.Core.Common\QinSoft.Core.Common.csproj" />
+    <ProjectReference Include="..\QinSoft.Core.MQ\QinSoft.Core.MQ.csproj" />
+  </ItemGroup>
+
 </Project>

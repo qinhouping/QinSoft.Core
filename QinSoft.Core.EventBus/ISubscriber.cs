@@ -4,7 +4,10 @@ using System.Text;
 
 namespace QinSoft.Core.EventBus
 {
-    internal class ISubscriber
+    public interface ISubscriber : IDisposable
     {
+        bool Subscriber(IHandler handler);
+
+        bool Unsubscriber(IHandler handler);
     }
 }

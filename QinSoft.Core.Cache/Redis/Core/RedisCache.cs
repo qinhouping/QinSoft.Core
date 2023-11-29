@@ -41,7 +41,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCache(ConfigurationOptions configurationOptions, bool isSentinel = false)
         {
-            ObjectUtils.CheckNull(configurationOptions, "configurationOptions");
+            ObjectUtils.CheckNull(configurationOptions, nameof(ConfigurationOptions));
             if (isSentinel)
             {
                 this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.SentinelConnect(configurationOptions).GetSentinelMasterConnection(configurationOptions.Clone());
@@ -56,7 +56,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCache(string configuration, bool isSentinel = false)
         {
-            ObjectUtils.CheckNull(configuration, "configuration");
+            ObjectUtils.CheckNull(configuration, nameof(configuration));
             ConfigurationOptions configurationOptions = ConfigurationOptions.Parse(configuration);
             if (isSentinel)
             {
@@ -72,7 +72,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCache(RedisCacheOptions redisCacheOptions)
         {
-            ObjectUtils.CheckNull(redisCacheOptions, "redisCacheOptions");
+            ObjectUtils.CheckNull(redisCacheOptions, nameof(redisCacheOptions));
             if (redisCacheOptions.IsSentinel)
             {
                 this.ConnectionMultiplexer = StackExchange.Redis.ConnectionMultiplexer.SentinelConnect(redisCacheOptions.ConfigurationOptions).GetSentinelMasterConnection(redisCacheOptions.ConfigurationOptions.Clone());
@@ -87,7 +87,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCache(IConnectionMultiplexer connectionMultiplexer, bool isPoolConnection = false)
         {
-            ObjectUtils.CheckNull(connectionMultiplexer, "connectionMultiplexer");
+            ObjectUtils.CheckNull(connectionMultiplexer, nameof(connectionMultiplexer));
             this.ConnectionMultiplexer = connectionMultiplexer;
             this.IsPoolConnection = isPoolConnection;
             this.DB = this.ConnectionMultiplexer.GetDatabase();
@@ -95,7 +95,7 @@ namespace QinSoft.Core.Cache.Redis.Core
 
         public RedisCache(IReconnectableConnectionMultiplexer reconnectableConnectionMultiplexer)
         {
-            ObjectUtils.CheckNull(reconnectableConnectionMultiplexer, "reconnectableConnectionMultiplexer");
+            ObjectUtils.CheckNull(reconnectableConnectionMultiplexer, nameof(reconnectableConnectionMultiplexer));
             this.ConnectionMultiplexer = reconnectableConnectionMultiplexer.Connection;
             this.IsPoolConnection = true;
             this.DB = this.ConnectionMultiplexer.GetDatabase();

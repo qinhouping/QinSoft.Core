@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\QinSoft.Core.Cache\QinSoft.Core.Cache.csproj" />
+    <ProjectReference Include="..\QinSoft.Core.EventBus\QinSoft.Core.EventBus.csproj" />
     <ProjectReference Include="..\QinSoft.Core.Job\QinSoft.Core.Job.csproj" />
     <ProjectReference Include="..\QinSoft.Core.MQ\QinSoft.Core.MQ.csproj" />
     <ProjectReference Include="..\QinSoft.Core.Log\QinSoft.Core.Log.csproj" />

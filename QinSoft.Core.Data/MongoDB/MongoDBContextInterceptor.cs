@@ -26,8 +26,8 @@ namespace QinSoft.Core.Data.MongoDB
 
         public MongoDBContextInterceptor(IMongoDBManager mongodbManager, IMongoDBContext mongodbContext)
         {
-            ObjectUtils.CheckNull(mongodbManager, "mongodbManager");
-            ObjectUtils.CheckNull(mongodbContext, "mongodbContext");
+            ObjectUtils.CheckNull(mongodbManager, nameof(mongodbManager));
+            ObjectUtils.CheckNull(mongodbContext, nameof(mongodbContext));
             this.MongoDBManager = mongodbManager;
             this.MongoDBContext = mongodbContext;
         }

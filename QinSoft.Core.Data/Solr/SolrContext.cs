@@ -30,7 +30,7 @@ namespace QinSoft.Core.Data.Solr
 
         public SolrContext(ISolrManager solrManager)
         {
-            ObjectUtils.CheckNull(solrManager, "solrManager");
+            ObjectUtils.CheckNull(solrManager, nameof(solrManager));
             this.Context = new AsyncLocal<ConcurrentDictionary<string, object>>();
             this.DefaultContext = new AsyncLocal<ConcurrentDictionary<string, object>>();
             this.SolrManager = solrManager;

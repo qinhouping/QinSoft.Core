@@ -39,8 +39,8 @@ namespace QinSoft.Core.Cache.Local
 
         public LocalCacheManager(LocalCacheManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             CacheDictionary = new ConcurrentDictionary<string, ILocalCache>();
             LocalCacheManagerConfig = config;
             this.logger = logger;
@@ -52,9 +52,9 @@ namespace QinSoft.Core.Cache.Local
 
         public LocalCacheManager(LocalCacheManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, ILocalCache>();
             LocalCacheManagerConfig = configer.Get<LocalCacheManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<LocalCacheManager>();
@@ -66,9 +66,9 @@ namespace QinSoft.Core.Cache.Local
 
         public LocalCacheManager(IOptions<LocalCacheManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             CacheDictionary = new ConcurrentDictionary<string, ILocalCache>();
             LocalCacheManagerConfig = configer.Get<LocalCacheManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<LocalCacheManager>();
@@ -79,7 +79,7 @@ namespace QinSoft.Core.Cache.Local
         /// </summary>
         protected virtual LocalCacheItemConfig GetCacheItemConfig(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             return LocalCacheManagerConfig.GetByName(name);
         }
 
@@ -96,7 +96,7 @@ namespace QinSoft.Core.Cache.Local
         /// </summary>
         protected virtual ILocalCache BuildCacheFromConfig(LocalCacheItemConfig config)
         {
-            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(config, nameof(config));
             return new LocalCache(new LocalCacheOptions()
             {
                 ExpirationScanFrequency = config.ExpirationScanFrequency,
@@ -138,7 +138,7 @@ namespace QinSoft.Core.Cache.Local
         /// </summary>
         public virtual ILocalCache GetCache(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             LocalCacheItemConfig config = GetCacheItemConfig(name);
             if (config == null)
             {

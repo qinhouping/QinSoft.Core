@@ -41,8 +41,8 @@ namespace QinSoft.Core.Data.Zookeeper
 
         public ZookeeperManager(ZookeeperManagerConfig config, ILogger logger)
         {
-            ObjectUtils.CheckNull(config, "config");
-            ObjectUtils.CheckNull(logger, "logger");
+            ObjectUtils.CheckNull(config, nameof(config));
+            ObjectUtils.CheckNull(logger, nameof(logger));
             this.CacheDictionary = new ConcurrentDictionary<string, IZookeeper>();
             ZookeeperManagerConfig = config;
             this.logger = logger;
@@ -54,9 +54,9 @@ namespace QinSoft.Core.Data.Zookeeper
 
         public ZookeeperManager(ZookeeperManagerOptions options, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(options, "options");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             this.CacheDictionary = new ConcurrentDictionary<string, IZookeeper>();
             ZookeeperManagerConfig = configer.Get<ZookeeperManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<ZookeeperManager>();
@@ -68,9 +68,9 @@ namespace QinSoft.Core.Data.Zookeeper
 
         public ZookeeperManager(IOptions<ZookeeperManagerOptions> optionsAccessor, IConfiger configer, ILoggerFactory loggerFactory)
         {
-            ObjectUtils.CheckNull(optionsAccessor, "optionsAccessor");
-            ObjectUtils.CheckNull(configer, "configer");
-            ObjectUtils.CheckNull(loggerFactory, "loggerFactory");
+            ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
+            ObjectUtils.CheckNull(configer, nameof(configer));
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             this.CacheDictionary = new ConcurrentDictionary<string, IZookeeper>();
             ZookeeperManagerConfig = configer.Get<ZookeeperManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<ZookeeperManager>();
@@ -81,7 +81,7 @@ namespace QinSoft.Core.Data.Zookeeper
         /// </summary>
         protected virtual ZookeeperItemConfig GetZookeeperItemConfig(string name)
         {
-            ObjectUtils.CheckNull(name, name);
+            ObjectUtils.CheckNull(name, nameof(name));
             return ZookeeperManagerConfig.GetByName(name);
         }
 
@@ -111,7 +111,7 @@ namespace QinSoft.Core.Data.Zookeeper
         /// </summary>
         protected virtual IZookeeper BuildClientFromConfig(ZookeeperItemConfig config)
         {
-            ObjectUtils.CheckNull(config, "config");
+            ObjectUtils.CheckNull(config, nameof(config));
             IZookeeper zooKeeper = new Core.Zookeeper(config.ConnectionString, config.SessionTimeout)
             {
                 ConfigId = config.Name
@@ -158,7 +158,7 @@ namespace QinSoft.Core.Data.Zookeeper
         /// </summary>
         public virtual IZookeeper GetZookeeper(string name)
         {
-            ObjectUtils.CheckNull(name, "name");
+            ObjectUtils.CheckNull(name, nameof(name));
             ZookeeperItemConfig config = GetZookeeperItemConfig(name);
             if (config == null)
             {
