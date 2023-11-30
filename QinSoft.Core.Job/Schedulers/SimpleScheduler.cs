@@ -28,12 +28,14 @@ namespace QinSoft.Core.Job.Schedulers
 
         public SimpleScheduler(ILogger logger)
         {
+            ObjectUtils.CheckNull(logger, nameof(logger));
             this.JobItems = new ConcurrentDictionary<string, JobItem>();
             this.logger = logger;
         }
 
         public SimpleScheduler(ILoggerFactory loggerFactory)
         {
+            ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
             this.JobItems = new ConcurrentDictionary<string, JobItem>();
             logger = loggerFactory.CreateLogger<SimpleScheduler>();
         }

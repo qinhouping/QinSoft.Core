@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using QinSoft.Core.Common.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -226,22 +227,25 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// </summary>
         public virtual void Consume(string topic, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer())
+            ExecuteUtils.ExecuteInThread(() =>
             {
-                consumer.Subscribe(topic);
-                try
+                using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer())
                 {
-                    while (true)
+                    consumer.Subscribe(topic);
+                    try
                     {
-                        ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
-                        resultHandler(consumer, result);
+                        while (true)
+                        {
+                            ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
+                            resultHandler(consumer, result);
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        //取消消费
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    //取消消费
-                }
-            }
+            });
         }
 
         /// <summary>
@@ -249,22 +253,25 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// </summary>
         public virtual void Consume(TopicPartition topicPartition, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartition))
+            ExecuteUtils.ExecuteInThread(() =>
             {
-                consumer.Subscribe(topicPartition.Topic);
-                try
+                using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartition))
                 {
-                    while (true)
+                    consumer.Subscribe(topicPartition.Topic);
+                    try
                     {
-                        ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
-                        resultHandler(consumer, result);
+                        while (true)
+                        {
+                            ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
+                            resultHandler(consumer, result);
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        //取消消费
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    //取消消费
-                }
-            }
+            });
         }
 
         /// <summary>
@@ -272,22 +279,25 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// </summary>
         public virtual void Consume(TopicPartitionOffset topicPartitionOffset, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartitionOffset))
+            ExecuteUtils.ExecuteInThread(() =>
             {
-                consumer.Subscribe(topicPartitionOffset.Topic);
-                try
+                using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartitionOffset))
                 {
-                    while (true)
+                    consumer.Subscribe(topicPartitionOffset.Topic);
+                    try
                     {
-                        ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
-                        resultHandler(consumer, result);
+                        while (true)
+                        {
+                            ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
+                            resultHandler(consumer, result);
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        //取消消费
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    //取消消费
-                }
-            }
+            });
         }
 
         /// <summary>
@@ -295,22 +305,26 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// </summary>
         public virtual async Task ConsumeAsync(string topic, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer())
+            ExecuteUtils.ExecuteInThread(() =>
             {
-                consumer.Subscribe(topic);
-                try
+                using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer())
                 {
-                    while (true)
+                    consumer.Subscribe(topic);
+                    try
                     {
-                        ConsumeResult<TKEY, TVALUE> result = await Task.FromResult(consumer.Consume(cancellationToken));
-                        resultHandler(consumer, result);
+                        while (true)
+                        {
+                            ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
+                            resultHandler(consumer, result);
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        //取消消费
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    //取消消费
-                }
-            }
+            });
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -318,22 +332,26 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// </summary>
         public virtual async Task ConsumeAsync(TopicPartition topicPartition, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartition))
+            ExecuteUtils.ExecuteInThread(() =>
             {
-                consumer.Subscribe(topicPartition.Topic);
-                try
+                using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartition))
                 {
-                    while (true)
+                    consumer.Subscribe(topicPartition.Topic);
+                    try
                     {
-                        ConsumeResult<TKEY, TVALUE> result = await Task.FromResult(consumer.Consume(cancellationToken));
-                        resultHandler(consumer, result);
+                        while (true)
+                        {
+                            ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
+                            resultHandler(consumer, result);
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        //取消消费
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    //取消消费
-                }
-            }
+            });
+            await Task.CompletedTask;
         }
 
         /// <summary>
@@ -341,22 +359,26 @@ namespace QinSoft.Core.MQ.Kafka.Core
         /// </summary>
         public virtual async Task ConsumeAsync(TopicPartitionOffset topicPartitionOffset, Action<IConsumer<TKEY, TVALUE>, ConsumeResult<TKEY, TVALUE>> resultHandler, CancellationToken cancellationToken = default)
         {
-            using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartitionOffset))
+            ExecuteUtils.ExecuteInThread(() =>
             {
-                consumer.Subscribe(topicPartitionOffset.Topic);
-                try
+                using (IConsumer<TKEY, TVALUE> consumer = BuildConsumer(topicPartitionOffset))
                 {
-                    while (true)
+                    consumer.Subscribe(topicPartitionOffset.Topic);
+                    try
                     {
-                        ConsumeResult<TKEY, TVALUE> result = await Task.FromResult(consumer.Consume(cancellationToken));
-                        resultHandler(consumer, result);
+                        while (true)
+                        {
+                            ConsumeResult<TKEY, TVALUE> result = consumer.Consume(cancellationToken);
+                            resultHandler(consumer, result);
+                        }
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        //取消消费
                     }
                 }
-                catch (OperationCanceledException)
-                {
-                    //取消消费
-                }
-            }
+            });
+            await Task.CompletedTask;
         }
 
         /// <summary>

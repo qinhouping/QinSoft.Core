@@ -110,7 +110,7 @@ namespace QinSoft.Core.EventBus
             this.Readed?.Invoke(this, data);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             this.QueueThreadCancelToken?.Cancel();
         }

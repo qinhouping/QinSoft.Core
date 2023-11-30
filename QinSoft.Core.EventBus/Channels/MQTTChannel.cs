@@ -3,11 +3,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using MQTTnet.Client;
+using MQTTnet.Protocol;
 using QinSoft.Core.Common.Utils;
 using QinSoft.Core.MQ.MQTT;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace QinSoft.Core.EventBus.Channels
 {
@@ -15,19 +17,21 @@ namespace QinSoft.Core.EventBus.Channels
     {
         protected IMqttClient mqttClient { get; set; }
 
-        protected string MQTT_TOPIC = "/QinSoft.Core/__EventBus__";
+        /// <summary>
+        /// MQTT通道主题
+        /// </summary>
+        public string MQTT_TOPIC { get; set; } = "/QinSoft.Core/__EventBus__";
 
         /// <summary>
         /// 默认编码
         /// </summary>
-        public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
+        public virtual Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
 
-        public MQTTChannel(IMqttClient client) : base(NullLoggerFactory.Instance.CreateLogger<MQTTChannel>())
+        protected CancellationTokenSource SubscribeCancellationToken = new CancellationTokenSource();
+
+        public MQTTChannel(IMqttClient client) : this(client, NullLoggerFactory.Instance)
         {
-            ObjectUtils.CheckNull(client, nameof(client));
-            this.mqttClient = client;
 
-            this.SubscribeMQTT();
         }
 
         public MQTTChannel(IMqttClient client, ILogger logger) : base(logger)
@@ -38,64 +42,39 @@ namespace QinSoft.Core.EventBus.Channels
             this.SubscribeMQTT();
         }
 
-        public MQTTChannel(IMqttClient client, ILoggerFactory loggerFactory) : base(loggerFactory.CreateLogger<MQTTChannel>())
+        public MQTTChannel(IMqttClient client, ILoggerFactory loggerFactory) : this(client, loggerFactory.CreateLogger<MQTTChannel>())
         {
-            ObjectUtils.CheckNull(client, nameof(client));
-            this.mqttClient = client;
 
-            this.SubscribeMQTT();
         }
 
-        public MQTTChannel(IMQTTManager manager, MQTTChannelOptions options) : base(NullLoggerFactory.Instance.CreateLogger<MQTTChannel>())
+        public MQTTChannel(IMQTTManager manager, MQTTChannelOptions options) : this(manager, options, NullLoggerFactory.Instance)
         {
-            ObjectUtils.CheckNull(manager, nameof(manager));
-            ObjectUtils.CheckNull(options, nameof(options));
-            this.mqttClient = string.IsNullOrEmpty(options.Name) ? manager.GetMqtt() : manager.GetMqtt(options.Name);
 
-            this.SubscribeMQTT();
-        }
-
-        public MQTTChannel(IMQTTManager manager, MQTTChannelOptions options, ILogger logger) : base(logger)
-        {
-            ObjectUtils.CheckNull(manager, nameof(manager));
-            ObjectUtils.CheckNull(options, nameof(options));
-            this.mqttClient = string.IsNullOrEmpty(options.Name) ? manager.GetMqtt() : manager.GetMqtt(options.Name);
-
-            this.SubscribeMQTT();
         }
 
         public MQTTChannel(IMQTTManager manager, MQTTChannelOptions options, ILoggerFactory loggerFactory) : base(loggerFactory.CreateLogger<MQTTChannel>())
         {
             ObjectUtils.CheckNull(manager, nameof(manager));
             ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckEmpty(options.Topic, nameof(options.Topic));
             this.mqttClient = string.IsNullOrEmpty(options.Name) ? manager.GetMqtt() : manager.GetMqtt(options.Name);
+            this.MQTT_TOPIC = options.Topic;
 
             this.SubscribeMQTT();
         }
 
-        public MQTTChannel(IMQTTManager manager, IOptions<MQTTChannelOptions> options) : base(NullLoggerFactory.Instance.CreateLogger<MQTTChannel>())
+        public MQTTChannel(IMQTTManager manager, IOptions<MQTTChannelOptions> options) : this(manager, options, NullLoggerFactory.Instance)
         {
-            ObjectUtils.CheckNull(manager, nameof(manager));
-            ObjectUtils.CheckNull(options, nameof(options));
-            this.mqttClient = string.IsNullOrEmpty(options.Value.Name) ? manager.GetMqtt() : manager.GetMqtt(options.Value.Name);
 
-            this.SubscribeMQTT();
-        }
-
-        public MQTTChannel(IMQTTManager manager, IOptions<MQTTChannelOptions> options, ILogger logger) : base(logger)
-        {
-            ObjectUtils.CheckNull(manager, nameof(manager));
-            ObjectUtils.CheckNull(options, nameof(options));
-            this.mqttClient = string.IsNullOrEmpty(options.Value.Name) ? manager.GetMqtt() : manager.GetMqtt(options.Value.Name);
-
-            this.SubscribeMQTT();
         }
 
         public MQTTChannel(IMQTTManager manager, IOptions<MQTTChannelOptions> options, ILoggerFactory loggerFactory) : base(loggerFactory.CreateLogger<MQTTChannel>())
         {
             ObjectUtils.CheckNull(manager, nameof(manager));
             ObjectUtils.CheckNull(options, nameof(options));
+            ObjectUtils.CheckEmpty(options.Value.Topic, nameof(options.Value.Topic));
             this.mqttClient = string.IsNullOrEmpty(options.Value.Name) ? manager.GetMqtt() : manager.GetMqtt(options.Value.Name);
+            this.MQTT_TOPIC = options.Value.Topic;
 
             this.SubscribeMQTT();
         }
@@ -109,17 +88,25 @@ namespace QinSoft.Core.EventBus.Channels
             {
                 this.Read(JsonUtils.FromJson<ChannelData>(e.ApplicationMessage.PayloadSegment.ToArray().ToString(DefaultEncoding)));
             };
-            this.mqttClient.SubscribeAsync(this.MQTT_TOPIC);
+            this.mqttClient.SubscribeAsync(MQTT_TOPIC, MqttQualityOfServiceLevel.AtMostOnce, this.SubscribeCancellationToken.Token);
         }
 
         protected override void WriteCore(ChannelData data)
         {
             this.mqttClient.PublishBinaryAsync(MQTT_TOPIC, data.ToJson().ToBytes(DefaultEncoding)).Wait();
         }
+
+        public override void Dispose()
+        {
+            this.SubscribeCancellationToken.Cancel();
+            base.Dispose();
+        }
     }
 
     public class MQTTChannelOptions
     {
         public string Name { get; set; }
+
+        public string Topic { get; set; } = "/QinSoft.Core/__EventBus__";
     }
 }

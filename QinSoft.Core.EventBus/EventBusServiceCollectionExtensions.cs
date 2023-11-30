@@ -19,9 +19,21 @@ namespace Microsoft.Extensions.DependencyInjection
     /// </summary>
     public static class EventBusServiceCollectionExtensions
     {
+        /// <summary>
+        /// 注入EventBus
+        /// </summary>
+        public static IServiceCollection AddEventBus(this IServiceCollection services)
+        {
+            ObjectUtils.CheckNull(services, nameof(services));
+            services.AddOptions();
+            services.TryAdd(ServiceDescriptor.Singleton<IPublisher, SimplePublisher>());
+            services.TryAdd(ServiceDescriptor.Singleton<ISubscriber, SimpleSubscriber>());
+            AddMemoryChannel(new EventBusBuilder(services));
+            return services;
+        }
 
         /// <summary>
-        /// 注入MQTT
+        /// 注入EventBus
         /// </summary>
         public static IServiceCollection AddEventBus(this IServiceCollection services, Action<EventBusBuilder> builder)
         {
@@ -34,6 +46,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
+        /// <summary>
+        /// 注入内存通道
+        /// </summary>
         public static EventBusBuilder AddMemoryChannel(this EventBusBuilder builder)
         {
             ObjectUtils.CheckNull(builder, nameof(builder));
@@ -42,6 +57,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        /// <summary>
+        /// 注入MQTT通道
+        /// </summary>
         public static EventBusBuilder AddMQTTChannel(this EventBusBuilder builder)
         {
             ObjectUtils.CheckNull(builder, nameof(builder));
@@ -50,11 +68,60 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        /// <summary>
+        /// 注入MQTT通道
+        /// </summary>
         public static EventBusBuilder AddMQTTChannel(this EventBusBuilder builder, Action<MQTTChannelOptions> setupAction)
         {
             ObjectUtils.CheckNull(builder, nameof(builder));
             ObjectUtils.CheckNull(setupAction, nameof(setupAction));
             builder.Services.TryAdd(ServiceDescriptor.Singleton<Channel, MQTTChannel>());
+            builder.Services.Configure(setupAction);
+            return builder;
+        }
+
+        /// <summary>
+        /// 注入Kafka通道
+        /// </summary>
+        public static EventBusBuilder AddKafkaChannel(this EventBusBuilder builder)
+        {
+            ObjectUtils.CheckNull(builder, nameof(builder));
+            builder.Services.TryAdd(ServiceDescriptor.Singleton<Channel, KafkaChannel>());
+            builder.Services.Configure((KafkaChannelOptions options) => { });
+            return builder;
+        }
+
+        /// <summary>
+        /// 注入Kafka通道
+        /// </summary>
+        public static EventBusBuilder AddKafkaChannel(this EventBusBuilder builder, Action<KafkaChannelOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(builder, nameof(builder));
+            ObjectUtils.CheckNull(setupAction, nameof(setupAction));
+            builder.Services.TryAdd(ServiceDescriptor.Singleton<Channel, KafkaChannel>());
+            builder.Services.Configure(setupAction);
+            return builder;
+        }
+
+        /// <summary>
+        /// 注入Kafka通道
+        /// </summary>
+        public static EventBusBuilder AddRabbitMQChannel(this EventBusBuilder builder)
+        {
+            ObjectUtils.CheckNull(builder, nameof(builder));
+            builder.Services.TryAdd(ServiceDescriptor.Singleton<Channel, RabbitMQChannel>());
+            builder.Services.Configure((RabbitMQChannelOptions options) => { });
+            return builder;
+        }
+
+        /// <summary>
+        /// 注入Kafka通道
+        /// </summary>
+        public static EventBusBuilder AddRabbitMQChannel(this EventBusBuilder builder, Action<RabbitMQChannelOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(builder, nameof(builder));
+            ObjectUtils.CheckNull(setupAction, nameof(setupAction));
+            builder.Services.TryAdd(ServiceDescriptor.Singleton<Channel, RabbitMQChannel>());
             builder.Services.Configure(setupAction);
             return builder;
         }

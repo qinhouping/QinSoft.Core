@@ -41,30 +41,26 @@ namespace QinSoft.Core.Test
             {
                 ExecuteUtils.ExecuteInThread(() =>
                 {
-                    IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>();
+                    IKafkaClient<string, string> client = kafkaManager.GetKafka<string, string>();
                     while (true)
                     {
-                        kafka.ProduceAsync(topic, Guid.NewGuid().ToString(), DateTime.Now.ToString());
+                        client.ProduceAsync(topic, Guid.NewGuid().ToString(), DateTime.Now.ToString());
                         Thread.Sleep(1000);
                     }
                 });
-                ExecuteUtils.ExecuteInThread(() =>
+
+                IKafkaClient<string, string> client = kafkaManager.GetKafka<string, string>();
+                client.Consume(topic, (consumer, result) =>
                 {
-                    IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>();
-                    kafka.Consume(topic, (consumer, result) =>
-                    {
-                        Debug.WriteLine("consumer1:\n" + result.ToJson());
-                        consumer.Commit(result);
-                    });
+                    Debug.WriteLine("consumer1:\n" + result.ToJson());
+                    consumer.Commit(result);
                 });
-                ExecuteUtils.ExecuteInThread(() =>
+
+                IKafkaClient<string, string> client2 = kafkaManager.GetKafka<string, string>();
+                client2.Consume(topic, (consumer2, result2) =>
                 {
-                    IKafkaClient<string, string> kafka = kafkaManager.GetKafka<string, string>();
-                    kafka.Consume(topic, (consumer2, result2) =>
-                    {
-                        Debug.WriteLine("consumer2:\n" + result2.Message.Key + ":" + result2.Message.Value);
-                        consumer2.Commit(result2);
-                    });
+                    Debug.WriteLine("consumer2:\n" + result2.Message.Key + ":" + result2.Message.Value);
+                    consumer2.Commit(result2);
                 });
 
                 Thread.Sleep(1000 * 3600);

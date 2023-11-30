@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QinSoft.Core.Common.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,6 +11,7 @@ namespace QinSoft.Core.Job.Timers
 
         public SimpleTimer(double interval)
         {
+            ObjectUtils.CheckRange(interval, 0, Double.MaxValue, nameof(interval));
             this.Interval = interval;
         }
 

@@ -1,4 +1,5 @@
 ﻿using Cronos;
+using QinSoft.Core.Common.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,6 +13,7 @@ namespace QinSoft.Core.Job.Timers
         public CronExpression CronExpression { get; protected set; }
         public CronTimer(string cronExpression)
         {
+            ObjectUtils.CheckEmpty(cronExpression, nameof(cronExpression));
             this.CronExpress = cronExpression;
             this.CronExpression = CronExpression.Parse(cronExpression, CronFormat.IncludeSeconds);
         }
