@@ -86,7 +86,7 @@ namespace QinSoft.Core.EventBus.Channels
         {
             this.KafkaClient.Consume(Kafka_TOPIC, (c, r) =>
             {
-                this.Read(JsonUtils.FromJson<ChannelData>(r.Message.Value.ToString(default)));
+                this.Read(JsonUtils.FromJson<ChannelData>(r.Message.Value.ToString(DefaultEncoding)));
             }, this.SubscribeCancellationToken.Token);
         }
 
