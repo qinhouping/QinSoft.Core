@@ -125,6 +125,52 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.Configure(setupAction);
             return builder;
         }
+
+        /// <summary>
+        /// 注入Redis通道
+        /// </summary>
+        public static EventBusBuilder AddRedisChannel(this EventBusBuilder builder)
+        {
+            ObjectUtils.CheckNull(builder, nameof(builder));
+            builder.Services.TryAdd(ServiceDescriptor.Singleton<Channel, RedisChannel>());
+            builder.Services.Configure((RedisChannelOptions options) => { });
+            return builder;
+        }
+
+        /// <summary>
+        /// 注入Redis通道
+        /// </summary>
+        public static EventBusBuilder AddRedisChannel(this EventBusBuilder builder, Action<RedisChannelOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(builder, nameof(builder));
+            ObjectUtils.CheckNull(setupAction, nameof(setupAction));
+            builder.Services.TryAdd(ServiceDescriptor.Singleton<Channel, RedisChannel>());
+            builder.Services.Configure(setupAction);
+            return builder;
+        }
+
+        /// <summary>
+        /// 注入Redis通道
+        /// </summary>
+        public static EventBusBuilder AddCSRedisChannel(this EventBusBuilder builder)
+        {
+            ObjectUtils.CheckNull(builder, nameof(builder));
+            builder.Services.TryAdd(ServiceDescriptor.Singleton<Channel, CSRedisChannel>());
+            builder.Services.Configure((CSRedisChannelOptions options) => { });
+            return builder;
+        }
+
+        /// <summary>
+        /// 注入Redis通道
+        /// </summary>
+        public static EventBusBuilder AddCSRedisChannel(this EventBusBuilder builder, Action<CSRedisChannelOptions> setupAction)
+        {
+            ObjectUtils.CheckNull(builder, nameof(builder));
+            ObjectUtils.CheckNull(setupAction, nameof(setupAction));
+            builder.Services.TryAdd(ServiceDescriptor.Singleton<Channel, CSRedisChannel>());
+            builder.Services.Configure(setupAction);
+            return builder;
+        }
     }
 
     public class EventBusBuilder
