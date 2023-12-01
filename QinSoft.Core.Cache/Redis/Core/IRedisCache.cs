@@ -11,6 +11,11 @@ namespace QinSoft.Core.Cache.Redis.Core
     public interface IRedisCache : IDatabase, ICache, IDisposable
     {
         /// <summary>
+        /// Redis连接
+        /// </summary>
+        IConnectionMultiplexer ConnectionMultiplexer { get; }
+
+        /// <summary>
         /// 切换DB
         /// </summary>
         void Select(int database);

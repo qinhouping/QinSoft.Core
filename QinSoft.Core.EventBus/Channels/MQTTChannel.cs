@@ -86,7 +86,7 @@ namespace QinSoft.Core.EventBus.Channels
         {
             this.mqttClient.ApplicationMessageReceivedAsync += async e =>
             {
-                this.Read(JsonUtils.FromJson<ChannelData>(e.ApplicationMessage.PayloadSegment.ToArray().ToString(DefaultEncoding)));
+                this.Read(e.ApplicationMessage.PayloadSegment.ToArray().ToString(DefaultEncoding).FromJson<ChannelData>());
             };
             this.mqttClient.SubscribeAsync(MQTT_TOPIC, MqttQualityOfServiceLevel.AtMostOnce, this.SubscribeCancellationToken.Token);
         }

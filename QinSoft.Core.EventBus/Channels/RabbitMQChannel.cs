@@ -91,7 +91,7 @@ namespace QinSoft.Core.EventBus.Channels
         {
             this.RabbitMQClient.Consume(RabbitMQ_QUEUE, true, (s, e) =>
             {
-                this.Read(JsonUtils.FromJson<ChannelData>(e.Body.ToArray().ToString(DefaultEncoding)));
+                this.Read(e.Body.ToArray().ToString(DefaultEncoding).FromJson<ChannelData>());
             }, SubscribeCancellationToken.Token);
         }
 

@@ -10,7 +10,7 @@ namespace QinSoft.Core.Cache.Local.Core
     /// <summary>
     /// 本地缓存实现
     /// </summary>
-    internal class LocalCache : MemoryCache, ILocalCache
+    public class LocalCache : MemoryCache, ILocalCache
     {
         public LocalCache(LocalCacheOptions options) : base(options)
         {

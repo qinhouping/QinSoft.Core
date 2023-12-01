@@ -12,12 +12,12 @@ namespace QinSoft.Core.Cache.Redis.Core
     /// <summary>
     /// Redis缓存实现
     /// </summary>
-    internal class RedisCache : IRedisCache
+    public class RedisCache : IRedisCache
     {
         /// <summary>
         /// Redis连接
         /// </summary>
-        protected IConnectionMultiplexer ConnectionMultiplexer { get; set; }
+        public virtual IConnectionMultiplexer ConnectionMultiplexer { protected get; set; }
 
         /// <summary>
         /// 是否是池连接
