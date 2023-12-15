@@ -81,7 +81,7 @@ namespace QinSoft.Core.Test
 
         private void Channel_Readed(object sender, ChannelData e)
         {
-            Debug.WriteLine(e.Topic + ":" + ByteUtils.ToString(e.Payload));
+            Debug.WriteLine(e.Topic + ":" + BaseUtils.ToString(e.Payload));
         }
     }
 
@@ -90,7 +90,7 @@ namespace QinSoft.Core.Test
         [HandlerMethod("test")]
         public void Work(ChannelData data)
         {
-            Debug.WriteLine(data.Topic + ":" + ByteUtils.ToString(data.Payload));
+            Debug.WriteLine(data.Topic + ":" + BaseUtils.ToString(data.Payload));
         }
     }
 }

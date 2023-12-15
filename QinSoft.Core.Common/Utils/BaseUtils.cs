@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -37,6 +38,44 @@ namespace QinSoft.Core.Common.Utils
                 return res;
             }
             return null;
+        }
+
+        public static string ToString(this byte[] bytes, Encoding encoding)
+        {
+            if (bytes == null) return null;
+            return encoding.GetString(bytes);
+        }
+
+        public static string ToString(this byte[] bytes)
+        {
+            return ToString(bytes, Encoding.Default);
+        }
+
+        public static byte[] ToBytes(this string str, Encoding encoding)
+        {
+            if (str == null) return null;
+            return encoding.GetBytes(str);
+        }
+
+        public static byte[] ToBytes(this string str)
+        {
+            return ToBytes(str, Encoding.Default);
+        }
+
+        public static Stream ToStream(this byte[] bytes)
+        {
+            MemoryStream ms = new MemoryStream(bytes);
+            ms.Seek(0, SeekOrigin.Begin);
+            return ms;
+        }
+
+        public static byte[] ToBytes(this Stream stream)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                stream.CopyTo(ms);
+                return ms.ToArray();
+            }
         }
     }
 }

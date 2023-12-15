@@ -48,7 +48,7 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 格式化时间格式
         /// </summary>
-        public static string Format(this DateTime dateTime, string format = "yyyy-MM-dd HH:mm:ss")
+        public static string FormatDateTime(this DateTime dateTime, string format = "yyyy-MM-dd HH:mm:ss")
         {
             return dateTime.ToString(format);
         }
@@ -56,7 +56,7 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// 解析时间
         /// </summary>
-        public static DateTime Parse(string dateTime, string format = "yyyy-MM-dd HH:mm:ss")
+        public static DateTime ParseDateTime(string dateTime, string format = "yyyy-MM-dd HH:mm:ss")
         {
             DateTime dt = DateTime.ParseExact(dateTime, format, CultureInfo.InvariantCulture);
             DateTime.SpecifyKind(dt, DateTimeKind.Local);

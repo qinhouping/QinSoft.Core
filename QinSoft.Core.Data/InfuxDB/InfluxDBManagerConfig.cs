@@ -76,5 +76,12 @@ namespace QinSoft.Core.Data.InfluxDB
         [XmlElement("bucket")]
         [JsonProperty("bucket")]
         public string Bucket { get; set; }
+
+        /// <summary>
+        /// Influx超时时间 单位秒
+        /// </summary>
+        [XmlElement("timeout")]
+        [JsonProperty("timeout")]
+        public int Timeout { get; set; } = 10;
     }
 }

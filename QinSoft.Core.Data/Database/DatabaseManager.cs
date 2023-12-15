@@ -12,7 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using static NodaTime.TimeZones.ZoneEqualityComparer;
 
 namespace QinSoft.Core.Data.Database
 {

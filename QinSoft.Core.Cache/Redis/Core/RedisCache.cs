@@ -17,7 +17,7 @@ namespace QinSoft.Core.Cache.Redis.Core
         /// <summary>
         /// Redis连接
         /// </summary>
-        public virtual IConnectionMultiplexer ConnectionMultiplexer { protected get; set; }
+        public virtual IConnectionMultiplexer ConnectionMultiplexer { get; protected set; }
 
         /// <summary>
         /// 是否是池连接

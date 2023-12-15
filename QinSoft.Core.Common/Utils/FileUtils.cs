@@ -49,5 +49,24 @@ namespace QinSoft.Core.Common.Utils
             }
             return files;
         }
+
+        /// <summary>
+        /// 保存文件
+        /// </summary>
+        public static void SaveFile(this Stream stream, FileInfo file)
+        {
+            using (FileStream fs = new FileStream(file.FullName, FileMode.OpenOrCreate, FileAccess.Write))
+            {
+                stream.CopyTo(fs);
+            }
+        }
+
+        /// <summary>
+        /// 加载文件流
+        /// </summary>
+        public static Stream LoadFile(this FileInfo file)
+        {
+            return new FileStream(file.FullName, FileMode.Open, FileAccess.Read);
+        }
     }
 }

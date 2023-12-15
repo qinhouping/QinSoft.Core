@@ -9,6 +9,7 @@
     <PackageReference Include="Castle.Core" Version="5.0.0" />
     <PackageReference Include="log4net" Version="2.0.13" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="MiniExcel" Version="1.31.2" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="Google.Protobuf" Version="3.24.1" />
   </ItemGroup>

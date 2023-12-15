@@ -55,11 +55,13 @@ namespace QinSoft.Core.Test
             var timespan = time - time2;
             Assert.AreEqual(timespan.TotalSeconds, 0);
 
-            Assert.AreEqual(time.Format(), time2.Format());
+            Assert.AreEqual(time.FormatDateTime(), time2.FormatDateTime());
 
             var time3 = new DateTime(1970, 1, 1, 0, 0, 0);
             var time4 = time3.ToLocalTime();
             var time5 = time3.ToUniversalTime();
+
+            string t = DateTime.Now.ToUniversalTime().ToString("O");
         }
 
         [TestMethod]

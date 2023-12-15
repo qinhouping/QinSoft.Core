@@ -105,6 +105,7 @@ namespace QinSoft.Core.Data.InfluxDB
                 .AuthenticateToken(config.Token)
                 .Org(config.Org)
                 .Bucket(config.Bucket)
+                .TimeOut(TimeSpan.FromSeconds(config.Timeout))
                 .Build();
             return new InfluxClient(options);
         }

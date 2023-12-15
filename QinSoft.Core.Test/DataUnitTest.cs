@@ -41,6 +41,7 @@ using InfluxDB.Client.Writes;
 using InfluxDB.Client.Core.Flux.Domain;
 using InfluxDB.Client.Core;
 using InfluxDB.Client.Linq;
+using InfluxDB.Client.Configurations;
 
 namespace QinSoft.Core.Test
 {
@@ -275,7 +276,41 @@ namespace QinSoft.Core.Test
                 delete.Delete(DateTime.Today, DateTime.Today.AddDays(1), @"_measurement=""project""", "qinsoft", "qinsoft").Wait();
             }
         }
+
+        [TestMethod]
+        public void TestInfluxLinq()
+        {
+            IConfiger configer = new FileConfiger(new FileConfigerOptions());
+            InfluxDBManagerConfig influxdbManagerConfig = configer.Get<InfluxDBManagerConfig>("InfluxDBManagerConfig");
+            using (IInfluxDBManager influxManager = new InfluxDBManager(influxdbManagerConfig))
+            {
+                IInfluxClient client = influxManager.GetInflux("test_linq");
+                var optimizerSettings = new QueryableOptimizerSettings
+                {
+                    AlignFieldsWithPivot = false
+                };
+                var res = (from s in InfluxDBQueryable<EquipmentParameter>.Queryable("iiot_main", "digihua", client.GetQueryApiSync() as QueryApiSync, optimizerSettings)
+                           where s.Timestamp >= DateTime.Now.AddMinutes(-1).ToUniversalTime()
+                           orderby s.Timestamp descending
+                           select s)
+                           .Take(10).ToList();
+
+                Assert.AreEqual(1, res.Count);
+            }
+        }
     }
+
+    [Measurement("equipment_parameter")]
+    public class EquipmentParameter
+    {
+        [Column(IsTimestamp = true)] public DateTime Timestamp { get; set; }
+        [Column("identify_no", IsTag = true)] public ushort IdentifyNo { get; init; }
+        [Column("workshop_no", IsTag = true)] public string WorkshopNo { get; init; }
+        [Column("data_no", IsTag = true)] public string DataNo { get; init; } = string.Empty;
+        [Column("data_name", IsTag = true)] public string DataName { get; init; } = string.Empty;
+        [Column("data_value")] public object DataValue { get; init; }
+    }
+
 
     public class QinSoftWatcher : Watcher
     {

@@ -36,7 +36,6 @@ namespace QinSoft.Core.Test
             .AddLogging(builder =>
             {
                 //builder.AddNLog();
-                //builder.AddLog4Net();
                 builder.AddConsole();
             })
             .AddFileConfiger(options =>
