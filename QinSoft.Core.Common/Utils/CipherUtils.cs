@@ -22,6 +22,9 @@ namespace QinSoft.Core.Common.Utils
         /// </summary>
         public static Encoding DefaultEncoding { get; set; } = Encoding.UTF8;
 
+
+        #region 哈希
+
         /// <summary>
         /// HASH
         /// </summary>
@@ -51,6 +54,14 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// MD5
         /// </summary>
+        public static byte[] MD5(this byte[] bytes)
+        {
+            return Hash(bytes, "MD5");
+        }
+
+        /// <summary>
+        /// MD5
+        /// </summary>
         public static string MD5(this string text, Encoding encoding)
         {
             return Hash(text, "MD5", encoding);
@@ -67,9 +78,41 @@ namespace QinSoft.Core.Common.Utils
         /// <summary>
         /// SHA1
         /// </summary>
+        public static byte[] SHA1(this byte[] bytes)
+        {
+            return Hash(bytes, "SHA1");
+        }
+
+        /// <summary>
+        /// SHA1
+        /// </summary>
+        public static string SHA1(this string text, Encoding encoding)
+        {
+            return Hash(text, "SHA1", encoding);
+        }
+
+        /// <summary>
+        /// SHA1
+        /// </summary>
         public static string SHA1(this string text)
         {
             return Hash(text, "SHA1", DefaultEncoding);
+        }
+
+        /// <summary>
+        /// SHA256
+        /// </summary>
+        public static byte[] SHA256(this byte[] bytes)
+        {
+            return Hash(bytes, "SHA256");
+        }
+
+        /// <summary>
+        /// SHA256
+        /// </summary>
+        public static string SHA256(this string text, Encoding encoding)
+        {
+            return Hash(text, "SHA256", encoding);
         }
 
         /// <summary>
@@ -81,13 +124,31 @@ namespace QinSoft.Core.Common.Utils
         }
 
         /// <summary>
-        /// SHA256
+        /// SHA512
+        /// </summary>
+        public static byte[] SHA512(this byte[] bytes)
+        {
+            return Hash(bytes, "SHA512");
+        }
+
+        /// <summary>
+        /// SHA512
+        /// </summary>
+        public static string SHA512(this string text, Encoding encoding)
+        {
+            return Hash(text, "SHA512", encoding);
+        }
+
+        /// <summary>
+        /// SHA512
         /// </summary>
         public static string SHA512(this string text)
         {
             return Hash(text, "SHA512", DefaultEncoding);
         }
+        #endregion
 
+        #region 加解密
         /// <summary>
         /// DES解密
         /// </summary>
@@ -367,5 +428,6 @@ namespace QinSoft.Core.Common.Utils
             byte[] res = RSAEncrypt(DefaultEncoding.GetBytes(text), publicKey);
             return Convert.ToBase64String(res);
         }
+        #endregion
     }
 }

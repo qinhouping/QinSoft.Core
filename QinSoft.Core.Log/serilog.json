@@ -1,0 +1,201 @@
+﻿{
+  "Serilog": {
+    "MinimumLevel": {
+      "Default": "Information",
+      "Override": {
+        "Microsoft": "Warning",
+        "System": "Warning",
+        "Microsoft.AspNetCore": "Warning"
+      }
+    },
+    "WriteTo": [
+      {
+        "Name": "Console",
+        "Args": {
+          "RestrictedToMinimumLevel": "Verbose",
+          "OutputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level}] ({SourceContext}) {Message:lj}{NewLine}{Exception}"
+        }
+      },
+      {
+        "Name": "File",
+        "Args": {
+          "Path": "./logs/.log",
+          "RestrictedToMinimumLevel": "Verbose",
+          "RollingInterval": "Day",
+          "RollOnFileSizeLimit": true,
+          "FileSizeLimitBytes": 104857600,
+          "OutputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level}] ({SourceContext}) {Message:lj}{NewLine}{Exception}"
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "ConfigureLogger": {
+            "Filter": [
+              {
+                "Name": "ByIncludingOnly",
+                "Args": {
+                  "Expression": "@l= 'Verbose'"
+                }
+              }
+            ],
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "Path": "./logs/Verbose/.log",
+                  "RestrictedToMinimumLevel": "Verbose",
+                  "RollingInterval": "Day",
+                  "RollOnFileSizeLimit": true,
+                  "FileSizeLimitBytes": 104857600,
+                  "OutputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level}] ({SourceContext}) {Message:lj}{NewLine}{Exception}"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "ConfigureLogger": {
+            "Filter": [
+              {
+                "Name": "ByIncludingOnly",
+                "Args": {
+                  "Expression": "@l= 'Debug'"
+                }
+              }
+            ],
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "Path": "./logs/Debug/.log",
+                  "RestrictedToMinimumLevel": "Verbose",
+                  "RollingInterval": "Day",
+                  "RollOnFileSizeLimit": true,
+                  "FileSizeLimitBytes": 104857600,
+                  "OutputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level}] ({SourceContext}) {Message:lj}{NewLine}{Exception}"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "ConfigureLogger": {
+            "Filter": [
+              {
+                "Name": "ByIncludingOnly",
+                "Args": {
+                  "Expression": "@l= 'Information'"
+                }
+              }
+            ],
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "Path": "./logs/Information/.log",
+                  "RestrictedToMinimumLevel": "Verbose",
+                  "RollingInterval": "Day",
+                  "RollOnFileSizeLimit": true,
+                  "FileSizeLimitBytes": 104857600,
+                  "OutputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level}] ({SourceContext}) {Message:lj}{NewLine}{Exception}"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "ConfigureLogger": {
+            "Filter": [
+              {
+                "Name": "ByIncludingOnly",
+                "Args": {
+                  "Expression": "@l= 'Warning'"
+                }
+              }
+            ],
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "Path": "./logs/Warning/.log",
+                  "RestrictedToMinimumLevel": "Verbose",
+                  "RollingInterval": "Day",
+                  "RollOnFileSizeLimit": true,
+                  "FileSizeLimitBytes": 104857600,
+                  "OutputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level}] ({SourceContext}) {Message:lj}{NewLine}{Exception}"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "ConfigureLogger": {
+            "Filter": [
+              {
+                "Name": "ByIncludingOnly",
+                "Args": {
+                  "Expression": "@l= 'Error'"
+                }
+              }
+            ],
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "Path": "./logs/Error/.log",
+                  "RestrictedToMinimumLevel": "Verbose",
+                  "RollingInterval": "Day",
+                  "RollOnFileSizeLimit": true,
+                  "FileSizeLimitBytes": 104857600,
+                  "OutputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level}] ({SourceContext}) {Message:lj}{NewLine}{Exception}"
+                }
+              }
+            ]
+          }
+        }
+      },
+      {
+        "Name": "Logger",
+        "Args": {
+          "ConfigureLogger": {
+            "Filter": [
+              {
+                "Name": "ByIncludingOnly",
+                "Args": {
+                  "Expression": "@l= 'Fatal'"
+                }
+              }
+            ],
+            "WriteTo": [
+              {
+                "Name": "File",
+                "Args": {
+                  "Path": "./logs/Fatal/.log",
+                  "RestrictedToMinimumLevel": "Verbose",
+                  "RollingInterval": "Day",
+                  "RollOnFileSizeLimit": true,
+                  "FileSizeLimitBytes": 104857600,
+                  "OutputTemplate": "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff} {Level}] ({SourceContext}) {Message:lj}{NewLine}{Exception}"
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "Enrich": [ "WithMachineName", "WithThreadId" ]
+  }
+}

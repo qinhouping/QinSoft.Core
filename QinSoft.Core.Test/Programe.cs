@@ -20,6 +20,7 @@ using QinSoft.Core.Data.Elasticsearch;
 using QinSoft.Core.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using QinSoft.Core.Data.Solr;
+using Serilog;
 
 namespace QinSoft.Core.Test
 {
@@ -35,8 +36,10 @@ namespace QinSoft.Core.Test
             IServiceCollection services = new ServiceCollection()
             .AddLogging(builder =>
             {
+                //builder.AddConsole();
+                //builder.AddLog4Net();
                 //builder.AddNLog();
-                builder.AddConsole();
+                //builder.AddSerilog();
             })
             .AddFileConfiger(options =>
             {

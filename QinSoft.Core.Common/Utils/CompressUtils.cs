@@ -24,7 +24,7 @@ namespace QinSoft.Core.Common.Utils
 
         public static Stream Compress(this Stream stream, CompressionLevel level = CompressionLevel.Optimal)
         {
-            ObjectUtils.CheckNull(stream, paramName: nameof(stream));
+            ObjectUtils.CheckNull(stream, nameof(stream));
             MemoryStream memoryStream = new MemoryStream();
             using (GZipStream gzipStream = new GZipStream(memoryStream, level, true))
             {
@@ -43,6 +43,18 @@ namespace QinSoft.Core.Common.Utils
                 {
                     return gzipStream.ToBytes();
                 }
+            }
+        }
+
+        public static Stream Decompress(this Stream stream)
+        {
+            ObjectUtils.CheckNull(stream, nameof(stream));
+            MemoryStream memoryStream = new MemoryStream();
+            using (GZipStream gzipStream = new GZipStream(stream, CompressionMode.Decompress, true))
+            {
+                gzipStream.CopyTo(memoryStream);
+                memoryStream.Seek(0, SeekOrigin.Begin);
+                return memoryStream;
             }
         }
     }
