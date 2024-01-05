@@ -23,13 +23,15 @@ namespace QinSoft.Core.Test
             log4net.Config.XmlConfigurator.Configure(new FileInfo("log4net.config"));
             log4net.ILog log = log4net.LogManager.GetLogger(typeof(LogUnitTest));
 
-            log.Trace(DateTime.Now.ToString(), null);
-            log.Debug(DateTime.Now.ToString());
-            log.Info(DateTime.Now.ToString());
-            log.Warn(DateTime.Now.ToString());
-            log.Error(DateTime.Now.ToString(), new Exception("测试异常"));
-            log.Critical(DateTime.Now.ToString(), new Exception("测试异常"));
-            log.Fatal(DateTime.Now.ToString(), new Exception("测试异常"));
+            log.Trace(Guid.NewGuid().ToString(), null);
+            log.Debug(Guid.NewGuid().ToString());
+            log.Info(Guid.NewGuid().ToString());
+            log.Warn(Guid.NewGuid().ToString());
+            log.Error(Guid.NewGuid().ToString(), new Exception("测试异常"));
+            log.Critical(Guid.NewGuid().ToString(), new Exception("测试异常"));
+            log.Fatal(Guid.NewGuid().ToString(), new Exception("测试异常"));
+
+            Thread.Sleep(3000);
         }
 
         [TestMethod]
@@ -38,12 +40,14 @@ namespace QinSoft.Core.Test
             NLog.LogManager.Configuration = new NLog.Config.XmlLoggingConfiguration("nlog.config");
             NLog.ILogger log = NLog.LogManager.GetLogger((typeof(LogUnitTest)).FullName);
 
-            log.Trace(DateTime.Now.ToString());
-            log.Debug(DateTime.Now.ToString());
-            log.Info(DateTime.Now.ToString());
-            log.Warn(DateTime.Now.ToString());
-            log.Error(DateTime.Now.ToString(), new Exception("测试异常"));
-            log.Fatal(DateTime.Now.ToString(), new Exception("测试异常"));
+            log.Trace(Guid.NewGuid().ToString());
+            log.Debug(Guid.NewGuid().ToString());
+            log.Info(Guid.NewGuid().ToString());
+            log.Warn(Guid.NewGuid().ToString());
+            log.Error(Guid.NewGuid().ToString(), new Exception("测试异常"));
+            log.Fatal(Guid.NewGuid().ToString(), new Exception("测试异常"));
+
+            Thread.Sleep(3000);
         }
 
         [TestMethod]
@@ -52,21 +56,32 @@ namespace QinSoft.Core.Test
             IConfiguration configuration = (new ConfigurationBuilder()).AddJsonFile("serilog.json").Build();
             Serilog.ILogger log = Serilog.ConfigurationLoggerConfigurationExtensions.Configuration((new Serilog.LoggerConfiguration()).ReadFrom, configuration).CreateLogger();
 
-            log.Debug(DateTime.Now.ToString());
-            log.Information(DateTime.Now.ToString());
-            log.Warning(DateTime.Now.ToString());
-            log.Error(new Exception("测试异常"), (DateTime.Now.ToString()));
-            log.Fatal(new Exception("测试异常"), (DateTime.Now.ToString()));
+            log.Debug(Guid.NewGuid().ToString());
+            log.Information(Guid.NewGuid().ToString());
+            log.Warning(Guid.NewGuid().ToString());
+            log.Error(new Exception("测试异常"), (Guid.NewGuid().ToString()));
+            log.Fatal(new Exception("测试异常"), (Guid.NewGuid().ToString()));
+
+            Thread.Sleep(3000);
         }
 
         [TestMethod]
         public void TestLog()
         {
-            string cwd = Directory.GetCurrentDirectory();
             ILoggerFactory logFactory = Programe.ServiceProvider.GetService<ILoggerFactory>();
-            ILogger logger = logFactory.CreateLogger<LogUnitTest>();
-            logger.LogInformation("日志测试");
-            Thread.Sleep(1000);
+            ILogger log = logFactory.CreateLogger<LogUnitTest>();
+
+            while (true)
+            {
+                log.LogTrace("LogTrace:" + Guid.NewGuid().ToString());
+                log.LogDebug("LogDebug:" + Guid.NewGuid().ToString());
+                log.LogInformation("LogInformation:" + Guid.NewGuid().ToString());
+                log.LogWarning("LogWarning:" + Guid.NewGuid().ToString());
+                log.LogError(new Exception("ERROR测试异常"), "LogError:" + (Guid.NewGuid().ToString()));
+                log.LogCritical(new Exception("FATAL测试异常"), "LogCritical:" + (Guid.NewGuid().ToString()));
+
+                Thread.Sleep(1000);
+            }
         }
     }
 }

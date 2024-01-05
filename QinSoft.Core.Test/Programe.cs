@@ -20,6 +20,7 @@ using QinSoft.Core.Data.Elasticsearch;
 using QinSoft.Core.Test;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using QinSoft.Core.Data.Solr;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 
 namespace QinSoft.Core.Test
@@ -37,8 +38,10 @@ namespace QinSoft.Core.Test
             .AddLogging(builder =>
             {
                 //builder.AddConsole();
-                //builder.AddLog4Net();
+                builder.AddLog4Net();
                 //builder.AddNLog();
+                //IConfiguration configuration = (new ConfigurationBuilder()).AddJsonFile("serilog.json").Build();
+                //Serilog.Log.Logger = (new Serilog.LoggerConfiguration()).ReadFrom.Configuration(configuration).CreateLogger();
                 //builder.AddSerilog();
             })
             .AddFileConfiger(options =>
