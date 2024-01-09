@@ -38,6 +38,7 @@ namespace QinSoft.Core.Test
             .AddLogging(builder =>
             {
                 //builder.AddConsole();
+                //builder.AddSeq();
                 builder.AddLog4Net();
                 //builder.AddNLog();
                 //IConfiguration configuration = (new ConfigurationBuilder()).AddJsonFile("serilog.json").Build();
