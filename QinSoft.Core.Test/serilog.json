@@ -198,8 +198,8 @@
       {
         "Name": "Seq",
         "Args": {
-          "serverUrl": "http://127.0.0.1:5341",
-          "apiKey": "hTKEnB7ot7NWkdcrpsGo"
+          "ServerUrl": "http://127.0.0.1:5341",
+          "ApiKey": "iuqcxu6MB3T0RgoKx1z9"
         }
       }
     ],
