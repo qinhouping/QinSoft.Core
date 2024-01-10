@@ -41,8 +41,8 @@ namespace QinSoft.Core.Test
                 builder.AddSeq();
                 //builder.AddLog4Net();
                 //builder.AddNLog();
-                //IConfiguration configuration = (new ConfigurationBuilder()).AddJsonFile("serilog.json").Build();
-                //Serilog.Log.Logger = (new Serilog.LoggerConfiguration()).ReadFrom.Configuration(configuration).CreateLogger();
+                IConfiguration configuration = (new ConfigurationBuilder()).AddJsonFile("serilog.json").Build();
+                Serilog.Log.Logger = (new Serilog.LoggerConfiguration()).WriteTo.Seq().ReadFrom.Configuration(configuration).CreateLogger();
                 //builder.AddSerilog();
             })
             .AddFileConfiger(options =>

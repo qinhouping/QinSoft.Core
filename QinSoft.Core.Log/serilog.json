@@ -196,10 +196,17 @@
         }
       },
       {
-        "Name": "Seq",
+        "Name": "Async",
         "Args": {
-          "ServerUrl": "http://127.0.0.1:5341",
-          "ApiKey": "iuqcxu6MB3T0RgoKx1z9"
+          "configure": [
+            {
+              "Name": "Seq",
+              "Args": {
+                "ServerUrl": "http://127.0.0.1:5341",
+                "ApiKey": "iuqcxu6MB3T0RgoKx1z9"
+              }
+            }
+          ]
         }
       }
     ],
