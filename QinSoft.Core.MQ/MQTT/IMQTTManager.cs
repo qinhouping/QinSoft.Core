@@ -1,5 +1,6 @@
 ﻿using MQTTnet.Client;
 using QinSoft.Core.MQ.Kafka.Core;
+using QinSoft.Core.MQ.MQTT.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,21 +13,21 @@ namespace QinSoft.Core.MQ.MQTT
         /// <summary>
         /// 获取mqtt客户端
         /// </summary>
-        IMqttClient GetMqtt();
+        IMQTTClient GetMqtt();
 
         /// <summary>
         /// 获取mqtt客户端
         /// </summary>
-        Task<IMqttClient> GetMqttAsync();
+        Task<IMQTTClient> GetMqttAsync();
 
         /// <summary>
         /// 获取mqtt客户端
         /// </summary>
-        IMqttClient GetMqtt(string name);
+        IMQTTClient GetMqtt(string name);
 
         /// <summary>
         /// 获取mqtt客户端
         /// </summary>
-        Task<IMqttClient> GetMqttAsync(string name);
+        Task<IMQTTClient> GetMqttAsync(string name);
     }
 }

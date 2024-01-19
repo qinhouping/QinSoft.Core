@@ -198,7 +198,7 @@
       {
         "Name": "Async",
         "Args": {
-          "configure": [
+          "Configure": [
             {
               "Name": "Seq",
               "Args": {

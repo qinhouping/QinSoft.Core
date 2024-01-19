@@ -13,6 +13,7 @@ using MQTTnet.Client;
 using QinSoft.Core.MQ.Kafka;
 using RabbitMQ.Client;
 using Google.Protobuf.WellKnownTypes;
+using QinSoft.Core.MQ.MQTT.Core;
 
 namespace QinSoft.Core.MQ.MQTT
 {
@@ -21,7 +22,7 @@ namespace QinSoft.Core.MQ.MQTT
         /// <summary>
         /// 缓存字典
         /// </summary>
-        protected ConcurrentDictionary<string, IMqttClient> CacheDictionary;
+        protected ConcurrentDictionary<string, IMQTTClient> CacheDictionary;
 
         /// <summary>
         /// 日志
@@ -42,7 +43,7 @@ namespace QinSoft.Core.MQ.MQTT
         {
             ObjectUtils.CheckNull(config, nameof(config));
             ObjectUtils.CheckNull(logger, nameof(logger));
-            CacheDictionary = new ConcurrentDictionary<string, IMqttClient>();
+            CacheDictionary = new ConcurrentDictionary<string, IMQTTClient>();
             MQTTManagerConfig = config;
             this.logger = logger;
         }
@@ -56,7 +57,7 @@ namespace QinSoft.Core.MQ.MQTT
             ObjectUtils.CheckNull(options, nameof(options));
             ObjectUtils.CheckNull(configer, nameof(configer));
             ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
-            CacheDictionary = new ConcurrentDictionary<string, IMqttClient>();
+            CacheDictionary = new ConcurrentDictionary<string, IMQTTClient>();
             MQTTManagerConfig = configer.Get<MQTTManagerConfig>(options.ConfigName, options.ConfigFormat);
             logger = loggerFactory.CreateLogger<MQTTManager>();
         }
@@ -70,7 +71,7 @@ namespace QinSoft.Core.MQ.MQTT
             ObjectUtils.CheckNull(optionsAccessor, nameof(optionsAccessor));
             ObjectUtils.CheckNull(configer, nameof(configer));
             ObjectUtils.CheckNull(loggerFactory, nameof(loggerFactory));
-            CacheDictionary = new ConcurrentDictionary<string, IMqttClient>();
+            CacheDictionary = new ConcurrentDictionary<string, IMQTTClient>();
             MQTTManagerConfig = configer.Get<MQTTManagerConfig>(optionsAccessor.Value.ConfigName, optionsAccessor.Value.ConfigFormat);
             logger = loggerFactory.CreateLogger<MQTTManager>();
         }
@@ -95,7 +96,7 @@ namespace QinSoft.Core.MQ.MQTT
         /// <summary>
         /// 构建mqtt客户端实例
         /// </summary>
-        protected virtual IMqttClient BuildClientFromConfig(MQTTItemConfig config)
+        protected virtual IMQTTClient BuildClientFromConfig(MQTTItemConfig config)
         {
             var disoptions = new MqttClientDisconnectOptions();
             var options = new MqttClientOptionsBuilder()
@@ -105,15 +106,13 @@ namespace QinSoft.Core.MQ.MQTT
              .WithCleanSession(config.CleanSession)
              .Build();
             //创建连接
-            var mqttClient = new MqttFactory().CreateMqttClient();
-            mqttClient.ConnectAsync(options).Wait();
-            return mqttClient;
+            return new MQTTClient(options);
         }
 
         /// <summary>
         /// 获取mqtt客户端
         /// </summary>
-        public virtual IMqttClient GetMqtt()
+        public virtual IMQTTClient GetMqtt()
         {
             MQTTItemConfig config = GetDefaultMQTTItemConfig();
             if (config == null)
@@ -121,7 +120,7 @@ namespace QinSoft.Core.MQ.MQTT
                 throw new MQTTException("not found default mqtt client config");
             }
 
-            IMqttClient client = (IMqttClient)CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig(config));
+            IMQTTClient client = (IMQTTClient)CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig(config));
 
             logger.LogDebug("get default mqtt client from config");
 
@@ -131,7 +130,7 @@ namespace QinSoft.Core.MQ.MQTT
         /// <summary>
         /// 获取mqtt客户端
         /// </summary>
-        public virtual async Task<IMqttClient> GetMqttAsync()
+        public virtual async Task<IMQTTClient> GetMqttAsync()
         {
             return await ExecuteUtils.ExecuteInTask(GetMqtt);
         }
@@ -139,7 +138,7 @@ namespace QinSoft.Core.MQ.MQTT
         /// <summary>
         /// 获取mqtt客户端
         /// </summary>
-        public virtual IMqttClient GetMqtt(string name)
+        public virtual IMQTTClient GetMqtt(string name)
         {
             ObjectUtils.CheckNull(name, nameof(name));
             MQTTItemConfig config = GetMqttItemConfig(name);
@@ -148,7 +147,7 @@ namespace QinSoft.Core.MQ.MQTT
                 throw new MQTTException(string.Format("not found mqtt client config:{0}", name));
             }
 
-            IMqttClient client = (IMqttClient)CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig(config));
+            IMQTTClient client = (IMQTTClient)CacheDictionary.GetOrAdd(config.Name, key => BuildClientFromConfig(config));
 
             logger.LogDebug(string.Format("get mqtt client from config:{0}", name));
 
@@ -158,7 +157,7 @@ namespace QinSoft.Core.MQ.MQTT
         /// <summary>
         /// 获取mqtt客户端
         /// </summary>
-        public virtual async Task<IMqttClient> GetMqttAsync(string name)
+        public virtual async Task<IMQTTClient> GetMqttAsync(string name)
         {
             return await ExecuteUtils.ExecuteInTask(GetMqtt, name);
         }
@@ -171,7 +170,7 @@ namespace QinSoft.Core.MQ.MQTT
             GC.SuppressFinalize(this);
             if (CacheDictionary != null)
             {
-                foreach (KeyValuePair<string, IMqttClient> pair in CacheDictionary)
+                foreach (KeyValuePair<string, IMQTTClient> pair in CacheDictionary)
                 {
                     pair.Value.Dispose();
                 }

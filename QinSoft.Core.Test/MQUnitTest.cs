@@ -23,6 +23,7 @@ using QinSoft.Core.MQ.MQTT;
 using MQTTnet.Client;
 using System.Diagnostics;
 using MQTTnet.Protocol;
+using QinSoft.Core.MQ.MQTT.Core;
 
 namespace QinSoft.Core.Test
 {
@@ -114,15 +115,15 @@ namespace QinSoft.Core.Test
             {
                 ExecuteUtils.ExecuteInThread(() =>
                 {
-                    IMqttClient client = manager.GetMqtt();
+                    IMQTTClient client = manager.GetMqtt();
                     while (true)
                     {
-                        MqttClientPublishResult result = client.PublishStringAsync("/qinsoft.core/test", "test:" + DateTime.Now.ToString()).Result;
+                        MqttClientPublishResult result = client.PublishAsync("/qinsoft.core/test", "test:" + DateTime.Now.ToString()).Result;
                         Thread.Sleep(1000);
                     }
                 });
 
-                IMqttClient client = manager.GetMqtt();
+                IMQTTClient client = manager.GetMqtt();
 
                 client.ApplicationMessageReceivedAsync += async e =>
                 {
@@ -131,7 +132,7 @@ namespace QinSoft.Core.Test
                 };
                 client.SubscribeAsync("/qinsoft.core/test");
 
-                IMqttClient client2 = manager.GetMqtt();
+                IMQTTClient client2 = manager.GetMqtt();
                 client2.ApplicationMessageReceivedAsync += async e =>
                 {
                     Debug.WriteLine("consumer2:\n" + e.ClientId + "\n" + e.ApplicationMessage.Topic + "\n" + Encoding.Default.GetString(e.ApplicationMessage.Payload));
